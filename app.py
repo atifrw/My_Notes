@@ -2,54 +2,73 @@ import streamlit as st
 from youtube_transcript_api import YouTubeTranscriptApi
 import google.generativeai as genai
 
-# Page Setup (Premium look ke liye)
-st.set_page_config(page_title="EduNotes AI", page_icon="📝", layout="wide")
+# Page Configuration
+st.set_page_config(page_title="EduNotes Pro AI", page_icon="🚀", layout="wide")
 
-# Custom CSS for Premium Design
+# Premium CSS for modern look
 st.markdown("""
     <style>
-    .main { background-color: #f8f9fa; }
-    .stButton>button { background-color: #4CAF50; color: white; border-radius: 10px; border: none; padding: 10px 24px; font-weight: bold; width: 100%; }
-    .stTextInput>div>div>input { border-radius: 10px; border: 1px solid #ddd; }
-    .header-style { color: #2c3e50; text-align: center; padding: 20px; font-family: 'Helvetica'; }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+    html, body, [class*="st-"] { font-family: 'Inter', sans-serif; }
+    .main { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); }
+    .stButton>button {
+        background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+        color: white; border: none; border-radius: 12px;
+        padding: 15px; font-size: 18px; font-weight: bold;
+        transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .stButton>button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+    .card {
+        background: white; padding: 25px; border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 20px;
+    }
     </style>
     """, unsafe_allow_html=True)
 
-st.markdown("<h1 class='header-style'>🎓 AI Student Lecture Assistant</h1>", unsafe_allow_html=True)
-st.write("---")
+# Header Section
+st.markdown("<h1 style='text-align: center; color: #1e3a8a;'>🚀 EduNotes Pro AI</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #64748b;'>Video ko Smart Study Notes mein badlein - Topper ki tarah!</p>", unsafe_allow_html=True)
 
-# User Input Section
-col1, col2 = st.columns([2, 1])
+# Main Interface
+col1, col2, col3 = st.columns([1, 2, 1])
 
-with col1:
-    video_url = st.text_input("YouTube Video URL yahan paste karein:")
 with col2:
-    # Yahan humne aapka API key fit kar diya hai (Secret rakhne ke liye baad mein ise hatayenge)
-    api_key = "AIzaSyBGFT49_0fKLOHQNBTS3tX_cJhmOdMvqGE"
+    st.markdown('<div class="card">', unsafe_allow_html=True)
+    video_url = st.text_input("🔗 YouTube Lecture Link Yahan Paste Karein", placeholder="https://youtube.com/watch?v=...")
+    
+    # Sidebar for API Key (Safety)
+    with st.sidebar:
+        st.title("⚙️ Settings")
+        api_key = st.text_input("Gemini API Key dalein", type="password", value="AIzaSyBGFT49_0fKLOHQNBTS3tX_cJhmOdMvqGE")
+        st.info("Aapki key yahan safe hai.")
+    
+    generate_btn = st.button("Generate Smart Notes ✨")
+    st.markdown('</div>', unsafe_allow_html=True)
 
-if st.button("Generate Magic Notes ✨"):
+if generate_btn:
     if video_url:
         try:
             video_id = video_url.split("v=")[1].split("&")[0]
-            with st.spinner('AI video ki gehraayi mein ja raha hai...'):
-                # Transcript nikalna
-                transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
-                transcript_text = " ".join([t['text'] for t in transcript_list])
+            with st.spinner('🤖 AI Video ko scan kar raha hai...'):
+                # Transcript
+                transcript = YouTubeTranscriptApi.get_transcript(video_id)
+                text = " ".join([t['text'] for t in transcript])
 
-                # AI Processing
+                # AI Magic
                 genai.configure(api_key=api_key)
                 model = genai.GenerativeModel('gemini-1.5-flash')
-                prompt = f"""Tum ek world-class professor ho. Is video transcript se:
-                1. Saaf Headings ke saath detailed 'Topper Style' Notes banao.
-                2. Saare technical keywords ko bold karo.
-                3. Ek 'Summary' aur 3 'Practice Questions' bhi add karo.
-                Transcript: {transcript_text}"""
+                prompt = f"Tum ek world-class tutor ho. Is lecture transcript se 'Professional Study Notes' banao jisme: 1. Executive Summary 2. Detailed Key Concepts (Bullet points) 3. Important Formulas/Dates 4. Quiz Questions. Transcript: {text}"
                 
                 response = model.generate_content(prompt)
                 
-                st.success("✅ Aapke Notes Taiyar Hain!")
-                st.markdown(response.text)
+                # Output
+                st.balloons()
+                st.markdown("### 📝 Aapke Exclusive Notes")
+                st.markdown(f'<div class="card">{response.text}</div>', unsafe_allow_html=True)
+                
+                # Download Button (Optional)
+                st.download_button("Download Notes (TXT)", response.text, file_name="notes.txt")
         except Exception as e:
-            st.error("Error: Is video ka transcript nahi mil raha ya link galat hai.")
+            st.error("❌ Is video mein captions nahi hain ya link galat hai.")
     else:
-        st.warning("Pehle YouTube link toh daaliye!")
+        st.warning("Pehle link toh daliye!")
