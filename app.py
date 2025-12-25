@@ -3,93 +3,54 @@ from youtube_transcript_api import YouTubeTranscriptApi
 import google.generativeai as genai
 import re
 
-# Page Setup - Mobile responsive layout
-st.set_page_config(page_title="EduNotes Pro", page_icon="🎓", layout="centered")
+# Page Setup - Premium Mobile Look
+st.set_page_config(page_title="EduNotes AI", page_icon="🎓", layout="centered")
 
-# Custom CSS for a Mobile App-like Premium Look
+# Custom CSS for App-like Feel
 st.markdown("""
     <style>
-    /* Background and Font */
-    .main { background: #f0f2f5; }
-    
-    /* Title Styling */
-    .title { color: #1e3a8a; text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 5px; }
-    .subtitle { color: #64748b; text-align: center; font-size: 14px; margin-bottom: 25px; }
-
-    /* Input Box Styling */
-    .stTextInput input {
-        border-radius: 12px !important;
-        border: 2px solid #d1d5db !important;
-        padding: 12px !important;
+    .main { background-color: #f0f2f5; }
+    .stTextInput input { border-radius: 10px; padding: 12px; }
+    .stButton>button { 
+        background: #1a73e8; color: white; border-radius: 10px; 
+        font-weight: bold; width: 100%; height: 50px; border: none;
     }
-
-    /* Button Styling - Premium Gradient */
-    .stButton>button {
-        width: 100%;
-        background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
-        color: white;
-        border: none;
-        border-radius: 12px;
-        padding: 15px;
-        font-weight: bold;
-        font-size: 16px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-    
-    /* Result Card */
-    .note-card {
-        background: white;
-        padding: 20px;
-        border-radius: 16px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        margin-top: 20px;
-        color: #1f2937;
-    }
+    .status-box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
     </style>
     """, unsafe_allow_html=True)
 
-# UI Elements
-st.markdown("<div class='title'>🎓 EduNotes Pro AI</div>", unsafe_allow_html=True)
-st.markdown("<div class='subtitle'>YouTube Lecture ko Smart Notes mein badlein</div>", unsafe_allow_html=True)
+st.title("🎓 EduNotes AI")
+st.write("Video link dalein aur notes payein.")
 
 # Input Field
-video_url = st.text_input("", placeholder="YouTube link yahan paste karein...")
+video_url = st.text_input("", placeholder="YouTube URL yahan paste karein...")
 
-# Hidden Sidebar for API Key
-with st.sidebar:
-    st.header("⚙️ Settings")
-    api_key = st.text_input("Gemini API Key", type="password", value="AIzaSyBGFT49_0fKLOHQNBTS3tX_cJhmOdMvqGE")
+# --- SECRET KEY MANAGEMENT ---
+# Hum key ab Streamlit ki settings se uthayenge
+api_key = st.secrets.get("GEMINI_API_KEY")
 
 def get_video_id(url):
-    # Regex to handle all types of YT links (Shorts, Mobile, Desktop)
     regex = r"(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^\"&?\/\s]{11})"
     match = re.search(regex, url)
     return match.group(1) if match else None
 
 if st.button("Generate Smart Notes ✨"):
-    if video_url:
+    if not api_key:
+        st.error("Setup incomplete: API Key nahi mili. (Settings mein check karein)")
+    elif video_url:
         v_id = get_video_id(video_url)
         if v_id:
             try:
                 with st.spinner('🤖 AI Notes taiyar kar raha hai...'):
-                    # Fetching Transcript
-                    transcript_data = YouTubeTranscriptApi.get_transcript(v_id)
-                    full_text = " ".join([t['text'] for t in transcript_data])
-
-                    # AI Setup
+                    transcript = YouTubeTranscriptApi.get_transcript(v_id)
+                    text = " ".join([t['text'] for t in transcript])
+                    
                     genai.configure(api_key=api_key)
                     model = genai.GenerativeModel('gemini-1.5-flash')
-                    prompt = f"Tum ek expert topper ho. Is lecture transcript se saaf-sutre study notes banao. Bullet points ka use karo aur important terms ko Bold karo. Transcript: {full_text}"
-                    
+                    prompt = f"Summarize this lecture into neat student notes with headings and bullet points: {text}"
                     response = model.generate_content(prompt)
                     
-                    # Displaying Output
-                    st.balloons()
-                    st.markdown("### 📝 Aapke Notes:")
-                    st.markdown(f"<div class='note-card'>{response.text}</div>", unsafe_allow_html=True)
+                    st.success("✅ Done!")
+                    st.markdown(f"<div class='status-box'>{response.text}</div>", unsafe_allow_html=True)
             except Exception as e:
-                st.error("❌ Is video mein captions available nahi hain.")
-        else:
-            st.error("❌ Link sahi nahi hai. Kripya sahi YouTube URL dalein.")
-    else:
-        st.warning("Pehle link toh daaliye!")
+                st.error("Video mein captions band hain ya link sahi nahi hai.")
