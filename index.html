@@ -83,7 +83,7 @@
     let weakList = JSON.parse(localStorage.getItem("subj_weak_v2")) || [];
 
     // JSON LOADING
-    fetch("subjective.json")
+    fetch("sub.json")
       .then(r => r.json())
       .then(data => {
         quizData = data;
