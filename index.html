@@ -3,42 +3,41 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🧠 Subjective Quiz Pro</title>
+  <title>🧠 Study Mode - Subjective</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-color: #f5f2eb; --card-bg: #ffffff; --text-color: #2c3e50;
-      --question-bg: #ffffff; --border-color: #e0dcd0; --btn-bg: #faf9f6; 
-      --primary-color: #5d6d7e; --progress-color: #27ae60;
+      --bg-color: #f8f9fa; --card-bg: #ffffff; --text-color: #2c3e50;
+      --question-bg: #ffffff; --border-color: #dcdde1; --btn-bg: #ffffff; 
+      --primary-color: #5d6d7e; --correct-color: #27ae60; --improve-color: #e67e22;
     }
     [data-theme="dark"] {
-      --bg-color: #1a1a1a; --card-bg: #2d2d2d; --text-color: #e0e0e0;
-      --question-bg: #3d3d3d; --border-color: #444; --btn-bg: #3a3a3a;
-      --primary-color: #8da2b5;
+      --bg-color: #121212; --card-bg: #1e1e1e; --text-color: #e0e0e0;
+      --question-bg: #2d2d2d; --border-color: #444; --btn-bg: #2d2d2d;
     }
     body { font-family: 'Rubik', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 15px; transition: 0.3s; }
-    .container { max-width: 700px; margin: auto; background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; border: 1px solid var(--border-color); }
+    .container { max-width: 650px; margin: auto; background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid var(--border-color); }
     
-    .progress-container { width: 100%; background: #e0dcd0; height: 8px; border-radius: 5px; margin-bottom: 15px; display: none; }
-    #progressBar { height: 100%; width: 0%; background: var(--progress-color); border-radius: 5px; transition: 0.4s; }
+    .progress-container { width: 100%; background: #ddd; height: 6px; border-radius: 10px; margin-bottom: 20px; display: none; }
+    #progressBar { height: 100%; width: 0%; background: var(--correct-color); border-radius: 10px; transition: 0.4s; }
 
-    .header-btns { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
-    #themeBtn, #quitBtn { padding: 8px 12px; font-size: 13px; background: var(--primary-color); color: white; border: none; cursor: pointer; border-radius: 8px; }
+    .header-btns { display: flex; justify-content: space-between; margin-bottom: 15px; }
+    #themeBtn, #quitBtn { padding: 8px 15px; border-radius: 8px; border: none; cursor: pointer; background: var(--primary-color); color: white; font-weight: bold; }
     #quitBtn { background: #e74c3c; display: none; }
 
-    .main-btn { padding: 12px; font-size: 16px; margin-bottom: 12px; width: 100%; border-radius: 10px; border: 1px solid var(--border-color); background-color: var(--btn-bg); color: var(--text-color); cursor: pointer; font-weight: 500; display: block; box-sizing: border-box; }
+    .main-btn { padding: 14px; font-size: 16px; margin-bottom: 12px; width: 100%; border-radius: 12px; border: 1px solid var(--border-color); background-color: var(--btn-bg); color: var(--text-color); cursor: pointer; font-weight: 500; transition: 0.2s; }
+    .main-btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
-    .question-card { background: var(--question-bg); border-left: 6px solid var(--primary-color); padding: 20px; border-radius: 12px; margin-bottom: 20px; font-size: 22px; font-weight: 550; line-height: 1.5; }
+    .question-card { background: var(--question-bg); border-left: 6px solid var(--primary-color); padding: 25px; border-radius: 15px; margin-bottom: 20px; font-size: 22px; font-weight: 600; line-height: 1.6; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
     
-    .answer-box { background: #f8f9fa; border: 1px solid #ddd; padding: 15px; border-radius: 10px; margin-top: 15px; display: none; font-size: 19px; }
-    [data-theme="dark"] .answer-box { background: #333; color: #eee; border-color: #555; }
+    .explanation-box { background: #eef2f7; border: 1px dashed #3498db; padding: 20px; border-radius: 12px; margin-top: 15px; display: none; font-size: 18px; line-height: 1.5; color: #34495e; }
+    [data-theme="dark"] .explanation-box { background: #2c3e50; color: #ecf0f1; border-color: #5d6d7e; }
 
-    .explanation-box { background: #e1f5fe; padding: 12px; border-radius: 8px; margin-top: 10px; font-size: 15px; display: none; border-left: 4px solid #03a9f4; }
-    [data-theme="dark"] .explanation-box { background: #01579b; color: white; }
+    .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; display: none; }
+    .correct-btn { background: var(--correct-color) !important; color: white !important; }
+    .improve-btn { background: var(--improve-color) !important; color: white !important; }
 
-    .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; display: none; }
-    .correct-btn { background: #27ae60 !important; color: white !important; }
-    .improve-btn { background: #e67e22 !important; color: white !important; }
+    select, input { appearance: none; -webkit-appearance: none; }
   </style>
 </head>
 <body>
@@ -52,102 +51,78 @@
     <div class="progress-container" id="pCont"><div id="progressBar"></div></div>
 
     <div id="setupArea">
-        <h2 style="text-align:center;">🧠 Subjective Study Pro</h2>
+        <h2 style="text-align:center; margin-top:0;">📖 Subjective Pro</h2>
         <button id="resumeBtn" class="main-btn" style="background: #9b59b6; color: white; display: none;" onclick="resumeQuiz()">🕒 पिछला सेशन जारी रखें</button>
 
-        <select id="subjectSelect" class="main-btn" onchange="updateChapters()"><option value="all">-- लोड हो रहा है... --</option></select>
-        <select id="chapterSelect" class="main-btn"><option value="all">-- सभी अध्याय --</option></select>
+        <select id="subjectSelect" class="main-btn" onchange="updateChapters()"><option value="all">-- विषय चुनें --</option></select>
+        <select id="chapterSelect" class="main-btn"><option value="all">-- अध्याय चुनें --</option></select>
         
-        <input type="number" id="customLimit" class="main-btn" placeholder="सवाल की संख्या (उदा: 10)">
+        <input type="number" id="customLimit" class="main-btn" placeholder="कितने सवाल? (खाली छोड़ें = सब)">
         
-        <button class="main-btn" onclick="startQuiz()" style="background: #5d6d7e; color: white;">🎯 शुरू करें</button>
-        <button id="weakAreasBtn" class="main-btn" style="background: #e67e22; color: white; display: none;" onclick="startWeakAreasQuiz()">🔄 Improve Weak Areas (<span id="weakCount">0</span>)</button>
+        <button class="main-btn" onclick="startQuiz()" style="background: #2c3e50; color: white; margin-top: 10px;">🎯 क्विज़ शुरू करें</button>
+        <button id="weakAreasBtn" class="main-btn" style="background: #e67e22; color: white; display: none;" onclick="startWeakAreasQuiz()">🔄 सुधार वाले सवाल (<span id="weakCount">0</span>)</button>
     </div>
 
     <div id="quizArea" style="display:none;">
-        <div id="qCount" style="text-align:right; font-weight:bold; margin-bottom:10px;"></div>
+        <div id="qCount" style="text-align:right; font-weight:bold; font-size: 14px; margin-bottom:10px; opacity:0.7;"></div>
         <div id="questionBox" class="question-card"></div>
         
-        <button id="showAnsBtn" class="main-btn" style="background:#3498db; color:white;" onclick="revealAnswer()">👁️ जवाब देखें</button>
+        <button id="showAnsBtn" class="main-btn" style="background:#3498db; color:white;" onclick="revealAnswer()">👁️ जवाब / Explanation देखें</button>
         
-        <div id="answerBox" class="answer-box"></div>
-        <button id="expBtn" class="main-btn" style="background:#546e7a; color:white; display:none; margin-top:10px;" onclick="toggleExp()">💡 Explanation देखें</button>
         <div id="explanationBox" class="explanation-box"></div>
 
         <div id="actionBtns" class="action-btns">
-            <button class="main-btn correct-btn" onclick="handleResponse(true)">✅ सही जवाब</button>
-            <button class="main-btn improve-btn" onclick="handleResponse(false)">⚠️ सुधार की ज़रूरत</button>
+            <button class="main-btn correct-btn" onclick="handleResponse(true)">✅ सही है</button>
+            <button class="main-btn improve-btn" onclick="handleResponse(false)">⚠️ सुधार चाहिए</button>
         </div>
     </div>
   </div>
 
   <script>
     let quizData = {}, selectedQuestions = [], currentIdx = 0, score = 0;
-    let questionsAttempted = 0, currentSub = "", currentCh = "", isWeakMode = false;
-    let weakList = JSON.parse(localStorage.getItem("sub_weak")) || [];
+    let weakList = JSON.parse(localStorage.getItem("subj_weak_v2")) || [];
 
-    // DATA LOADING LOGIC
+    // JSON LOADING
     fetch("subjective.json")
-      .then(r => {
-        if(!r.ok) throw new Error("File Not Found");
-        return r.json();
-      })
+      .then(r => r.json())
       .then(data => {
         quizData = data;
         const subSelect = document.getElementById("subjectSelect");
         subSelect.innerHTML = "<option value='all'>-- सभी विषय --</option>";
-        
-        // Check if data is Array or Object
-        if (Array.isArray(data)) {
-          subSelect.add(new Option("Default Subject", "default"));
-        } else {
-          Object.keys(data).forEach(k => subSelect.add(new Option(k, k)));
-        }
-        updateChapters();
+        Object.keys(data).forEach(k => subSelect.add(new Option(k, k)));
       })
-      .catch(err => {
-        alert("subjective.json लोड नहीं हुई! सुनिश्चित करें कि फाइल का नाम सही है।");
-        console.error(err);
-      });
+      .catch(err => alert("Error: subjective.json फाइल नहीं मिली या खराब है!"));
 
     function updateChapters() {
       const s = document.getElementById("subjectSelect").value;
       const c = document.getElementById("chapterSelect");
       c.innerHTML = "<option value='all'>-- सभी अध्याय --</option>";
-      
-      if(s !== "all" && quizData[s] && !Array.isArray(quizData[s])) {
+      if(s !== "all" && quizData[s]) {
         Object.keys(quizData[s]).forEach(k => c.add(new Option(k, k)));
       }
     }
 
     function startQuiz() {
-      isWeakMode = false;
-      currentSub = document.getElementById("subjectSelect").value;
-      currentCh = document.getElementById("chapterSelect").value;
+      const sub = document.getElementById("subjectSelect").value;
+      const ch = document.getElementById("chapterSelect").value;
       let allQ = [];
 
-      if (Array.isArray(quizData)) {
-        allQ = quizData;
-      } else if (currentSub === "all") {
-        Object.keys(quizData).forEach(s => {
-          if(Array.isArray(quizData[s])) allQ = allQ.concat(quizData[s]);
-          else Object.keys(quizData[s]).forEach(ch => allQ = allQ.concat(quizData[s][ch]));
-        });
-      } else if (currentCh === "all") {
-        if(Array.isArray(quizData[currentSub])) allQ = quizData[currentSub];
-        else Object.keys(quizData[currentSub]).forEach(ch => allQ = allQ.concat(quizData[currentSub][ch]));
+      if (sub === "all") {
+        Object.keys(quizData).forEach(s => Object.keys(quizData[s]).forEach(c => allQ = allQ.concat(quizData[s][c])));
+      } else if (ch === "all") {
+        Object.keys(quizData[sub]).forEach(c => allQ = allQ.concat(quizData[sub][c]));
       } else {
-        allQ = quizData[currentSub][currentCh];
+        allQ = quizData[sub][ch];
       }
 
-      if(!allQ || allQ.length === 0) return alert("सवाल नहीं मिले! कृपया विषय/अध्याय चेक करें।");
+      if(!allQ || allQ.length === 0) return alert("सवाल नहीं मिले!");
       
       selectedQuestions = [...allQ].sort(() => Math.random() - 0.5);
       const limit = parseInt(document.getElementById("customLimit").value);
       if(limit > 0) selectedQuestions = selectedQuestions.slice(0, limit);
       
-      currentIdx = 0; score = 0; questionsAttempted = 0;
-      localStorage.removeItem("sub_quiz_session"); // Clear old
+      currentIdx = 0; score = 0;
+      localStorage.removeItem("subj_session_v2");
       initUI();
     }
 
@@ -165,32 +140,30 @@
       document.getElementById("qCount").innerText = `सवाल: ${currentIdx + 1} / ${selectedQuestions.length}`;
       document.getElementById("questionBox").innerText = q.question;
       
-      document.getElementById("answerBox").style.display = "none";
       document.getElementById("explanationBox").style.display = "none";
       document.getElementById("actionBtns").style.display = "none";
-      document.getElementById("expBtn").style.display = "none";
       document.getElementById("showAnsBtn").style.display = "block";
     }
 
     function revealAnswer() {
       const q = selectedQuestions[currentIdx];
-      document.getElementById("answerBox").innerText = q.answer || "जवाब उपलब्ध नहीं है।";
-      document.getElementById("answerBox").style.display = "block";
+      const expBox = document.getElementById("explanationBox");
+      
+      // If explanation exists, show it. Otherwise show "No details".
+      expBox.innerText = q.explanation ? q.explanation : "इस सवाल का कोई जवाब/Explanation नहीं दिया गया है।";
+      
+      expBox.style.display = "block";
       document.getElementById("showAnsBtn").style.display = "none";
       document.getElementById("actionBtns").style.display = "grid";
-
-      if(q.explanation) {
-          document.getElementById("expBtn").style.display = "block";
-          document.getElementById("explanationBox").innerText = q.explanation;
-      }
     }
 
     function handleResponse(isCorrect) {
       if(isCorrect) score++;
       else {
+        // Add to weak list if not already there
         if(!weakList.some(i => i.question === selectedQuestions[currentIdx].question)) {
           weakList.push(selectedQuestions[currentIdx]);
-          localStorage.setItem("sub_weak", JSON.stringify(weakList));
+          localStorage.setItem("subj_weak_v2", JSON.stringify(weakList));
         }
       }
       
@@ -204,39 +177,51 @@
     }
 
     function showFinalResult() {
-      localStorage.removeItem("sub_quiz_session");
+      localStorage.removeItem("subj_session_v2");
       document.getElementById("quizArea").innerHTML = `
-        <div style="text-align:center;">
-          <h3>🏁 परिणाम: ${score}/${selectedQuestions.length}</h3>
-          <button class="main-btn" onclick="location.reload()">🏠 होम</button>
+        <div style="text-align:center; padding: 20px;">
+          <h2 style="color:var(--correct-color)">🏁 पूरा हुआ!</h2>
+          <p style="font-size:20px;">आपका स्कोर: <b>${score} / ${selectedQuestions.length}</b></p>
+          <button class="main-btn" onclick="location.reload()" style="background:#2c3e50; color:white;">🏠 होम पर जाएं</button>
         </div>`;
+      updateWeakBtn();
     }
 
     function saveSession() {
-      const session = { selectedQuestions, currentIdx, score, currentSub, currentCh };
-      localStorage.setItem("sub_quiz_session", JSON.stringify(session));
+      const session = { selectedQuestions, currentIdx, score };
+      localStorage.setItem("subj_session_v2", JSON.stringify(session));
     }
 
     function checkResumeStatus() {
-      if(localStorage.getItem("sub_quiz_session")) document.getElementById("resumeBtn").style.display = "block";
+      if(localStorage.getItem("subj_session_v2")) document.getElementById("resumeBtn").style.display = "block";
+      updateWeakBtn();
     }
 
     function resumeQuiz() {
-      const s = JSON.parse(localStorage.getItem("sub_quiz_session"));
+      const s = JSON.parse(localStorage.getItem("subj_session_v2"));
       selectedQuestions = s.selectedQuestions; currentIdx = s.currentIdx; score = s.score;
       initUI();
     }
 
-    function toggleExp() {
-      const e = document.getElementById("explanationBox");
-      e.style.display = (e.style.display === "block") ? "none" : "block";
+    function updateWeakBtn() {
+      const btn = document.getElementById("weakAreasBtn");
+      btn.style.display = weakList.length > 0 ? "block" : "none";
+      document.getElementById("weakCount").innerText = weakList.length;
+    }
+
+    function startWeakAreasQuiz() {
+      selectedQuestions = [...weakList].sort(() => Math.random() - 0.5);
+      currentIdx = 0; score = 0;
+      initUI();
     }
 
     function toggleTheme() {
       document.body.hasAttribute("data-theme") ? document.body.removeAttribute("data-theme") : document.body.setAttribute("data-theme", "dark");
     }
 
-    function quitQuiz() { if(confirm("सेशन छोड़ें?")) location.reload(); }
+    function quitQuiz() { if(confirm("क्विज़ छोड़ें?")) location.reload(); }
+
+    window.onload = checkResumeStatus;
   </script>
 </body>
 </html>
