@@ -3,40 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🧠 Subjective Study Pro</title>
+  <title>🧠 Smart Subjective Quiz</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root { --bg: #f5f6fa; --card: #ffffff; --txt: #2f3640; --prim: #5d6d7e; --sec: #3498db; --ok: #27ae60; --bad: #e67e22; }
     [data-theme="dark"] { --bg: #1a1a1a; --card: #2d2d2d; --txt: #f5f6fa; }
     body { font-family: 'Rubik', sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 15px; transition: 0.3s; }
-    .container { max-width: 600px; margin: auto; background: var(--card); padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-    .main-btn { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid #ddd; cursor: pointer; font-size: 16px; font-weight: 500; background: #fff; color: #333; }
-    .q-card { background: var(--bg); padding: 20px; border-left: 5px solid var(--prim); border-radius: 10px; font-size: 20px; font-weight: 600; margin: 20px 0; }
-    .exp-box { background: #dff9fb; padding: 15px; border-radius: 10px; display: none; margin-bottom: 15px; color: #130f40; border: 1px dashed #3498db; }
+    .container { max-width: 600px; margin: auto; background: var(--card); padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    .main-btn { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid #ddd; cursor: pointer; font-size: 16px; font-weight: 500; background: #fff; color: #333; transition: 0.2s; }
+    .q-card { background: var(--bg); padding: 20px; border-left: 5px solid var(--prim); border-radius: 10px; font-size: 20px; font-weight: 600; margin-bottom: 20px; line-height: 1.5; }
+    .exp-box { background: #dff9fb; padding: 15px; border-radius: 10px; display: none; margin-bottom: 15px; color: #130f40; border: 1px dashed #3498db; font-size: 18px; }
     [data-theme="dark"] .exp-box { background: #3d3d3d; color: #fff; }
     .action-btns { display: none; grid-template-columns: 1fr 1fr; gap: 10px; }
+    #quitBtn { position: fixed; top: 15px; right: 15px; background:#e74c3c; color:#fff; border:none; padding:8px 12px; border-radius:8px; display:none; cursor:pointer; }
   </style>
 </head>
 <body>
 
-  <div style="display:flex; justify-content: space-between; margin-bottom: 15px;">
-    <button onclick="toggleTheme()" style="padding:5px 10px; border-radius:5px; border:none; background:var(--prim); color:#fff;">🌙 Mode</button>
-    <button id="quitBtn" onclick="location.reload()" style="display:none; background:#e74c3c; color:#fff; border:none; padding:5px 10px; border-radius:5px;">Stop</button>
-  </div>
+  <button onclick="toggleTheme()" style="position:fixed; top:15px; left:15px; padding:8px 12px; border-radius:8px; border:none; background:var(--prim); color:#fff; cursor:pointer;">🌙 Mode</button>
+  <button id="quitBtn" onclick="location.reload()">⏹️ Stop</button>
 
-  <div class="container">
+  <div class="container" style="margin-top: 50px;">
     <div id="setup">
       <h2 style="text-align:center;">📖 Subjective Pro</h2>
-      <select id="subSel" class="main-btn" onchange="updateCh()"><option value="all">-- विषय चुनें --</option></select>
-      <select id="chSel" class="main-btn"><option value="all">-- अध्याय चुनें --</option></select>
-      <button onclick="start()" class="main-btn" style="background:var(--prim); color:#fff;">शुरू करें</button>
+      <select id="subSel" class="main-btn" onchange="updateCh()"><option value="all">-- लोड हो रहा है... --</option></select>
+      <select id="chSel" class="main-btn"><option value="all">-- सभी अध्याय --</option></select>
+      <button onclick="start()" class="main-btn" style="background:var(--prim); color:#fff; margin-top:15px;">🚀 शुरू करें</button>
     </div>
 
     <div id="quiz" style="display:none;">
-      <div id="count" style="text-align:right; font-size:12px; opacity:0.7;"></div>
+      <div id="count" style="text-align:right; font-size:13px; font-weight:bold; margin-bottom:10px; opacity:0.7;"></div>
       <div id="qBox" class="q-card"></div>
+      
       <button id="showBtn" onclick="reveal()" class="main-btn" style="background:var(--sec); color:#fff;">👁️ जवाब देखें</button>
+      
       <div id="expBox" class="exp-box"></div>
+      
       <div id="actBtns" class="action-btns">
         <button onclick="next(true)" class="main-btn" style="background:var(--ok); color:#fff;">✅ सही था</button>
         <button onclick="next(false)" class="main-btn" style="background:var(--bad); color:#fff;">⚠️ सुधार चाहिए</button>
@@ -47,15 +49,16 @@
   <script>
     let data = {}, pool = [], idx = 0, score = 0;
 
-    // Fetching sub.json (as seen in your GitHub)
+    // GitHub पर रखी sub.json को लोड करना
     fetch("sub.json")
       .then(r => r.json())
       .then(j => {
         data = j;
         const s = document.getElementById("subSel");
+        s.innerHTML = "<option value='all'>-- सभी विषय --</option>";
         Object.keys(j).forEach(k => s.add(new Option(k, k)));
       })
-      .catch(e => alert("Error: sub.json नहीं मिली!"));
+      .catch(e => alert("Error: sub.json फाइल नहीं मिली!"));
 
     function updateCh() {
       const s = document.getElementById("subSel").value, c = document.getElementById("chSel");
@@ -65,13 +68,16 @@
 
     function start() {
       const s = document.getElementById("subSel").value, c = document.getElementById("chSel").value;
+      let tempPool = [];
       if (s === "all") {
-        Object.keys(data).forEach(sub => Object.keys(data[sub]).forEach(ch => pool = pool.concat(data[sub][ch])));
+        Object.keys(data).forEach(sub => Object.keys(data[sub]).forEach(ch => tempPool = tempPool.concat(data[sub][ch])));
       } else if (c === "all") {
-        Object.keys(data[s]).forEach(ch => pool = pool.concat(data[s][ch]));
-      } else { pool = data[s][c]; }
+        Object.keys(data[s]).forEach(ch => tempPool = tempPool.concat(data[s][ch]));
+      } else { tempPool = data[s][c]; }
       
-      pool.sort(() => Math.random() - 0.5);
+      if(tempPool.length === 0) return alert("कोई सवाल नहीं मिला!");
+      pool = [...tempPool].sort(() => Math.random() - 0.5);
+      
       document.getElementById("setup").style.display = "none";
       document.getElementById("quiz").style.display = "block";
       document.getElementById("quitBtn").style.display = "block";
@@ -79,15 +85,23 @@
     }
 
     function show() {
-      document.getElementById("count").innerText = `सवाल: ${idx+1}/${pool.length}`;
-      document.getElementById("qBox").innerText = pool[idx].question;
+      const q = pool[idx];
+      document.getElementById("count").innerText = `प्रगति: ${idx+1} / ${pool.length}`;
+      document.getElementById("qBox").innerText = q.question;
       document.getElementById("expBox").style.display = "none";
-      document.getElementById("actBtns").style.display = "none";
-      document.getElementById("showBtn").style.display = "block";
+      
+      // स्मार्ट लॉजिक: अगर Explanation है तो "Show" बटन दिखाओ, वर्ना सीधे "Action" बटन दिखाओ
+      if (q.explanation && q.explanation.trim() !== "") {
+        document.getElementById("showBtn").style.display = "block";
+        document.getElementById("actBtns").style.display = "none";
+      } else {
+        document.getElementById("showBtn").style.display = "none";
+        document.getElementById("actBtns").style.display = "grid";
+      }
     }
 
     function reveal() {
-      document.getElementById("expBox").innerText = pool[idx].explanation || "कोई विवरण नहीं है।";
+      document.getElementById("expBox").innerText = pool[idx].explanation;
       document.getElementById("expBox").style.display = "block";
       document.getElementById("showBtn").style.display = "none";
       document.getElementById("actBtns").style.display = "grid";
@@ -97,10 +111,15 @@
       if(win) score++;
       idx++;
       if(idx < pool.length) show();
-      else alert(`क्विज़ खत्म! स्कोर: ${score}/${pool.length}`) || location.reload();
+      else {
+        alert(`शानदार! आपने ${pool.length} में से ${score} सही किए।`);
+        location.reload();
+      }
     }
 
-    function toggleTheme() { document.body.setAttribute("data-theme", document.body.hasAttribute("data-theme") ? "" : "dark"); }
+    function toggleTheme() {
+      document.body.setAttribute("data-theme", document.body.hasAttribute("data-theme") ? "" : "dark");
+    }
   </script>
 </body>
 </html>
