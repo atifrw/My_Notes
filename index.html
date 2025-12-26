@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>📖 Subjective Pro - All Features + PDF</title>
+  <title>📖 Subjective Pro - Full Backup & PDF Edition</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -19,7 +19,6 @@
     body { font-family: 'Rubik', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 15px; transition: 0.3s; }
     .container { max-width: 700px; margin: auto; background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; border: 1px solid var(--border-color); }
     
-    /* Print CSS */
     @media print {
       body { background: white !important; color: black !important; }
       .container, .header-btns, .modal, .no-print { display: none !important; }
@@ -73,6 +72,10 @@
     .chapter-row { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid var(--border-color); font-size: 14px; }
 
     .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+
+    /* Backup Styles */
+    .backup-container { margin-top: 20px; padding-top: 15px; border-top: 2px dashed var(--border-color); display: flex; gap: 10px; }
+    .backup-btn { flex: 1; padding: 10px; font-size: 12px; background: #95a5a6; color: white; border: none; border-radius: 8px; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -122,6 +125,12 @@
         <div id="trackerArea" class="tracker-card">
           <h3 style="text-align:center; margin-top:0;">Revision Status</h3>
           <div id="trackerContent"></div>
+        </div>
+
+        <div class="backup-container">
+          <button class="backup-btn" onclick="exportData()">📤 Export Data</button>
+          <button class="backup-btn" onclick="document.getElementById('importFile').click()">📥 Import Data</button>
+          <input type="file" id="importFile" style="display:none" onchange="importData(event)" accept=".json">
         </div>
     </div>
 
@@ -303,6 +312,37 @@
     function renderTracker() { const content = document.getElementById("trackerContent"); content.innerHTML = ""; Object.keys(quizData).forEach(sub => { let html = `<div class="subject-group"><div class="subject-title">${sub}</div>`; Object.keys(quizData[sub]).forEach(ch => { const last = revisionDates[`${sub}_${ch}`]; let status = "#e74c3c", date = "Never"; if(last) { const days = (Date.now() - last) / 86400000; date = new Date(last).toLocaleDateString(); status = days < 7 ? "#2ecc71" : (days < 15 ? "#f1c40f" : "#e74c3c"); } html += `<div class="chapter-row"><div><span style="height:8px; width:8px; border-radius:50%; display:inline-block; margin-right:5px; background:${status}"></span>${ch}</div><span>${date}</span></div>`; }); content.innerHTML += html + "</div>"; }); }
     function quitQuiz() { if(confirm("क्विज़ छोड़ें?")) showFinalResult(); }
     function saveVoiceSpeed(v) { localStorage.setItem("subj_voice_speed", v); }
+
+    // Backup & Restore Functions
+    function exportData() {
+      const data = {
+        bookmarks: savedList,
+        weak: weakList,
+        revisions: revisionDates,
+        theme: document.body.hasAttribute("data-theme") ? "dark" : "light"
+      };
+      const blob = new Blob([JSON.stringify(data)], {type: "application/json"});
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `SubjectivePro_Backup_${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+    }
+
+    function importData(event) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if(confirm("पुरानी प्रोग्रेस को इस फाइल से बदलें?")) {
+            if(data.bookmarks) localStorage.setItem("subj_bookmarks", JSON.stringify(data.bookmarks));
+            if(data.weak) localStorage.setItem("subj_weak", JSON.stringify(data.weak));
+            if(data.revisions) localStorage.setItem("subj_revisions", JSON.stringify(data.revisions));
+            location.reload();
+          }
+        } catch(err) { alert("गलत फाइल!"); }
+      };
+      reader.readAsText(event.target.files[0]);
+    }
   </script>
 </body>
 </html>
