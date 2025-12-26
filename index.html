@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>📖 Subjective Pro - No Refresh Home</title>
+  <title>📖 Subjective Pro - Review Mode</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -53,15 +53,11 @@
     .exp-box { background: #dff9fb; padding: 15px; border-radius: 10px; display: none; margin-bottom: 15px; color: #130f40; border: 1px dashed #3498db; font-size: 18px; }
     [data-theme="dark"] .exp-box { background: #3d3d3d; color: #fff; }
 
-    .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-    .backup-area { display: flex; gap: 10px; margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 15px; }
-    .backup-btn { flex: 1; padding: 10px; font-size: 12px; cursor: pointer; border-radius: 8px; border: 1px solid var(--border-color); background: var(--btn-bg); color: var(--text-color); font-weight: bold; }
+    .review-item { text-align: left; background: var(--btn-bg); padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid #e67e22; }
+    .review-q { font-weight: 600; margin-bottom: 5px; display: block; }
+    .review-e { font-size: 14px; color: var(--primary-color); border-top: 1px solid #ddd; padding-top: 5px; margin-top: 5px; }
 
-    .tracker-card { display: none; margin-top: 10px; }
-    .subject-group { margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; }
-    .subject-title { background: var(--primary-color); color: white; padding: 10px; font-weight: bold; }
-    .chapter-row { display: flex; justify-content: space-between; padding: 10px; background: var(--card-bg); border-bottom: 1px solid var(--border-color); align-items: center; }
-    .status-badge { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+    .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -88,41 +84,25 @@
 
     <div id="setupArea">
         <h2>🔥 Smart Subjective Pro</h2>
-        
         <button id="resumeBtn" class="main-btn" style="background: #9b59b6; color: white; display: none;" onclick="resumeQuiz()">🕒 पिछला सेशन जारी रखें</button>
-
         <select id="subjectSelect" onchange="updateChapters()"><option value="all">-- लोड हो रहा है --</option></select>
         <select id="chapterSelect"><option value="all">-- सभी अध्याय --</option></select>
         <div class="challenge-grid">
           <div><label>सवाल:</label><input type="number" id="customLimit" placeholder="10"></div>
           <div><label>मिनट:</label><input type="number" id="customTime" placeholder="5"></div>
         </div>
-        
         <button class="main-btn" onclick="startQuiz()" style="background: #5d6d7e; color: white;">🎯 शुरू करें</button>
         <button id="weakAreasBtn" class="main-btn" style="background: #e67e22; color: white; display: none;" onclick="startWeakAreasQuiz()">🔄 Improve Weak Areas (<span id="weakCount">0</span>)</button>
         <button class="main-btn" onclick="toggleTracker()" style="background: #3498db; color: white;">📊 Revision Tracker</button>
         <button id="savedPracticeBtn" class="main-btn" style="background:#f1c40f; color:#000; display:none;" onclick="startSavedPractice()">⭐ सहेजे गए सवाल</button>
-
-        <div class="backup-area">
-          <button class="backup-btn" onclick="exportData()">📤 Backup</button>
-          <button class="backup-btn" onclick="document.getElementById('importFile').click()">📥 Restore</button>
-          <input type="file" id="importFile" style="display:none" onchange="importData(event)">
-        </div>
-
-        <div id="trackerArea" class="tracker-card">
-          <h3 style="text-align:center;">📅 रिवीजन स्टेटस</h3>
-          <div id="trackerContent"></div>
-        </div>
     </div>
 
     <div id="quizArea" style="display:none;">
       <div id="quizContent">
         <div id="qCount" style="text-align:right; font-size:14px; font-weight:bold; margin-bottom:5px;"></div>
         <div id="questionBox" class="question-card"></div>
-        
         <button id="showBtn" onclick="toggleExp()" class="main-btn" style="background:#3498db; color:#fff;">👁️ जवाब/Explanation देखें</button>
         <div id="expBox" class="exp-box"></div>
-        
         <div class="action-btns">
           <button onclick="handleResponse(true)" class="main-btn" style="background:var(--progress-color); color:#fff;">✅ सही था</button>
           <button onclick="handleResponse(false)" class="main-btn" style="background:#e67e22; color:#fff;">⚠️ सुधार चाहिए</button>
@@ -134,7 +114,7 @@
 
   <script>
     let quizData = {}, selectedQuestions = [], currentIdx = 0, score = 0, timerInterval;
-    let isWeakMode = false, currentSub = "", currentCh = "";
+    let wrongQuestions = [], isWeakMode = false, currentSub = "", currentCh = "";
     let savedList = JSON.parse(localStorage.getItem("subj_bookmarks")) || [];
     let revisionDates = JSON.parse(localStorage.getItem("subj_revisions")) || {};
     let weakList = JSON.parse(localStorage.getItem("subj_weak")) || [];
@@ -156,9 +136,7 @@
     function toggleTheme() { document.body.hasAttribute("data-theme") ? document.body.removeAttribute("data-theme") : document.body.setAttribute("data-theme", "dark"); }
 
     function startQuiz() {
-      isWeakMode = false;
-      currentSub = document.getElementById("subjectSelect").value;
-      currentCh = document.getElementById("chapterSelect").value;
+      isWeakMode = false; currentSub = document.getElementById("subjectSelect").value; currentCh = document.getElementById("chapterSelect").value;
       let tempPool = [];
       if (currentSub === "all") { Object.keys(quizData).forEach(s => Object.keys(quizData[s]).forEach(c => tempPool = tempPool.concat(quizData[s][c]))); }
       else if (currentCh === "all") { Object.keys(quizData[currentSub]).forEach(c => tempPool = tempPool.concat(quizData[currentSub][c])); }
@@ -169,13 +147,13 @@
       selectedQuestions = (limit > 0) ? tempPool.slice(0, limit) : tempPool;
       const mins = parseInt(document.getElementById("customTime").value);
       if(mins > 0) startTimer(mins);
-      currentIdx = score = 0; initUI();
+      currentIdx = score = 0; wrongQuestions = []; initUI();
     }
 
     function startWeakAreasQuiz() { 
       if(weakList.length === 0) return;
       isWeakMode = true; selectedQuestions = [...weakList].sort(() => Math.random() - 0.5);
-      currentIdx = score = 0; initUI();
+      currentIdx = score = 0; wrongQuestions = []; initUI();
     }
 
     function startTimer(m) {
@@ -218,6 +196,7 @@
         score++;
         if(isWeakMode) { weakList = weakList.filter(i => i.question !== q.question); localStorage.setItem("subj_weak", JSON.stringify(weakList)); }
       } else {
+        wrongQuestions.push(q);
         if(!weakList.some(i => i.question === q.question)) { weakList.push(q); localStorage.setItem("subj_weak", JSON.stringify(weakList)); }
       }
       currentIdx++;
@@ -232,7 +211,26 @@
       document.getElementById("quizContent").style.display = "none";
       const resArea = document.getElementById("resultArea");
       resArea.style.display = "block";
-      resArea.innerHTML = `<h3>🏁 समाप्त! स्कोर: ${score}/${selectedQuestions.length}</h3><button class="main-btn" onclick="goToHome()">🏠 होम</button>`;
+      
+      let html = `<h3>🏁 स्कोर: ${score}/${selectedQuestions.length}</h3>`;
+      
+      if(wrongQuestions.length > 0) {
+        html += `<div style="margin: 20px 0; max-height: 300px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px;">
+                  <h4 style="color:#e67e22;">⚠️ इन सवालों में सुधार चाहिए:</h4>`;
+        wrongQuestions.forEach(q => {
+          html += `<div class="review-item">
+                    <span class="review-q">${q.question}</span>
+                    <div class="review-e">${q.explanation || 'No explanation available'}</div>
+                   </div>`;
+        });
+        html += `</div>`;
+      } else {
+        html += `<p style="color:var(--progress-color); font-weight:bold;">🌟 अद्भुत! सारे सवाल सही थे।</p>`;
+      }
+
+      html += `<button class="main-btn" onclick="goToHome()">🏠 होम</button>`;
+      resArea.innerHTML = html;
+      
       document.getElementById("timerDisplay").style.display = "none";
       document.getElementById("bookmarkActionBtn").style.display = "none";
       document.getElementById("quitBtn").style.display = "none";
@@ -249,17 +247,21 @@
     function quitQuiz() { if(confirm("क्विज़ छोड़ें?")) showFinalResult(); }
     function toggleExp() { const eb = document.getElementById("expBox"); eb.style.display = (eb.style.display === "block") ? "none" : "block"; }
     function speak(text) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.rate = parseFloat(document.getElementById("voiceSpeed").value) || 1; window.speechSynthesis.speak(u); }
-    function saveSession() { localStorage.setItem("subj_active_session", JSON.stringify({ selectedQuestions, currentIdx, score, isWeakMode, currentSub, currentCh })); }
+    function saveSession() { localStorage.setItem("subj_active_session", JSON.stringify({ selectedQuestions, currentIdx, score, isWeakMode, currentSub, currentCh, wrongQuestions })); }
     function checkResumeStatus() { document.getElementById("resumeBtn").style.display = localStorage.getItem("subj_active_session") ? "block" : "none"; }
-    function resumeQuiz() { const s = JSON.parse(localStorage.getItem("subj_active_session")); selectedQuestions = s.selectedQuestions; currentIdx = s.currentIdx; score = s.score; isWeakMode = s.isWeakMode; currentSub = s.currentSub; currentCh = s.currentCh; initUI(); }
+    function resumeQuiz() { 
+      const s = JSON.parse(localStorage.getItem("subj_active_session")); 
+      selectedQuestions = s.selectedQuestions; currentIdx = s.currentIdx; score = s.score; 
+      isWeakMode = s.isWeakMode; currentSub = s.currentSub; currentCh = s.currentCh; 
+      wrongQuestions = s.wrongQuestions || []; 
+      initUI(); 
+    }
     function updateWeakBtn() { document.getElementById("weakAreasBtn").style.display = weakList.length > 0 ? "block" : "none"; document.getElementById("weakCount").innerText = weakList.length; }
     function checkSavedBtn() { document.getElementById("savedPracticeBtn").style.display = savedList.length > 0 ? "block" : "none"; }
-    function startSavedPractice() { isWeakMode = false; selectedQuestions = [...savedList]; currentIdx = score = 0; initUI(); }
+    function startSavedPractice() { isWeakMode = false; selectedQuestions = [...savedList]; currentIdx = score = 0; wrongQuestions = []; initUI(); }
     function handleBookmarkClick() { const q = selectedQuestions[currentIdx]; const i = savedList.findIndex(x => x.question === q.question); if(i > -1) savedList.splice(i, 1); else savedList.push(q); localStorage.setItem("subj_bookmarks", JSON.stringify(savedList)); document.getElementById("bookmarkActionBtn").classList.toggle("active"); checkSavedBtn(); }
     function toggleTracker() { const area = document.getElementById("trackerArea"); area.style.display = (area.style.display === "block") ? "none" : "block"; if(area.style.display === "block") renderTracker(); }
     function renderTracker() { const content = document.getElementById("trackerContent"); content.innerHTML = ""; Object.keys(quizData).forEach(sub => { let html = `<div class="subject-group"><div class="subject-title">${sub}</div>`; Object.keys(quizData[sub]).forEach(ch => { const last = revisionDates[`${sub}_${ch}`]; let status = "status-red", date = "Never"; if(last) { const days = (Date.now() - last) / 86400000; date = new Date(last).toLocaleDateString(); status = days < 7 ? "status-green" : (days < 15 ? "status-yellow" : "status-red"); } html += `<div class="chapter-row"><div><span class="status-badge" style="background-color:${status === 'status-green'?'#2ecc71':(status === 'status-yellow'?'#f1c40f':'#e74c3c')}"></span>${ch}</div><span>${date}</span></div>`; }); content.innerHTML += html + "</div>"; }); }
-    function exportData() { const blob = new Blob([JSON.stringify({ savedList, revisionDates, weakList })], {type: "application/json"}); const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "subjective_backup.json"; a.click(); }
-    function importData(e) { const reader = new FileReader(); reader.onload = (event) => { const d = JSON.parse(event.target.result); localStorage.setItem("subj_bookmarks", JSON.stringify(d.savedList || [])); localStorage.setItem("subj_revisions", JSON.stringify(d.revisionDates || {})); localStorage.setItem("subj_weak", JSON.stringify(d.weakList || [])); location.reload(); }; reader.readAsText(e.target.files[0]); }
     function saveVoiceSpeed(v) { localStorage.setItem("subj_voice_speed", v); }
   </script>
 </body>
