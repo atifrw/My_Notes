@@ -104,7 +104,7 @@
     window.onload = () => { updateWeakBtn(); checkResumeStatus(); };
 
     // JSON Fetch (Change filename here)
-    fetch("mcqs (1).json").then(r => r.json()).then(j => {
+    fetch("subjective.json").then(r => r.json()).then(j => {
       quizData = j;
       const s = document.getElementById("subjectSelect");
       Object.keys(j).forEach(k => s.add(new Option(k, k)));
