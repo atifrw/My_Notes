@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>📖 Subjective Pro - Full Backup & PDF Edition</title>
+  <title>📖 Subjective Pro - Photo & Backup Edition</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
+    /* Purana CSS waisa hi hai, bas Image ke liye naya style */
     :root {
       --bg-color: #f5f2eb; --card-bg: #ffffff; --text-color: #2c3e50;
       --question-bg: #ffffff; --border-color: #e0dcd0; --btn-bg: #faf9f6; 
@@ -57,6 +58,14 @@
     .exp-box { background: #dff9fb; padding: 15px; border-radius: 10px; display: none; margin-bottom: 15px; color: #130f40; border: 1px dashed #3498db; font-size: 18px; }
     [data-theme="dark"] .exp-box { background: #3d3d3d; color: #fff; }
 
+    /* --- Naya Photo Style --- */
+    .exp-img { width: 100%; max-width: 100%; border-radius: 8px; margin-top: 10px; cursor: zoom-in; border: 1px solid var(--border-color); }
+    
+    /* Full Screen Image Modal Style */
+    #imageModal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); text-align: center; }
+    #fullImage { max-width: 95%; max-height: 90%; margin-top: 50px; border-radius: 5px; }
+    .close-img-modal { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; }
+
     /* Modals */
     .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); }
     .modal-content { background: var(--card-bg); margin: 5% auto; padding: 20px; border-radius: 15px; width: 90%; max-width: 550px; max-height: 80vh; overflow-y: auto; position: relative; border: 1px solid var(--border-color); }
@@ -73,12 +82,16 @@
 
     .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
 
-    /* Backup Styles */
     .backup-container { margin-top: 20px; padding-top: 15px; border-top: 2px dashed var(--border-color); display: flex; gap: 10px; }
     .backup-btn { flex: 1; padding: 10px; font-size: 12px; background: #95a5a6; color: white; border: none; border-radius: 8px; cursor: pointer; }
   </style>
 </head>
 <body>
+
+  <div id="imageModal" onclick="this.style.display='none'">
+    <span class="close-img-modal">&times;</span>
+    <img id="fullImage">
+  </div>
 
   <div id="printSection" style="display:none; padding: 20px;">
     <h2 style="text-align:center; border-bottom: 2px solid #333;">Saved Questions Bank</h2>
@@ -139,7 +152,9 @@
         <div id="qCount" style="text-align:right; font-size:14px; font-weight:bold; margin-bottom:5px;"></div>
         <div id="questionBox" class="question-card"></div>
         <button id="showBtn" onclick="toggleExp()" class="main-btn" style="background:#3498db; color:#fff;">👁️ जवाब देखें</button>
+        
         <div id="expBox" class="exp-box"></div>
+        
         <div class="action-btns">
           <button onclick="handleResponse(true)" class="main-btn" style="background:var(--progress-color); color:#fff;">✅ सही था</button>
           <button onclick="handleResponse(false)" class="main-btn" style="background:#e67e22; color:#fff;">⚠️ सुधार चाहिए</button>
@@ -235,13 +250,28 @@
       document.getElementById("progressBar").style.width = (currentIdx / selectedQuestions.length) * 100 + "%";
       document.getElementById("qCount").innerText = `प्रगति: ${currentIdx + 1} / ${selectedQuestions.length}`;
       document.getElementById("questionBox").innerHTML = `${q.question} <button class="speak-btn" onclick="speak('${q.question}')">🔊</button>`;
+      
       if(document.getElementById("autoReadSwitch").checked) setTimeout(() => speak(q.question), 500);
-      document.getElementById("expBox").style.display = "none";
-      document.getElementById("expBox").innerText = q.explanation || "";
-      document.getElementById("showBtn").style.display = (q.explanation) ? "block" : "none";
+      
+      // --- Smart Explanation Logic ---
+      const eb = document.getElementById("expBox");
+      eb.style.display = "none";
+      
+      let content = "";
+      if(q.explanation) content += `<div>${q.explanation}</div>`;
+      if(q.image) content += `<img src="${q.image}" class="exp-img" onclick="openFullImg(this.src)">`;
+      
+      eb.innerHTML = content;
+      document.getElementById("showBtn").style.display = (q.explanation || q.image) ? "block" : "none";
+      
       const bBtn = document.getElementById("bookmarkActionBtn");
       bBtn.classList.toggle("active", savedList.some(item => item.question === q.question));
       saveSession();
+    }
+
+    function openFullImg(src) {
+      document.getElementById("fullImage").src = src;
+      document.getElementById("imageModal").style.display = "block";
     }
 
     function handleResponse(isCorrect) {
@@ -276,7 +306,13 @@
 
     function openReview() {
       const list = document.getElementById("reviewList"); list.innerHTML = "";
-      wrongQuestions.forEach(q => list.innerHTML += `<div class="list-item"><span class="list-q">${q.question}</span><div class="list-e">${q.explanation || 'No explanation'}</div></div>`);
+      wrongQuestions.forEach(q => {
+        let content = `<div class="list-item"><span class="list-q">${q.question}</span>`;
+        if(q.explanation) content += `<div class="list-e">${q.explanation}</div>`;
+        if(q.image) content += `<img src="${q.image}" class="exp-img" style="max-height:100px; width:auto; cursor:pointer;" onclick="openFullImg('${q.image}')">`;
+        content += `</div>`;
+        list.innerHTML += content;
+      });
       document.getElementById("reviewModal").style.display = "block";
     }
 
@@ -285,8 +321,12 @@
       const printBody = document.getElementById("printBody");
       list.innerHTML = ""; printBody.innerHTML = "";
       savedList.forEach((q, i) => {
-        const html = `<div class="list-item"><span class="list-q">${i+1}. ${q.question}</span><div class="list-e">${q.explanation || ''}</div></div>`;
-        list.innerHTML += html;
+        let content = `<div class="list-item"><span class="list-q">${i+1}. ${q.question}</span>`;
+        if(q.explanation) content += `<div class="list-e">${q.explanation}</div>`;
+        if(q.image) content += `<img src="${q.image}" class="exp-img" style="max-height:80px; width:auto;">`;
+        content += `</div>`;
+        
+        list.innerHTML += content;
         printBody.innerHTML += `<div class="print-box"><strong>Q${i+1}: ${q.question}</strong><p>Ans: ${q.explanation || '---'}</p></div>`;
       });
       document.getElementById("savedListModal").style.display = "block";
@@ -313,18 +353,12 @@
     function quitQuiz() { if(confirm("क्विज़ छोड़ें?")) showFinalResult(); }
     function saveVoiceSpeed(v) { localStorage.setItem("subj_voice_speed", v); }
 
-    // Backup & Restore Functions
     function exportData() {
-      const data = {
-        bookmarks: savedList,
-        weak: weakList,
-        revisions: revisionDates,
-        theme: document.body.hasAttribute("data-theme") ? "dark" : "light"
-      };
+      const data = { bookmarks: savedList, weak: weakList, revisions: revisionDates };
       const blob = new Blob([JSON.stringify(data)], {type: "application/json"});
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = `SubjectivePro_Backup_${new Date().toISOString().slice(0,10)}.json`;
+      a.download = `SubPro_Backup_${new Date().toISOString().slice(0,10)}.json`;
       a.click();
     }
 
@@ -333,13 +367,13 @@
       reader.onload = function(e) {
         try {
           const data = JSON.parse(e.target.result);
-          if(confirm("पुरानी प्रोग्रेस को इस फाइल से बदलें?")) {
+          if(confirm("Restore data?")) {
             if(data.bookmarks) localStorage.setItem("subj_bookmarks", JSON.stringify(data.bookmarks));
             if(data.weak) localStorage.setItem("subj_weak", JSON.stringify(data.weak));
             if(data.revisions) localStorage.setItem("subj_revisions", JSON.stringify(data.revisions));
             location.reload();
           }
-        } catch(err) { alert("गलत फाइल!"); }
+        } catch(err) { alert("Invalid File"); }
       };
       reader.readAsText(event.target.files[0]);
     }
