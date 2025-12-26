@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🧠 Subjective Pro</title>
+  <title>🧠 Subjective Pro - Free Flow</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root { --bg: #f5f6fa; --card: #ffffff; --txt: #2f3640; --prim: #5d6d7e; --sec: #3498db; --ok: #27ae60; --bad: #e67e22; }
@@ -11,16 +11,16 @@
     body { font-family: 'Rubik', sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 15px; transition: 0.3s; }
     .container { max-width: 600px; margin: auto; background: var(--card); padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-top: 50px; }
     .main-btn { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid #ddd; cursor: pointer; font-size: 16px; font-weight: 500; background: #fff; color: #333; }
-    .q-card { background: var(--bg); padding: 20px; border-left: 5px solid var(--prim); border-radius: 10px; font-size: 20px; font-weight: 600; margin-bottom: 20px; }
-    .exp-box { background: #dff9fb; padding: 15px; border-radius: 10px; display: none; margin-bottom: 15px; color: #130f40; border: 1px dashed #3498db; }
+    .q-card { background: var(--bg); padding: 20px; border-left: 5px solid var(--prim); border-radius: 10px; font-size: 20px; font-weight: 600; margin-bottom: 15px; }
+    .exp-box { background: #dff9fb; padding: 15px; border-radius: 10px; display: none; margin-bottom: 15px; color: #130f40; border: 1px dashed #3498db; font-size: 18px; }
     [data-theme="dark"] .exp-box { background: #3d3d3d; color: #fff; }
-    .action-btns { display: none; grid-template-columns: 1fr 1fr; gap: 10px; }
-    #quitBtn { position: fixed; top: 15px; right: 15px; background:#e74c3c; color:#fff; border:none; padding:8px 12px; border-radius:8px; display:none; }
+    .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+    #quitBtn { position: fixed; top: 15px; right: 15px; background:#e74c3c; color:#fff; border:none; padding:8px 12px; border-radius:8px; display:none; cursor:pointer; z-index: 100; }
   </style>
 </head>
 <body>
 
-  <button onclick="toggleTheme()" style="position:fixed; top:15px; left:15px; padding:8px 12px; border-radius:8px; border:none; background:var(--prim); color:#fff;">🌙 Mode</button>
+  <button onclick="toggleTheme()" style="position:fixed; top:15px; left:15px; padding:8px 12px; border-radius:8px; border:none; background:var(--prim); color:#fff; cursor:pointer; z-index: 100;">🌙 Mode</button>
   <button id="quitBtn" onclick="location.reload()">⏹️ Stop</button>
 
   <div class="container">
@@ -35,11 +35,11 @@
       <div id="count" style="text-align:right; font-size:12px; opacity:0.7; margin-bottom:10px;"></div>
       <div id="qBox" class="q-card"></div>
       
-      <button id="showBtn" onclick="reveal()" class="main-btn" style="background:var(--sec); color:#fff; display:none;">👁️ जवाब देखें</button>
+      <button id="showBtn" onclick="toggleExp()" class="main-btn" style="background:var(--sec); color:#fff;">👁️ जवाब/Explanation देखें</button>
       
       <div id="expBox" class="exp-box"></div>
       
-      <div id="actBtns" class="action-btns">
+      <div class="action-btns">
         <button onclick="next(true)" class="main-btn" style="background:var(--ok); color:#fff;">✅ सही था</button>
         <button onclick="next(false)" class="main-btn" style="background:var(--bad); color:#fff;">⚠️ सुधार चाहिए</button>
       </div>
@@ -49,7 +49,6 @@
   <script>
     let data = {}, pool = [], idx = 0, score = 0;
 
-    // आपके GitHub फाइल 'sub.json' को लोड कर रहा है
     fetch("sub.json")
       .then(r => r.json())
       .then(j => {
@@ -58,7 +57,7 @@
         s.innerHTML = "<option value='all'>-- सभी विषय --</option>";
         Object.keys(j).forEach(k => s.add(new Option(k, k)));
       })
-      .catch(e => alert("Error: sub.json फाइल नहीं मिली!"));
+      .catch(e => alert("Error: sub.json नहीं मिली!"));
 
     function updateCh() {
       const s = document.getElementById("subSel").value, c = document.getElementById("chSel");
@@ -77,6 +76,7 @@
       
       if(temp.length === 0) return alert("कोई सवाल नहीं मिला!");
       pool = [...temp].sort(() => Math.random() - 0.5);
+      
       document.getElementById("setup").style.display = "none";
       document.getElementById("quiz").style.display = "block";
       document.getElementById("quitBtn").style.display = "block";
@@ -87,29 +87,31 @@
       const q = pool[idx];
       document.getElementById("count").innerText = `सवाल: ${idx+1} / ${pool.length}`;
       document.getElementById("qBox").innerText = q.question;
-      document.getElementById("expBox").style.display = "none";
       
+      const expBox = document.getElementById("expBox");
+      const showBtn = document.getElementById("showBtn");
+      
+      expBox.style.display = "none";
+      expBox.innerText = q.explanation || "";
+
+      // अगर explanation है तो बटन दिखाओ, वरना छुपा दो
       if (q.explanation && q.explanation.trim() !== "") {
-        document.getElementById("showBtn").style.display = "block";
-        document.getElementById("actBtns").style.display = "none";
+        showBtn.style.display = "block";
       } else {
-        document.getElementById("showBtn").style.display = "none";
-        document.getElementById("actBtns").style.display = "grid";
+        showBtn.style.display = "none";
       }
     }
 
-    function reveal() {
-      document.getElementById("expBox").innerText = pool[idx].explanation;
-      document.getElementById("expBox").style.display = "block";
-      document.getElementById("showBtn").style.display = "none";
-      document.getElementById("actBtns").style.display = "grid";
+    function toggleExp() {
+      const eb = document.getElementById("expBox");
+      eb.style.display = (eb.style.display === "block") ? "none" : "block";
     }
 
     function next(win) {
       if(win) score++;
       idx++;
       if(idx < pool.length) show();
-      else alert(`स्कोर: ${score}/${pool.length}`) || location.reload();
+      else alert(`क्विज़ पूरा! स्कोर: ${score}/${pool.length}`) || location.reload();
     }
 
     function toggleTheme() {
