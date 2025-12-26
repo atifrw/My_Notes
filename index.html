@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>📖 Subjective Pro - Review Mode</title>
+  <title>📖 Subjective Pro - Review Button Edition</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -44,18 +44,20 @@
     h2 { text-align: center; margin-top: 0; color: var(--primary-color); }
     select, input, .main-btn { padding: 12px; font-size: 16px; margin-bottom: 12px; width: 100%; border-radius: 10px; border: 1px solid var(--border-color); background-color: var(--btn-bg); color: var(--text-color); box-sizing: border-box; }
 
-    .challenge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; background: var(--bg-color); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); }
-    .challenge-grid label { font-size: 13px; font-weight: bold; margin-bottom: 5px; display: block; }
-
-    .question-card { background: var(--question-bg); border-left: 6px solid var(--primary-color); padding: 20px; border-radius: 12px; margin-bottom: 20px; font-size: 22px; font-weight: 550; line-height: 1.5; position: relative; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+    .question-card { background: var(--question-bg); border-left: 6px solid var(--primary-color); padding: 20px; border-radius: 12px; margin-bottom: 20px; font-size: 22px; font-weight: 550; line-height: 1.5; position: relative; }
     .speak-btn { position: absolute; right: 10px; top: 10px; background: none; border: none; cursor: pointer; font-size: 20px; opacity: 0.6; }
 
     .exp-box { background: #dff9fb; padding: 15px; border-radius: 10px; display: none; margin-bottom: 15px; color: #130f40; border: 1px dashed #3498db; font-size: 18px; }
     [data-theme="dark"] .exp-box { background: #3d3d3d; color: #fff; }
 
-    .review-item { text-align: left; background: var(--btn-bg); padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid #e67e22; }
-    .review-q { font-weight: 600; margin-bottom: 5px; display: block; }
-    .review-e { font-size: 14px; color: var(--primary-color); border-top: 1px solid #ddd; padding-top: 5px; margin-top: 5px; }
+    /* Modal Styling */
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); }
+    .modal-content { background: var(--card-bg); margin: 10% auto; padding: 20px; border-radius: 15px; width: 90%; max-width: 500px; max-height: 70vh; overflow-y: auto; position: relative; border: 1px solid var(--border-color); }
+    .close-modal { position: sticky; top: 0; float: right; font-size: 28px; cursor: pointer; color: #e74c3c; font-weight: bold; background: var(--card-bg); width: 30px; text-align: center; border-radius: 50%; }
+
+    .review-item { text-align: left; background: var(--bg-color); padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #e67e22; }
+    .review-q { font-weight: 600; display: block; margin-bottom: 5px; }
+    .review-e { font-size: 14px; opacity: 0.8; border-top: 1px solid #ddd; padding-top: 5px; margin-top: 5px; }
 
     .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
   </style>
@@ -66,11 +68,8 @@
     <div class="header-left">
       <button id="themeBtn" onclick="toggleTheme()">🌙</button>
       <div style="display:flex; align-items:center; gap:5px;">
-        <span style="font-size:12px;">🔊</span>
-        <label class="voice-switch">
-          <input type="checkbox" id="autoReadSwitch">
-          <span class="slider"></span>
-        </label>
+        <span>🔊</span>
+        <label class="voice-switch"><input type="checkbox" id="autoReadSwitch"><span class="slider"></span></label>
         <input type="range" id="voiceSpeed" min="0.5" max="1.5" step="0.1" value="1" style="width:50px;" onchange="saveVoiceSpeed(this.value)">
       </div>
     </div>
@@ -87,9 +86,9 @@
         <button id="resumeBtn" class="main-btn" style="background: #9b59b6; color: white; display: none;" onclick="resumeQuiz()">🕒 पिछला सेशन जारी रखें</button>
         <select id="subjectSelect" onchange="updateChapters()"><option value="all">-- लोड हो रहा है --</option></select>
         <select id="chapterSelect"><option value="all">-- सभी अध्याय --</option></select>
-        <div class="challenge-grid">
-          <div><label>सवाल:</label><input type="number" id="customLimit" placeholder="10"></div>
-          <div><label>मिनट:</label><input type="number" id="customTime" placeholder="5"></div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+          <div><label style="font-size: 12px;">सवाल:</label><input type="number" id="customLimit" placeholder="10"></div>
+          <div><label style="font-size: 12px;">मिनट:</label><input type="number" id="customTime" placeholder="5"></div>
         </div>
         <button class="main-btn" onclick="startQuiz()" style="background: #5d6d7e; color: white;">🎯 शुरू करें</button>
         <button id="weakAreasBtn" class="main-btn" style="background: #e67e22; color: white; display: none;" onclick="startWeakAreasQuiz()">🔄 Improve Weak Areas (<span id="weakCount">0</span>)</button>
@@ -101,7 +100,7 @@
       <div id="quizContent">
         <div id="qCount" style="text-align:right; font-size:14px; font-weight:bold; margin-bottom:5px;"></div>
         <div id="questionBox" class="question-card"></div>
-        <button id="showBtn" onclick="toggleExp()" class="main-btn" style="background:#3498db; color:#fff;">👁️ जवाब/Explanation देखें</button>
+        <button id="showBtn" onclick="toggleExp()" class="main-btn" style="background:#3498db; color:#fff;">👁️ जवाब देखें</button>
         <div id="expBox" class="exp-box"></div>
         <div class="action-btns">
           <button onclick="handleResponse(true)" class="main-btn" style="background:var(--progress-color); color:#fff;">✅ सही था</button>
@@ -109,6 +108,14 @@
         </div>
       </div>
       <div id="resultArea" style="display:none; text-align:center;"></div>
+    </div>
+  </div>
+
+  <div id="reviewModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeReview()">&times;</span>
+      <h3 style="text-align:center; color:#e67e22;">गलत सवालों की लिस्ट</h3>
+      <div id="reviewList"></div>
     </div>
   </div>
 
@@ -212,56 +219,43 @@
       const resArea = document.getElementById("resultArea");
       resArea.style.display = "block";
       
-      let html = `<h3>🏁 स्कोर: ${score}/${selectedQuestions.length}</h3>`;
-      
+      let resHTML = `<h3>🏁 स्कोर: ${score}/${selectedQuestions.length}</h3>`;
       if(wrongQuestions.length > 0) {
-        html += `<div style="margin: 20px 0; max-height: 300px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px;">
-                  <h4 style="color:#e67e22;">⚠️ इन सवालों में सुधार चाहिए:</h4>`;
-        wrongQuestions.forEach(q => {
-          html += `<div class="review-item">
-                    <span class="review-q">${q.question}</span>
-                    <div class="review-e">${q.explanation || 'No explanation available'}</div>
-                   </div>`;
-        });
-        html += `</div>`;
+        resHTML += `<button class="main-btn" style="background:#e67e22; color:white;" onclick="openReview()">🔍 Review Wrong Questions (${wrongQuestions.length})</button>`;
       } else {
-        html += `<p style="color:var(--progress-color); font-weight:bold;">🌟 अद्भुत! सारे सवाल सही थे।</p>`;
+        resHTML += `<p style="color:var(--progress-color); font-weight:bold;">🌟 जबरदस्त! सब सही था।</p>`;
       }
-
-      html += `<button class="main-btn" onclick="goToHome()">🏠 होम</button>`;
-      resArea.innerHTML = html;
+      resHTML += `<button class="main-btn" onclick="goToHome()">🏠 होम</button>`;
+      resArea.innerHTML = resHTML;
       
       document.getElementById("timerDisplay").style.display = "none";
       document.getElementById("bookmarkActionBtn").style.display = "none";
       document.getElementById("quitBtn").style.display = "none";
     }
 
-    function goToHome() {
-      document.getElementById("quizArea").style.display = "none";
-      document.getElementById("setupArea").style.display = "block";
-      document.getElementById("pCont").style.display = "none";
-      window.speechSynthesis.cancel();
-      updateWeakBtn(); checkSavedBtn(); checkResumeStatus();
+    function openReview() {
+      const list = document.getElementById("reviewList");
+      list.innerHTML = "";
+      wrongQuestions.forEach(q => {
+        list.innerHTML += `<div class="review-item"><span class="review-q">${q.question}</span><div class="review-e">${q.explanation || 'No explanation'}</div></div>`;
+      });
+      document.getElementById("reviewModal").style.display = "block";
     }
 
-    function quitQuiz() { if(confirm("क्विज़ छोड़ें?")) showFinalResult(); }
+    function closeReview() { document.getElementById("reviewModal").style.display = "none"; }
+    function goToHome() { document.getElementById("quizArea").style.display = "none"; document.getElementById("setupArea").style.display = "block"; document.getElementById("pCont").style.display = "none"; window.speechSynthesis.cancel(); updateWeakBtn(); checkSavedBtn(); checkResumeStatus(); }
     function toggleExp() { const eb = document.getElementById("expBox"); eb.style.display = (eb.style.display === "block") ? "none" : "block"; }
     function speak(text) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.rate = parseFloat(document.getElementById("voiceSpeed").value) || 1; window.speechSynthesis.speak(u); }
     function saveSession() { localStorage.setItem("subj_active_session", JSON.stringify({ selectedQuestions, currentIdx, score, isWeakMode, currentSub, currentCh, wrongQuestions })); }
     function checkResumeStatus() { document.getElementById("resumeBtn").style.display = localStorage.getItem("subj_active_session") ? "block" : "none"; }
-    function resumeQuiz() { 
-      const s = JSON.parse(localStorage.getItem("subj_active_session")); 
-      selectedQuestions = s.selectedQuestions; currentIdx = s.currentIdx; score = s.score; 
-      isWeakMode = s.isWeakMode; currentSub = s.currentSub; currentCh = s.currentCh; 
-      wrongQuestions = s.wrongQuestions || []; 
-      initUI(); 
-    }
+    function resumeQuiz() { const s = JSON.parse(localStorage.getItem("subj_active_session")); selectedQuestions = s.selectedQuestions; currentIdx = s.currentIdx; score = s.score; isWeakMode = s.isWeakMode; currentSub = s.currentSub; currentCh = s.currentCh; wrongQuestions = s.wrongQuestions || []; initUI(); }
     function updateWeakBtn() { document.getElementById("weakAreasBtn").style.display = weakList.length > 0 ? "block" : "none"; document.getElementById("weakCount").innerText = weakList.length; }
     function checkSavedBtn() { document.getElementById("savedPracticeBtn").style.display = savedList.length > 0 ? "block" : "none"; }
     function startSavedPractice() { isWeakMode = false; selectedQuestions = [...savedList]; currentIdx = score = 0; wrongQuestions = []; initUI(); }
     function handleBookmarkClick() { const q = selectedQuestions[currentIdx]; const i = savedList.findIndex(x => x.question === q.question); if(i > -1) savedList.splice(i, 1); else savedList.push(q); localStorage.setItem("subj_bookmarks", JSON.stringify(savedList)); document.getElementById("bookmarkActionBtn").classList.toggle("active"); checkSavedBtn(); }
     function toggleTracker() { const area = document.getElementById("trackerArea"); area.style.display = (area.style.display === "block") ? "none" : "block"; if(area.style.display === "block") renderTracker(); }
-    function renderTracker() { const content = document.getElementById("trackerContent"); content.innerHTML = ""; Object.keys(quizData).forEach(sub => { let html = `<div class="subject-group"><div class="subject-title">${sub}</div>`; Object.keys(quizData[sub]).forEach(ch => { const last = revisionDates[`${sub}_${ch}`]; let status = "status-red", date = "Never"; if(last) { const days = (Date.now() - last) / 86400000; date = new Date(last).toLocaleDateString(); status = days < 7 ? "status-green" : (days < 15 ? "status-yellow" : "status-red"); } html += `<div class="chapter-row"><div><span class="status-badge" style="background-color:${status === 'status-green'?'#2ecc71':(status === 'status-yellow'?'#f1c40f':'#e74c3c')}"></span>${ch}</div><span>${date}</span></div>`; }); content.innerHTML += html + "</div>"; }); }
+    function renderTracker() { const content = document.getElementById("trackerContent"); content.innerHTML = ""; Object.keys(quizData).forEach(sub => { let html = `<div class="subject-group"><div class="subject-title">${sub}</div>`; Object.keys(quizData[sub]).forEach(ch => { const last = revisionDates[`${sub}_${ch}`]; let status = "status-red", date = "Never"; if(last) { const days = (Date.now() - last) / 86400000; date = new Date(last).toLocaleDateString(); status = days < 7 ? "#2ecc71" : (days < 15 ? "#f1c40f" : "#e74c3c"); } html += `<div class="chapter-row"><div><span style="height:10px; width:10px; border-radius:50%; display:inline-block; margin-right:8px; background:${last?status:'#e74c3c'}"></span>${ch}</div><span>${date}</span></div>`; }); content.innerHTML += html + "</div>"; }); }
+    function quitQuiz() { if(confirm("क्विज़ छोड़ें?")) showFinalResult(); }
     function saveVoiceSpeed(v) { localStorage.setItem("subj_voice_speed", v); }
   </script>
 </body>
