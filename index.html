@@ -103,12 +103,24 @@
 
     window.onload = () => { updateWeakBtn(); checkResumeStatus(); };
 
-    // JSON Fetch (Change filename here)
-    fetch("subjective.json").then(r => r.json()).then(j => {
-      quizData = j;
-      const s = document.getElementById("subjectSelect");
-      Object.keys(j).forEach(k => s.add(new Option(k, k)));
-    });
+    // पुराने fetch को हटाकर इसे डालें
+fetch("subjective.json") 
+  .then(r => {
+    if (!r.ok) throw new Error("File not found");
+    return r.json();
+  })
+  .then(j => {
+    quizData = j;
+    console.log("Data Loaded:", quizData); // चेक करने के लिए Console देखें
+    const s = document.getElementById("subjectSelect");
+    s.innerHTML = "<option value='all'>-- सभी विषय --</option>";
+    Object.keys(j).forEach(k => s.add(new Option(k, k)));
+  })
+  .catch(err => {
+    alert("JSON फाइल लोड नहीं हो पाई! चेक करें कि फाइल का नाम 'subjective.json' ही है और वह उसी फोल्डर में है जहाँ HTML फाइल है।");
+    console.error(err);
+  });
+
 
     function updateChapters() {
       const s = document.getElementById("subjectSelect").value, c = document.getElementById("chapterSelect");
