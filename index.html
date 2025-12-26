@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>📖 Subjective Pro - Review Button Edition</title>
+  <title>📖 Subjective Pro - All Features + PDF</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -19,6 +19,14 @@
     body { font-family: 'Rubik', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 15px; transition: 0.3s; }
     .container { max-width: 700px; margin: auto; background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; border: 1px solid var(--border-color); }
     
+    /* Print CSS */
+    @media print {
+      body { background: white !important; color: black !important; }
+      .container, .header-btns, .modal, .no-print { display: none !important; }
+      #printSection { display: block !important; }
+      .print-box { border-bottom: 1px solid #eee; padding: 10px; page-break-inside: avoid; }
+    }
+
     .progress-container { width: 100%; background: #e0dcd0; height: 8px; border-radius: 5px; margin-bottom: 15px; display: none; }
     #progressBar { height: 100%; width: 0%; background: var(--progress-color); border-radius: 5px; transition: 0.4s; }
 
@@ -42,7 +50,7 @@
     #timerDisplay { font-weight: bold; font-size: 18px; color: #e74c3c; display: none; text-align: center; flex-grow: 1; }
 
     h2 { text-align: center; margin-top: 0; color: var(--primary-color); }
-    select, input, .main-btn { padding: 12px; font-size: 16px; margin-bottom: 12px; width: 100%; border-radius: 10px; border: 1px solid var(--border-color); background-color: var(--btn-bg); color: var(--text-color); box-sizing: border-box; }
+    select, input, .main-btn { padding: 12px; font-size: 16px; margin-bottom: 12px; width: 100%; border-radius: 10px; border: 1px solid var(--border-color); background-color: var(--btn-bg); color: var(--text-color); box-sizing: border-box; cursor: pointer; }
 
     .question-card { background: var(--question-bg); border-left: 6px solid var(--primary-color); padding: 20px; border-radius: 12px; margin-bottom: 20px; font-size: 22px; font-weight: 550; line-height: 1.5; position: relative; }
     .speak-btn { position: absolute; right: 10px; top: 10px; background: none; border: none; cursor: pointer; font-size: 20px; opacity: 0.6; }
@@ -50,21 +58,31 @@
     .exp-box { background: #dff9fb; padding: 15px; border-radius: 10px; display: none; margin-bottom: 15px; color: #130f40; border: 1px dashed #3498db; font-size: 18px; }
     [data-theme="dark"] .exp-box { background: #3d3d3d; color: #fff; }
 
-    /* Modal Styling */
+    /* Modals */
     .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); }
-    .modal-content { background: var(--card-bg); margin: 10% auto; padding: 20px; border-radius: 15px; width: 90%; max-width: 500px; max-height: 70vh; overflow-y: auto; position: relative; border: 1px solid var(--border-color); }
-    .close-modal { position: sticky; top: 0; float: right; font-size: 28px; cursor: pointer; color: #e74c3c; font-weight: bold; background: var(--card-bg); width: 30px; text-align: center; border-radius: 50%; }
+    .modal-content { background: var(--card-bg); margin: 5% auto; padding: 20px; border-radius: 15px; width: 90%; max-width: 550px; max-height: 80vh; overflow-y: auto; position: relative; border: 1px solid var(--border-color); }
+    .close-modal { position: sticky; top: 0; float: right; font-size: 28px; cursor: pointer; color: #e74c3c; font-weight: bold; background: var(--card-bg); width: 30px; text-align: center; border-radius: 50%; z-index: 10; }
 
-    .review-item { text-align: left; background: var(--bg-color); padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #e67e22; }
-    .review-q { font-weight: 600; display: block; margin-bottom: 5px; }
-    .review-e { font-size: 14px; opacity: 0.8; border-top: 1px solid #ddd; padding-top: 5px; margin-top: 5px; }
+    .list-item { background: var(--bg-color); padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid var(--primary-color); position: relative; }
+    .list-q { font-weight: 600; display: block; margin-bottom: 5px; padding-right: 25px; }
+    .list-e { font-size: 14px; opacity: 0.8; border-top: 1px solid #ddd; padding-top: 5px; margin-top: 5px; }
+    
+    .tracker-card { display: none; margin-top: 15px; padding: 10px; background: var(--btn-bg); border-radius: 10px; border: 1px solid var(--border-color); }
+    .subject-group { margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
+    .subject-title { background: var(--primary-color); color: white; padding: 8px; font-weight: bold; }
+    .chapter-row { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid var(--border-color); font-size: 14px; }
 
     .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
   </style>
 </head>
 <body>
 
-  <div class="header-btns">
+  <div id="printSection" style="display:none; padding: 20px;">
+    <h2 style="text-align:center; border-bottom: 2px solid #333;">Saved Questions Bank</h2>
+    <div id="printBody"></div>
+  </div>
+
+  <div class="header-btns no-print">
     <div class="header-left">
       <button id="themeBtn" onclick="toggleTheme()">🌙</button>
       <div style="display:flex; align-items:center; gap:5px;">
@@ -78,7 +96,7 @@
     <button id="quitBtn" onclick="quitQuiz()">⏹️ Quit</button>
   </div>
 
-  <div class="container">
+  <div class="container no-print">
     <div class="progress-container" id="pCont"><div id="progressBar"></div></div>
 
     <div id="setupArea">
@@ -86,14 +104,25 @@
         <button id="resumeBtn" class="main-btn" style="background: #9b59b6; color: white; display: none;" onclick="resumeQuiz()">🕒 पिछला सेशन जारी रखें</button>
         <select id="subjectSelect" onchange="updateChapters()"><option value="all">-- लोड हो रहा है --</option></select>
         <select id="chapterSelect"><option value="all">-- सभी अध्याय --</option></select>
+        
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-          <div><label style="font-size: 12px;">सवाल:</label><input type="number" id="customLimit" placeholder="10"></div>
-          <div><label style="font-size: 12px;">मिनट:</label><input type="number" id="customTime" placeholder="5"></div>
+          <div><label style="font-size: 11px;">सवाल:</label><input type="number" id="customLimit" placeholder="10"></div>
+          <div><label style="font-size: 11px;">मिनट:</label><input type="number" id="customTime" placeholder="5"></div>
         </div>
+
         <button class="main-btn" onclick="startQuiz()" style="background: #5d6d7e; color: white;">🎯 शुरू करें</button>
         <button id="weakAreasBtn" class="main-btn" style="background: #e67e22; color: white; display: none;" onclick="startWeakAreasQuiz()">🔄 Improve Weak Areas (<span id="weakCount">0</span>)</button>
         <button class="main-btn" onclick="toggleTracker()" style="background: #3498db; color: white;">📊 Revision Tracker</button>
-        <button id="savedPracticeBtn" class="main-btn" style="background:#f1c40f; color:#000; display:none;" onclick="startSavedPractice()">⭐ सहेजे गए सवाल</button>
+        
+        <div style="display:flex; gap:10px;">
+          <button id="savedPracticeBtn" class="main-btn" style="background:#f1c40f; color:#000; display:none; flex:1;" onclick="startSavedPractice()">⭐ सहेजे गए सवाल</button>
+          <button id="viewSavedListBtn" class="main-btn" style="background:#3498db; color:#fff; display:none; flex:1;" onclick="openSavedListModal()">📄 View & PDF</button>
+        </div>
+
+        <div id="trackerArea" class="tracker-card">
+          <h3 style="text-align:center; margin-top:0;">Revision Status</h3>
+          <div id="trackerContent"></div>
+        </div>
     </div>
 
     <div id="quizArea" style="display:none;">
@@ -111,11 +140,20 @@
     </div>
   </div>
 
-  <div id="reviewModal" class="modal">
+  <div id="reviewModal" class="modal no-print">
     <div class="modal-content">
       <span class="close-modal" onclick="closeReview()">&times;</span>
       <h3 style="text-align:center; color:#e67e22;">गलत सवालों की लिस्ट</h3>
       <div id="reviewList"></div>
+    </div>
+  </div>
+
+  <div id="savedListModal" class="modal no-print">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeSavedList()">&times;</span>
+      <h3 style="text-align:center; color:#3498db;">⭐ सहेजे गए सवालों की लिस्ट</h3>
+      <button class="main-btn" style="background:#27ae60; color:white;" onclick="window.print()">🖨️ Download PDF / Print</button>
+      <div id="savedListContent"></div>
     </div>
   </div>
 
@@ -214,35 +252,39 @@
       clearInterval(timerInterval);
       localStorage.removeItem("subj_active_session");
       if(!isWeakMode && currentSub !== "all" && currentCh !== "all") { revisionDates[`${currentSub}_${currentCh}`] = Date.now(); localStorage.setItem("subj_revisions", JSON.stringify(revisionDates)); }
-      
       document.getElementById("quizContent").style.display = "none";
       const resArea = document.getElementById("resultArea");
       resArea.style.display = "block";
-      
       let resHTML = `<h3>🏁 स्कोर: ${score}/${selectedQuestions.length}</h3>`;
-      if(wrongQuestions.length > 0) {
-        resHTML += `<button class="main-btn" style="background:#e67e22; color:white;" onclick="openReview()">🔍 Review Wrong Questions (${wrongQuestions.length})</button>`;
-      } else {
-        resHTML += `<p style="color:var(--progress-color); font-weight:bold;">🌟 जबरदस्त! सब सही था।</p>`;
-      }
+      if(wrongQuestions.length > 0) resHTML += `<button class="main-btn" style="background:#e67e22; color:white;" onclick="openReview()">🔍 Review Wrong Questions (${wrongQuestions.length})</button>`;
+      else resHTML += `<p style="color:var(--progress-color); font-weight:bold;">🌟 जबरदस्त! सब सही था।</p>`;
       resHTML += `<button class="main-btn" onclick="goToHome()">🏠 होम</button>`;
       resArea.innerHTML = resHTML;
-      
       document.getElementById("timerDisplay").style.display = "none";
       document.getElementById("bookmarkActionBtn").style.display = "none";
       document.getElementById("quitBtn").style.display = "none";
     }
 
     function openReview() {
-      const list = document.getElementById("reviewList");
-      list.innerHTML = "";
-      wrongQuestions.forEach(q => {
-        list.innerHTML += `<div class="review-item"><span class="review-q">${q.question}</span><div class="review-e">${q.explanation || 'No explanation'}</div></div>`;
-      });
+      const list = document.getElementById("reviewList"); list.innerHTML = "";
+      wrongQuestions.forEach(q => list.innerHTML += `<div class="list-item"><span class="list-q">${q.question}</span><div class="list-e">${q.explanation || 'No explanation'}</div></div>`);
       document.getElementById("reviewModal").style.display = "block";
     }
 
+    function openSavedListModal() {
+      const list = document.getElementById("savedListContent");
+      const printBody = document.getElementById("printBody");
+      list.innerHTML = ""; printBody.innerHTML = "";
+      savedList.forEach((q, i) => {
+        const html = `<div class="list-item"><span class="list-q">${i+1}. ${q.question}</span><div class="list-e">${q.explanation || ''}</div></div>`;
+        list.innerHTML += html;
+        printBody.innerHTML += `<div class="print-box"><strong>Q${i+1}: ${q.question}</strong><p>Ans: ${q.explanation || '---'}</p></div>`;
+      });
+      document.getElementById("savedListModal").style.display = "block";
+    }
+
     function closeReview() { document.getElementById("reviewModal").style.display = "none"; }
+    function closeSavedList() { document.getElementById("savedListModal").style.display = "none"; }
     function goToHome() { document.getElementById("quizArea").style.display = "none"; document.getElementById("setupArea").style.display = "block"; document.getElementById("pCont").style.display = "none"; window.speechSynthesis.cancel(); updateWeakBtn(); checkSavedBtn(); checkResumeStatus(); }
     function toggleExp() { const eb = document.getElementById("expBox"); eb.style.display = (eb.style.display === "block") ? "none" : "block"; }
     function speak(text) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.rate = parseFloat(document.getElementById("voiceSpeed").value) || 1; window.speechSynthesis.speak(u); }
@@ -250,11 +292,15 @@
     function checkResumeStatus() { document.getElementById("resumeBtn").style.display = localStorage.getItem("subj_active_session") ? "block" : "none"; }
     function resumeQuiz() { const s = JSON.parse(localStorage.getItem("subj_active_session")); selectedQuestions = s.selectedQuestions; currentIdx = s.currentIdx; score = s.score; isWeakMode = s.isWeakMode; currentSub = s.currentSub; currentCh = s.currentCh; wrongQuestions = s.wrongQuestions || []; initUI(); }
     function updateWeakBtn() { document.getElementById("weakAreasBtn").style.display = weakList.length > 0 ? "block" : "none"; document.getElementById("weakCount").innerText = weakList.length; }
-    function checkSavedBtn() { document.getElementById("savedPracticeBtn").style.display = savedList.length > 0 ? "block" : "none"; }
+    function checkSavedBtn() { 
+      const display = savedList.length > 0 ? "block" : "none";
+      document.getElementById("savedPracticeBtn").style.display = display; 
+      document.getElementById("viewSavedListBtn").style.display = display; 
+    }
     function startSavedPractice() { isWeakMode = false; selectedQuestions = [...savedList]; currentIdx = score = 0; wrongQuestions = []; initUI(); }
     function handleBookmarkClick() { const q = selectedQuestions[currentIdx]; const i = savedList.findIndex(x => x.question === q.question); if(i > -1) savedList.splice(i, 1); else savedList.push(q); localStorage.setItem("subj_bookmarks", JSON.stringify(savedList)); document.getElementById("bookmarkActionBtn").classList.toggle("active"); checkSavedBtn(); }
     function toggleTracker() { const area = document.getElementById("trackerArea"); area.style.display = (area.style.display === "block") ? "none" : "block"; if(area.style.display === "block") renderTracker(); }
-    function renderTracker() { const content = document.getElementById("trackerContent"); content.innerHTML = ""; Object.keys(quizData).forEach(sub => { let html = `<div class="subject-group"><div class="subject-title">${sub}</div>`; Object.keys(quizData[sub]).forEach(ch => { const last = revisionDates[`${sub}_${ch}`]; let status = "status-red", date = "Never"; if(last) { const days = (Date.now() - last) / 86400000; date = new Date(last).toLocaleDateString(); status = days < 7 ? "#2ecc71" : (days < 15 ? "#f1c40f" : "#e74c3c"); } html += `<div class="chapter-row"><div><span style="height:10px; width:10px; border-radius:50%; display:inline-block; margin-right:8px; background:${last?status:'#e74c3c'}"></span>${ch}</div><span>${date}</span></div>`; }); content.innerHTML += html + "</div>"; }); }
+    function renderTracker() { const content = document.getElementById("trackerContent"); content.innerHTML = ""; Object.keys(quizData).forEach(sub => { let html = `<div class="subject-group"><div class="subject-title">${sub}</div>`; Object.keys(quizData[sub]).forEach(ch => { const last = revisionDates[`${sub}_${ch}`]; let status = "#e74c3c", date = "Never"; if(last) { const days = (Date.now() - last) / 86400000; date = new Date(last).toLocaleDateString(); status = days < 7 ? "#2ecc71" : (days < 15 ? "#f1c40f" : "#e74c3c"); } html += `<div class="chapter-row"><div><span style="height:8px; width:8px; border-radius:50%; display:inline-block; margin-right:5px; background:${status}"></span>${ch}</div><span>${date}</span></div>`; }); content.innerHTML += html + "</div>"; }); }
     function quitQuiz() { if(confirm("क्विज़ छोड़ें?")) showFinalResult(); }
     function saveVoiceSpeed(v) { localStorage.setItem("subj_voice_speed", v); }
   </script>
