@@ -12,7 +12,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
   <style>
-    /* ========== वही स्टाइल जैसा पिछली बार दिया था ========== */
+    /* ========== स्टाइल (पहले जैसी ही) ========== */
     :root {
       --bg-color: #f5f2eb; --card-bg: #ffffff; --text-color: #2c3e50;
       --question-bg: #ffffff; --border-color: #e0dcd0; --btn-bg: #faf9f6; 
@@ -152,7 +152,8 @@
     
     .option-btn { display: block; background: var(--card-bg); border: 2px solid var(--border-color); color: var(--text-color); padding: 14px; margin: 10px 0; border-radius: 10px; cursor: pointer; width: 100%; text-align: left; font-size: 19px; font-weight: 500; transition: 0.2s; }
     .option-btn:hover { border-color: var(--primary-color); background: var(--btn-bg); }
-    #nextBtn { display: none; background: #28a745 !important; color: white !important; border: none; text-align: center; margin-top: 15px; width: 100%; padding: 14px; border-radius: 10px; font-size: 18px; cursor: pointer; }
+    
+    /* Next Button हटा दिया गया है - अब इसकी जरूरत नहीं */
     
     .explanation-box { display: none; background: #eef2f7; border-left: 5px solid #3498db; padding: 15px; margin-top: 15px; border-radius: 8px; font-size: 16px; line-height: 1.6; color: var(--text-color); }
     [data-theme="dark"] .explanation-box { background: #3a3a3a; border-left-color: #8da2b5; }
@@ -352,7 +353,7 @@
   </div>
 
   <script>
-    // ========== फायरबेस कॉन्फिग (वही) ==========
+    // ========== फायरबेस कॉन्फिग ==========
     const firebaseConfig = {
       apiKey: "AIzaSyA_Wm4oRPvdHJ_9NVHrGGWaom5Y3lu6MBE",
       authDomain: "mystudyquiz-ac0d9.firebaseapp.com",
@@ -369,14 +370,15 @@
     const database = firebase.database();
 
     // ========== ग्लोबल वेरिएबल्स ==========
-    let quizData = {}; // डेटा sub.json से लोड होगा (Website 1 वाला)
+    let quizData = {};
     let selectedQuestions = [], wrongQuestions = [], currentIdx = 0, score = 0, questionsAttempted = 0, timerInterval;
     let currentSub = "", currentCh = "", isWeakMode = false;
     let savedList = [], revisionDates = {}, weakList = [], collections = {};
     let isGuest = false;
+    let autoNextTimer = null; // ऑटो नेक्स्ट के लिए टाइमर
 
     // ========== डेटा स्टोरेज के लिए अलग पहचान (Website 1 के लिए) ==========
-    const STORAGE_PREFIX = 'website1_';  // Website 1 के लिए अलग प्रीफिक्स
+    const STORAGE_PREFIX = 'website1_';
 
     // ========== ऑथ स्टेट लिसनर ==========
     auth.onAuthStateChanged((user) => {
@@ -506,7 +508,7 @@
         location.reload();
     }
 
-    // ========== फायरबेस/लोकल स्टोरेज सिंक (Website 1 के लिए अलग पाथ) ==========
+    // ========== फायरबेस/लोकल स्टोरेज सिंक ==========
     function syncToFirebase() {
         const dataToSave = {
             bookmarks: savedList,
@@ -520,7 +522,6 @@
         } else {
             const user = auth.currentUser;
             if (!user) return;
-            // Website 1 के लिए अलग पाथ: users_website1/{uid}
             database.ref('users_website1/' + user.uid).set(dataToSave);
         }
     }
@@ -536,10 +537,9 @@
         });
     }
 
-    // ========== ऐप इनिशियलाइजेशन (Website 1 की JSON फाइल लोड करेगा) ==========
+    // ========== ऐप इनिशियलाइजेशन ==========
     function initApp() { 
       checkSavedBtn(); updateWeakBtn(); checkResumeStatus(); updateCollectionBtn();
-      // Website 1 के लिए sub.json लोड करें (बिना ऑप्शन वाले सवाल)
       fetch("sub.json?v=" + Math.random()).then(r => r.json()).then(j => {
         quizData = j;
         const s = document.getElementById("subjectSelect");
@@ -706,13 +706,31 @@
         <div id="questionBox" class="question-card"></div>
         <div id="optionsBox"></div>
         <div id="resultBox" style="text-align:center; font-weight:bold; margin-top:10px;"></div>
-        <button id="nextBtn" onclick="nextQuestionTrigger()">➡️ अगला सवाल</button>
         <div id="explanationBox" class="explanation-box"></div>`;
+        // Next Button हटा दिया गया
     }
 
     // क्वेश्चन का सब्जेक्ट और चैप्टर ढूंढें
     function findQuestionMeta(q) {
       for(let s in quizData) for(let c in quizData[s]) if(quizData[s][c].some(item => item.question === q.question)) { q.sub = s; q.ch = c; return; }
+    }
+
+    // ========== ऑटो नेक्स्ट फंक्शन ==========
+    function goToNextQuestion() {
+      // पिछला टाइमर कैंसल करें
+      if(autoNextTimer) {
+        clearTimeout(autoNextTimer);
+        autoNextTimer = null;
+      }
+      
+      window.speechSynthesis.cancel(); 
+      currentIdx++; 
+      if(currentIdx < selectedQuestions.length) { 
+        saveCurrentSession(); 
+        showQuestion(); 
+      } else { 
+        showFinalResult(); 
+      }
     }
 
     function showQuestion() {
@@ -721,7 +739,7 @@
       document.getElementById("progressBar").style.width = (currentIdx / selectedQuestions.length) * 100 + "%";
       document.getElementById("qCount").innerText = `सवाल: ${currentIdx + 1} / ${selectedQuestions.length}`;
       
-      // सवाल दिखाएं (बिना इमेज के, क्योंकि इमेज एक्सप्लेनेशन में दिखेगी)
+      // सवाल दिखाएं (बिना इमेज के)
       document.getElementById("questionBox").innerHTML = `${q.question} <button class="speak-btn" onclick="readFullQuestion()">🔊</button>`;
       
       if(document.getElementById("autoReadSwitch").checked) setTimeout(readFullQuestion, 500);
@@ -729,15 +747,15 @@
       // बुकमार्क बटन स्टेट
       document.getElementById("bookmarkActionBtn").classList.toggle("active", savedList.some(item => item.question === q.question));
       
-      // हार्ट बटन स्टेट (कलेक्शन)
+      // हार्ट बटन स्टेट
       let isHearted = (q.sub && q.ch && collections[q.sub] && collections[q.sub][q.ch]) ? collections[q.sub][q.ch].some(item => item.question === q.question) : false;
       document.getElementById("heartActionBtn").classList.toggle("active", isHearted);
       
-      const oBox = document.getElementById("optionsBox"), rBox = document.getElementById("resultBox"), nBtn = document.getElementById("nextBtn"), eBox = document.getElementById("explanationBox");
-      oBox.innerHTML = ""; rBox.innerText = ""; nBtn.style.display = "none"; eBox.style.display = "none"; 
+      const oBox = document.getElementById("optionsBox"), rBox = document.getElementById("resultBox"), eBox = document.getElementById("explanationBox");
+      oBox.innerHTML = ""; rBox.innerText = ""; eBox.style.display = "none"; 
       
       if(q.options && q.options.length > 0) {
-        // अगर ऑप्शन हैं (मल्टीपल चॉइस)
+        // MCQ
         q.options.forEach((opt) => {
           const b = document.createElement("button"); b.className = "option-btn"; b.innerText = opt;
           b.onclick = () => {
@@ -751,20 +769,24 @@
               wrongQuestions.push(q); 
               if(!weakList.some(i => i.question === q.question)) { weakList.push(q); syncToFirebase(); }
             }
-            // एक्सप्लेनेशन और इमेज दिखाएं (यहाँ दिखेगा)
+            // एक्सप्लेनेशन और इमेज दिखाएं
             let expHTML = "";
             if(q.explanation) expHTML += `<strong>💡 व्याख्या:</strong><br>${q.explanation}`;
             if(q.image) expHTML += `<img src="${q.image}" class="exp-img" onclick="openFullImg(this.src)">`;
             eBox.innerHTML = expHTML;
             eBox.style.display = expHTML ? "block" : "none";
-            nBtn.style.display = "block"; 
+            
             saveCurrentSession();
+            
+            // 1.5 सेकंड बाद अगला सवाल लोड करें
+            if(autoNextTimer) clearTimeout(autoNextTimer);
+            autoNextTimer = setTimeout(goToNextQuestion, 1500);
           };
           oBox.appendChild(b);
         });
       } else {
-        // सब्जेक्टिव सवाल (बिना ऑप्शन के) - Website 1 का तरीका
-        oBox.innerHTML = ""; // पहले से कोई ऑप्शन नहीं
+        // सब्जेक्टिव
+        oBox.innerHTML = ""; 
         
         // "जवाब देखें" बटन
         const viewAnsBtn = document.createElement("button");
@@ -780,7 +802,7 @@
           eBox.innerHTML = expHTML;
           eBox.style.display = "block";
           
-          // अब "सही था" और "सुधार चाहिए" बटन दिखाएं (Website 1 की तरह)
+          // "सही था" और "सुधार चाहिए" बटन
           oBox.innerHTML = `
             <div class="action-btns" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
               <button onclick="handleSubjectiveResponse(true)" class="main-btn" style="background:var(--progress-color); color:#fff;">✅ सही था</button>
@@ -808,8 +830,10 @@
           syncToFirebase(); 
         }
       }
-      document.getElementById("nextBtn").style.display = "block";
       saveCurrentSession();
+      
+      // तुरंत अगला सवाल लोड करें (बिना देरी के)
+      goToNextQuestion();
     }
 
     // ========== हार्ट/कलेक्शन हैंडलिंग ==========
@@ -855,21 +879,55 @@
 
     function updateCollectionBtn() { document.getElementById("collectionMainBtn").style.display = Object.keys(collections).length > 0 ? "flex" : "none"; }
 
-    // ========== नेक्स्ट क्वेश्चन ==========
-    function nextQuestionTrigger() { 
+    // ========== बुकमार्क हैंडलिंग ==========
+    function handleBookmarkClick() { 
+      const q = selectedQuestions[currentIdx], idx = savedList.findIndex(i => i.question === q.question); 
+      idx > -1 ? savedList.splice(idx, 1) : savedList.push(q); 
+      syncToFirebase(); checkSavedBtn(); 
+      document.getElementById("bookmarkActionBtn").classList.toggle("active"); 
+    }
+
+    function checkSavedBtn() { 
+      document.getElementById("savedPracticeBtn").style.display = savedList.length > 0 ? "flex" : "none"; 
+    }
+
+    function startSavedPractice() { 
+      clearSession(); isWeakMode = false; selectedQuestions = [...savedList].sort(() => Math.random() - 0.5); initQuizUI(); 
+    }
+
+    function updateWeakBtn() { 
+      document.getElementById("weakAreasBtn").style.display = (weakList.length > 0) ? "flex" : "none"; 
+      if(document.getElementById("weakCount")) document.getElementById("weakCount").innerText = weakList.length; 
+    }
+
+    function startWeakAreasQuiz() { 
+      clearSession(); isWeakMode = true; selectedQuestions = [...weakList].sort(() => Math.random() - 0.5); initQuizUI(); 
+    }
+
+    function retryWrong() { 
+      selectedQuestions = [...wrongQuestions]; initQuizUI(); 
+    }
+
+    function quitQuiz() { 
+      if(confirm("क्विज़ छोड़ें?")) showFinalResult(); 
+    }
+
+    function goToHome() { 
+      clearInterval(timerInterval); 
+      if(autoNextTimer) clearTimeout(autoNextTimer);
       window.speechSynthesis.cancel(); 
-      currentIdx++; 
-      if(currentIdx < selectedQuestions.length) { 
-        saveCurrentSession(); 
-        showQuestion(); 
-      } else { 
-        showFinalResult(); 
-      } 
+      document.getElementById("quizArea").style.display = "none"; 
+      document.getElementById("setupArea").style.display = "block"; 
+      document.getElementById("pCont").style.display = "none"; 
+      document.getElementById("quitBtn").style.display = "none"; 
+      updateWeakBtn(); checkResumeStatus(); 
     }
 
     // ========== फाइनल रिजल्ट ==========
     function showFinalResult() {
-      clearSession(); clearInterval(timerInterval); window.speechSynthesis.cancel();
+      clearSession(); clearInterval(timerInterval); 
+      if(autoNextTimer) clearTimeout(autoNextTimer);
+      window.speechSynthesis.cancel();
       document.getElementById("timerDisplay").style.display = "none";
       document.getElementById("bookmarkActionBtn").style.display = "none";
       document.getElementById("heartActionBtn").style.display = "none";
@@ -925,48 +983,6 @@
     }
 
     function closeSavedList() { document.getElementById("savedListModal").style.display = "none"; }
-
-    // ========== बुकमार्क हैंडलिंग ==========
-    function handleBookmarkClick() { 
-      const q = selectedQuestions[currentIdx], idx = savedList.findIndex(i => i.question === q.question); 
-      idx > -1 ? savedList.splice(idx, 1) : savedList.push(q); 
-      syncToFirebase(); checkSavedBtn(); 
-      document.getElementById("bookmarkActionBtn").classList.toggle("active"); 
-    }
-
-    function checkSavedBtn() { 
-      document.getElementById("savedPracticeBtn").style.display = savedList.length > 0 ? "flex" : "none"; 
-    }
-
-    function startSavedPractice() { 
-      clearSession(); isWeakMode = false; selectedQuestions = [...savedList].sort(() => Math.random() - 0.5); initQuizUI(); 
-    }
-
-    function updateWeakBtn() { 
-      document.getElementById("weakAreasBtn").style.display = (weakList.length > 0) ? "flex" : "none"; 
-      if(document.getElementById("weakCount")) document.getElementById("weakCount").innerText = weakList.length; 
-    }
-
-    function startWeakAreasQuiz() { 
-      clearSession(); isWeakMode = true; selectedQuestions = [...weakList].sort(() => Math.random() - 0.5); initQuizUI(); 
-    }
-
-    function retryWrong() { 
-      selectedQuestions = [...wrongQuestions]; initQuizUI(); 
-    }
-
-    function quitQuiz() { 
-      if(confirm("क्विज़ छोड़ें?")) showFinalResult(); 
-    }
-
-    function goToHome() { 
-      clearInterval(timerInterval); window.speechSynthesis.cancel(); 
-      document.getElementById("quizArea").style.display = "none"; 
-      document.getElementById("setupArea").style.display = "block"; 
-      document.getElementById("pCont").style.display = "none"; 
-      document.getElementById("quitBtn").style.display = "none"; 
-      updateWeakBtn(); checkResumeStatus(); 
-    }
 
     // ========== टाइमर ==========
     function startTimer(m) { 
