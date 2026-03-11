@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>📖 Subjective Pro - Ultimate Edition</title>
+  <title>📖 Subjective Pro - Full Featured</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
   
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -21,59 +21,57 @@
       --question-bg: #3d3d3d; --border-color: #444; --btn-bg: #3a3a3a;
       --primary-color: #8da2b5;
     }
-
     body { font-family: 'Rubik', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 15px; transition: 0.3s; }
-    
-    /* LOGIN UI FROM WEBSITE 1 */
-    #loginArea { 
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: linear-gradient(135deg, #f5f2eb 0%, #e0dcd0 100%);
-      display: flex; align-items: center; justify-content: center; z-index: 9999;
-    }
-    [data-theme="dark"] #loginArea { background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%); }
-    .login-glass-card {
-      background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.4); padding: 30px;
-      border-radius: 30px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-      max-width: 400px; width: 90%; animation: fadeIn 0.8s ease-out;
-    }
-    .login-input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 10px; }
-    .email-login-btn { background: #3498db; color: white; border: none; padding: 12px; border-radius: 12px; width: 100%; font-weight: 600; cursor: pointer; }
-    .modern-google-btn, .guest-btn { background: white; border: 1px solid #ddd; padding: 12px; border-radius: 12px; width: 100%; margin-top: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500; }
 
-    /* HEADER & NAV */
+    /* --- LOGIN & UI (From Website 1) --- */
+    #loginArea { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #f5f2eb 0%, #e0dcd0 100%); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+    [data-theme="dark"] #loginArea { background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%); }
+    .login-glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.4); padding: 30px; border-radius: 30px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.1); max-width: 400px; width: 90%; animation: fadeIn 0.8s ease-out; }
+    .login-input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 10px; box-sizing: border-box; }
+    .email-login-btn { background: #3498db; color: white; border: none; padding: 12px; border-radius: 12px; width: 100%; font-weight: 600; cursor: pointer; }
+    .modern-google-btn, .guest-btn { background: white; color: #2c3e50; border: 1px solid #ddd; padding: 12px; border-radius: 12px; width: 100%; margin-top: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500; }
+
+    /* --- LAYOUT --- */
+    .container { max-width: 700px; margin: auto; background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid var(--border-color); position: relative; }
     .header-btns { display: none; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
     .user-profile { position: relative; display: flex; align-items: center; cursor: pointer; }
     .user-profile img { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--primary-color); }
-    .profile-dropdown { position: absolute; top: 45px; right: 0; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; min-width: 160px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: none; flex-direction: column; z-index: 10000; }
-    .profile-dropdown button { padding: 12px; border: none; background: transparent; text-align: left; cursor: pointer; color: var(--text-color); }
+    .profile-dropdown { position: absolute; top: 45px; right: 0; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; min-width: 160px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: none; flex-direction: column; z-index: 10000; overflow: hidden; }
+    .profile-dropdown button { padding: 12px; border: none; background: transparent; color: var(--text-color); text-align: left; cursor: pointer; font-size: 14px; }
+    .profile-dropdown button:hover { background: var(--btn-bg); }
 
-    /* CONTAINER & GRID */
-    .container { max-width: 700px; margin: auto; background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid var(--border-color); }
+    /* --- GRID BUTTONS --- */
     .button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-    .grid-card { display: flex; align-items: center; padding: 15px; border-radius: 20px; border: none; cursor: pointer; transition: 0.3s; text-align: left; }
-    .orange-card { background: #fff9f0; color: #d9480f; border: 1px solid #ffdec0; }
-    .blue-card { background: #f0f7ff; color: #1971c2; border: 1px solid #b2dfff; }
-    .red-card { background: #fff5f5; color: #c92a2a; border: 1px solid #ffc9c9; }
-    .yellow-card { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+    .grid-card { display: flex; align-items: center; padding: 20px 15px; min-height: 100px; border-radius: 20px; border: none; cursor: pointer; transition: 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: left; }
+    .grid-card:hover { transform: translateY(-4px); }
+    .orange-card { background: linear-gradient(135deg, #fff9f0, #ffe8cc); color: #d9480f; border: 1px solid #ffdec0; }
+    .blue-card { background: linear-gradient(135deg, #f0f7ff, #d0ebff); color: #1971c2; border: 1px solid #b2dfff; }
+    .red-card { background: linear-gradient(135deg, #fff5f5, #ffe3e3); color: #c92a2a; border: 1px solid #ffc9c9; }
+    .yellow-card { background: linear-gradient(135deg, #fffbeb, #fef3c7); color: #92400e; border: 1px solid #fde68a; }
+    .card-icon { font-size: 38px; margin-right: 15px; }
+    .card-title { font-weight: 600; font-size: 17px; }
+    .card-sub { font-size: 11px; opacity: 0.8; }
 
-    /* QUIZ AREA STYLES */
+    /* --- QUIZ AREA --- */
     .question-card { background: var(--question-bg); border-left: 6px solid var(--primary-color); padding: 20px; border-radius: 12px; margin-bottom: 20px; font-size: 22px; font-weight: 550; position: relative; }
-    .exp-box { background: #dff9fb; padding: 15px; border-radius: 10px; display: none; margin-bottom: 15px; color: #130f40; border: 1px dashed #3498db; }
+    .speak-btn { position: absolute; right: 10px; top: 10px; background: none; border: none; cursor: pointer; font-size: 20px; opacity: 0.5; }
+    .exp-box { background: #dff9fb; padding: 15px; border-radius: 10px; display: none; margin-bottom: 15px; color: #130f40; border: 1px dashed #3498db; font-size: 18px; }
     [data-theme="dark"] .exp-box { background: #3d3d3d; color: #fff; }
     .exp-img { width: 100%; border-radius: 8px; margin-top: 10px; cursor: zoom-in; }
-
-    /* UTILS */
-    #bookmarkActionBtn, #heartActionBtn { background: transparent; border: none; cursor: pointer; display: none; }
+    
+    /* --- UTILS --- */
+    .progress-container { width: 100%; background: #e0dcd0; height: 8px; border-radius: 5px; margin-bottom: 15px; display: none; }
+    #progressBar { height: 100%; width: 0%; background: var(--progress-color); border-radius: 5px; transition: 0.4s; }
+    #bookmarkActionBtn, #heartActionBtn { background: transparent; border: none; cursor: pointer; display: none; padding: 0; }
     #bookmarkActionBtn svg, #heartActionBtn svg { width: 28px; height: 28px; stroke: var(--text-color); fill: none; stroke-width: 2; }
     #bookmarkActionBtn.active svg { fill: var(--text-color); }
     #heartActionBtn.active svg { fill: #e74c3c; stroke: #e74c3c; }
-    #timerDisplay { font-weight: bold; color: #e74c3c; display: none; }
-    .progress-container { width: 100%; background: #e0dcd0; height: 8px; border-radius: 5px; margin-bottom: 15px; display: none; }
-    #progressBar { height: 100%; width: 0%; background: var(--progress-color); border-radius: 5px; }
+    #timerDisplay { font-weight: bold; font-size: 18px; color: #e74c3c; display: none; text-align: center; flex-grow: 1; }
+    .main-btn { padding: 12px; font-size: 16px; width: 100%; border-radius: 10px; border: none; cursor: pointer; font-weight: 600; margin-bottom: 10px; }
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     @media (max-width: 500px) { .button-grid { grid-template-columns: 1fr; } }
+    @media print { .no-print { display: none !important; } #printArea { display: block !important; } }
   </style>
 </head>
 <body>
@@ -89,81 +87,87 @@
         </div>
         <div style="margin: 10px 0; color: #888; font-size: 12px;">OR</div>
         <button class="modern-google-btn" onclick="loginWithGoogle()">Continue with Google</button>
-        <button class="guest-btn" onclick="continueAsGuest()">👤 Bina login ke chalayein</button>
+        <button class="guest-btn" onclick="continueAsGuest()">👤 Bina login ke chalayein (Guest)</button>
     </div>
   </div>
 
-  <div class="header-btns" id="mainHeader">
-    <div style="display:flex; gap:10px; align-items:center;">
-      <button id="themeBtn" onclick="toggleTheme()">🌙</button>
+  <div class="header-btns no-print" id="mainHeader">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <button onclick="toggleTheme()" style="background:var(--primary-color); border:none; color:white; padding:8px; border-radius:8px; cursor:pointer;">🌙</button>
       <div style="display:flex; align-items:center; gap:5px;">
-        <span style="font-size:12px;">🔊</span>
+        <span>🔊</span>
         <input type="range" id="voiceSpeed" min="0.5" max="1.5" step="0.1" value="1" style="width:50px;">
       </div>
     </div>
     <div id="timerDisplay">⏳ 00:00</div>
-    <div style="display:flex; gap:10px; align-items:center;">
-        <button id="heartActionBtn" onclick="handleHeartClick()"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg></button>
-        <button id="bookmarkActionBtn" onclick="handleBookmarkClick()"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button>
-        <div id="userProfile" class="user-profile" onclick="toggleProfileMenu(event)"></div>
-        <button id="quitBtn" onclick="quitQuiz()" style="display:none; background:#e74c3c; color:white; border:none; padding:8px; border-radius:8px; cursor:pointer;">⏹️ Quit</button>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <button id="heartActionBtn" title="Collection" onclick="handleHeartClick()"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg></button>
+      <button id="bookmarkActionBtn" onclick="handleBookmarkClick()"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button>
+      <div id="userProfile" class="user-profile" onclick="toggleProfileMenu(event)"></div>
+      <button id="quitBtn" onclick="quitQuiz()" style="display:none; background:#e74c3c; color:white; border:none; padding:8px; border-radius:8px; cursor:pointer;">⏹️ Quit</button>
     </div>
   </div>
 
-  <div class="container" id="mainContainer" style="display:none;">
+  <div class="container no-print" id="mainContainer" style="display:none;">
     <div class="progress-container" id="pCont"><div id="progressBar"></div></div>
 
     <div id="setupArea">
         <h2>🔥 Smart Subjective Pro</h2>
-        <button id="resumeBtn" class="main-btn" style="background: #9b59b6; color: white; display: none; width:100%; padding:12px; border-radius:10px; border:none; margin-bottom:10px;" onclick="resumeQuiz()">🕒 पिछला सेशन जारी रखें</button>
+        <button id="resumeBtn" class="main-btn" style="background: #9b59b6; color: white; display: none;" onclick="resumeQuiz()">🕒 पिछला सेशन जारी रखें</button>
         
-        <select id="subjectSelect" onchange="updateChapters()" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px;"></select>
-        <select id="chapterSelect" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px;"><option value="all">-- सभी अध्याय --</option></select>
+        <select id="subjectSelect" onchange="updateChapters()" class="login-input"></select>
+        <select id="chapterSelect" class="login-input"><option value="all">-- सभी अध्याय --</option></select>
         
         <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-          <input type="number" id="customLimit" placeholder="सवाल (eg. 10)" style="flex:1; padding:10px; border-radius:10px; border:1px solid #ddd;">
-          <input type="number" id="customTime" placeholder="मिनट (eg. 5)" style="flex:1; padding:10px; border-radius:10px; border:1px solid #ddd;">
+          <input type="number" id="customLimit" placeholder="सवाल (eg. 10)" class="login-input" style="margin-bottom:0">
+          <input type="number" id="customTime" placeholder="मिनट (eg. 5)" class="login-input" style="margin-bottom:0">
         </div>
 
-        <button onclick="startQuiz()" style="width:100%; padding:14px; background:#5d6d7e; color:white; border:none; border-radius:10px; cursor:pointer; font-weight:600;">🚀 Start Session</button>
+        <button onclick="startQuiz()" class="main-btn" style="background:#5d6d7e; color:white; height:50px;">🚀 Start Session</button>
         
         <div class="button-grid">
             <button id="weakAreasBtn" class="grid-card orange-card" style="display:none;" onclick="startWeakAreasQuiz()">
-                <div style="font-size:30px; margin-right:10px;">🎯</div>
-                <div><b>Weak Areas (<span id="weakCount">0</span>)</b><br><small>Improve your errors</small></div>
+                <div class="card-icon">🎯</div>
+                <div><div class="card-title">Weak Areas (<span id="weakCount">0</span>)</div><div class="card-sub">Improve mistakes</div></div>
             </button>
-            <button id="collectionBtn" class="grid-card blue-card" style="display:none;" onclick="toggleCollection()">
-                <div style="font-size:30px; margin-right:10px;">📚</div>
-                <div><b>Collections</b><br><small>Subject-wise saved</small></div>
+            <button id="collectionMainBtn" class="grid-card blue-card" style="display:none;" onclick="toggleCollection()">
+                <div class="card-icon">📚</div>
+                <div><div class="card-title">Collections</div><div class="card-sub">Subject-wise saved</div></div>
             </button>
             <button class="grid-card red-card" onclick="toggleTracker()">
-                <div style="font-size:30px; margin-right:10px;">📊</div>
-                <div><b>Tracker</b><br><small>Revision status</small></div>
+                <div class="card-icon">📊</div>
+                <div><div class="card-title">Tracker</div><div class="card-sub">Revision status</div></div>
             </button>
             <button id="savedBtn" class="grid-card yellow-card" style="display:none;" onclick="startSavedPractice()">
-                <div style="font-size:30px; margin-right:10px;">⭐</div>
-                <div><b>Saved Qs</b><br><small>Review bookmarks</small></div>
+                <div class="card-icon">⭐</div>
+                <div><div class="card-title">Saved Qs</div><div class="card-sub">Review bookmarks</div></div>
             </button>
         </div>
 
-        <div id="trackerArea" style="display:none; margin-top:15px; border:1px solid #ddd; padding:10px; border-radius:10px;"></div>
+        <div id="trackerArea" style="display:none; margin-top:20px; border-top:1px solid #ddd; padding-top:10px;"></div>
+        
+        <div id="collectionArea" style="display:none; margin-top:15px; padding:15px; border:1px solid #ddd; border-radius:12px;">
+            <h3 style="text-align:center; margin-top:0;">❤️ Collections</h3>
+            <select id="collSubFilter" onchange="updateCollChapters()" class="login-input"></select>
+            <select id="collChFilter" class="login-input"></select>
+            <button onclick="startCollectionPractice()" class="main-btn" style="background:#27ae60; color:white;">🚀 Start Practice</button>
+        </div>
     </div>
 
     <div id="quizArea" style="display:none;">
-        <div id="qCount" style="text-align:right; font-size:13px; margin-bottom:5px;"></div>
+        <div id="qCount" style="text-align:right; font-size:14px; font-weight:600; margin-bottom:5px;"></div>
         <div id="questionBox" class="question-card"></div>
-        <button id="showBtn" onclick="toggleExp()" style="width:100%; padding:12px; background:#3498db; color:white; border:none; border-radius:10px; margin-bottom:10px;">👁️ जवाब देखें</button>
+        <button id="showBtn" onclick="toggleExp()" class="main-btn" style="background:#3498db; color:white;">👁️ जवाब देखें</button>
         <div id="expBox" class="exp-box"></div>
         
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-            <button onclick="handleResponse(true)" style="padding:15px; background:#27ae60; color:white; border:none; border-radius:10px;">✅ सही था</button>
-            <button onclick="handleResponse(false)" style="padding:15px; background:#e67e22; color:white; border:none; border-radius:10px;">⚠️ सुधार चाहिए</button>
+            <button onclick="handleResponse(true)" class="main-btn" style="background:#27ae60; color:white;">✅ सही था</button>
+            <button onclick="handleResponse(false)" class="main-btn" style="background:#e67e22; color:white;">⚠️ सुधार चाहिए</button>
         </div>
     </div>
   </div>
 
   <script>
-    // FIREBASE CONFIG FROM WEBSITE 1
     const firebaseConfig = {
       apiKey: "AIzaSyA_Wm4oRPvdHJ_9NVHrGGWaom5Y3lu6MBE",
       authDomain: "mystudyquiz-ac0d9.firebaseapp.com",
@@ -180,11 +184,12 @@
 
     let quizData = {}, selectedQuestions = [], currentIdx = 0, score = 0, timerInterval;
     let savedList = [], weakList = [], revisionDates = {}, collections = {}, isGuest = false;
+    let currentSub = "", currentCh = "", isWeakMode = false;
 
-    // AUTH LOGIC
+    // --- Authentication ---
     auth.onAuthStateChanged(user => {
         if (user) {
-            isGuest = false;
+            isGuest = false; localStorage.removeItem("subj_guest");
             document.getElementById("loginArea").style.display = "none";
             document.getElementById("mainContainer").style.display = "block";
             document.getElementById("mainHeader").style.display = "flex";
@@ -200,58 +205,38 @@
     function updateUserProfile(user) {
         const up = document.getElementById("userProfile");
         const photo = user.photoURL || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-        up.innerHTML = `
-            <img src="${photo}">
-            <div id="profileDropdown" class="profile-dropdown">
-                <button onclick="logoutUser()">🚪 Logout</button>
-            </div>`;
+        up.innerHTML = `<img src="${photo}"><div id="profileDropdown" class="profile-dropdown"><button onclick="logoutUser()">🚪 Logout</button></div>`;
     }
 
     function loginWithGoogle() { auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); }
+    function loginWithEmail() {
+        const e = document.getElementById("emailInput").value, p = document.getElementById("passwordInput").value;
+        if(!e || !p) return alert("Fill details");
+        auth.signInWithEmailAndPassword(e, p).catch(() => auth.createUserWithEmailAndPassword(e, p));
+    }
+
     function continueAsGuest() {
         isGuest = true; localStorage.setItem("subj_guest", "true");
         document.getElementById("loginArea").style.display = "none";
         document.getElementById("mainContainer").style.display = "block";
         document.getElementById("mainHeader").style.display = "flex";
         document.getElementById("userProfile").innerHTML = "👤 Guest";
+        const d = JSON.parse(localStorage.getItem("subj_guest_data") || "{}");
+        savedList = d.bookmarks || []; weakList = d.weak || []; revisionDates = d.revisions || {}; collections = d.collections || {};
         initApp();
     }
+
     function logoutUser() { auth.signOut(); localStorage.removeItem("subj_guest"); location.reload(); }
 
-    // DATA SYNC
-    function syncToFirebase() {
-        const data = { bookmarks: savedList, weak: weakList, revisions: revisionDates, collections: collections };
-        if(isGuest) localStorage.setItem("subj_guest_data", JSON.stringify(data));
-        else if(auth.currentUser) database.ref('users_subj/' + auth.currentUser.uid).set(data);
-    }
-
-    function syncFromFirebase(uid) {
-        database.ref('users_subj/' + uid).once('value').then(snap => {
-            const d = snap.val() || {};
-            savedList = d.bookmarks || [];
-            weakList = d.weak || [];
-            revisionDates = d.revisions || {};
-            collections = d.collections || {};
-            initApp();
-        });
-    }
-
-    // APP LOGIC
+    // --- Core Logic ---
     function initApp() {
         fetch("sub.json?v=" + Math.random()).then(r => r.json()).then(j => {
             quizData = j;
             const s = document.getElementById("subjectSelect");
             s.innerHTML = "<option value='all'>-- सभी विषय --</option>";
             Object.keys(j).forEach(k => s.add(new Option(k, k)));
-            updateUIButtons();
+            updateUIButtons(); checkResumeStatus();
         });
-    }
-
-    function updateUIButtons() {
-        document.getElementById("weakAreasBtn").style.display = weakList.length > 0 ? "flex" : "none";
-        document.getElementById("weakCount").innerText = weakList.length;
-        document.getElementById("savedBtn").style.display = savedList.length > 0 ? "flex" : "none";
-        document.getElementById("collectionBtn").style.display = Object.keys(collections).length > 0 ? "flex" : "none";
     }
 
     function updateChapters() {
@@ -260,19 +245,49 @@
         if(s !== "all" && quizData[s]) Object.keys(quizData[s]).forEach(k => c.add(new Option(k, k)));
     }
 
+    function syncToFirebase() {
+        const d = { bookmarks: savedList, weak: weakList, revisions: revisionDates, collections: collections };
+        if(isGuest) localStorage.setItem("subj_guest_data", JSON.stringify(d));
+        else if(auth.currentUser) database.ref('users_subj/' + auth.currentUser.uid).set(d);
+        updateUIButtons();
+    }
+
+    function syncFromFirebase(uid) {
+        database.ref('users_subj/' + uid).once('value').then(snap => {
+            const d = snap.val() || {};
+            savedList = d.bookmarks || []; weakList = d.weak || []; revisionDates = d.revisions || []; collections = d.collections || {};
+            initApp();
+        });
+    }
+
+    function updateUIButtons() {
+        document.getElementById("weakAreasBtn").style.display = weakList.length > 0 ? "flex" : "none";
+        document.getElementById("weakCount").innerText = weakList.length;
+        document.getElementById("savedBtn").style.display = savedList.length > 0 ? "flex" : "none";
+        document.getElementById("collectionMainBtn").style.display = Object.keys(collections).length > 0 ? "flex" : "none";
+    }
+
     function startQuiz() {
-        const sub = document.getElementById("subjectSelect").value;
-        const ch = document.getElementById("chapterSelect").value;
+        isWeakMode = false;
+        currentSub = document.getElementById("subjectSelect").value;
+        currentCh = document.getElementById("chapterSelect").value;
         let pool = [];
-        if(sub === "all") Object.keys(quizData).forEach(s => Object.keys(quizData[s]).forEach(c => pool = pool.concat(quizData[s][c])));
-        else if(ch === "all") Object.keys(quizData[sub]).forEach(c => pool = pool.concat(quizData[sub][c]));
-        else pool = [...quizData[sub][ch]];
+        if(currentSub === "all") Object.keys(quizData).forEach(s => Object.keys(quizData[s]).forEach(c => pool = pool.concat(quizData[s][c])));
+        else if(currentCh === "all") Object.keys(quizData[currentSub]).forEach(c => pool = pool.concat(quizData[currentSub][c]));
+        else pool = [...quizData[currentSub][ch]];
 
         selectedQuestions = pool.sort(() => Math.random() - 0.5);
         const limit = parseInt(document.getElementById("customLimit").value);
         if(limit > 0) selectedQuestions = selectedQuestions.slice(0, limit);
         
-        currentIdx = 0;
+        const mins = parseInt(document.getElementById("customTime").value);
+        if(mins > 0) startTimer(mins);
+        
+        initQuizUI();
+    }
+
+    function initQuizUI() {
+        currentIdx = 0; score = 0;
         document.getElementById("setupArea").style.display = "none";
         document.getElementById("quizArea").style.display = "block";
         document.getElementById("pCont").style.display = "block";
@@ -286,63 +301,99 @@
         const q = selectedQuestions[currentIdx];
         document.getElementById("progressBar").style.width = (currentIdx / selectedQuestions.length) * 100 + "%";
         document.getElementById("qCount").innerText = `प्रगति: ${currentIdx + 1} / ${selectedQuestions.length}`;
-        document.getElementById("questionBox").innerText = q.question;
+        document.getElementById("questionBox").innerHTML = `${q.question} <button class="speak-btn" onclick="speak('${q.question}')">🔊</button>`;
         
         const eb = document.getElementById("expBox");
         eb.style.display = "none";
-        eb.innerHTML = (q.explanation || "") + (q.image ? `<img src="${q.image}" class="exp-img">` : "");
+        eb.innerHTML = (q.explanation || "") + (q.image ? `<br><img src="${q.image}" class="exp-img" onclick="window.open(this.src)">` : "");
         
         document.getElementById("bookmarkActionBtn").classList.toggle("active", savedList.some(i => i.question === q.question));
-        // Heart active logic here if needed
-    }
+        
+        // Find if hearted
+        let isHearted = false;
+        for(let s in collections) for(let c in collections[s]) if(collections[s][c].some(i => i.question === q.question)) isHearted = true;
+        document.getElementById("heartActionBtn").classList.toggle("active", isHearted);
 
-    function toggleExp() {
-        const eb = document.getElementById("expBox");
-        eb.style.display = eb.style.display === "none" ? "block" : "none";
+        saveSession();
     }
 
     function handleResponse(correct) {
         const q = selectedQuestions[currentIdx];
-        if(!correct) {
-            if(!weakList.some(i => i.question === q.question)) weakList.push(q);
+        if(correct) {
+            score++;
+            if(isWeakMode) weakList = weakList.filter(i => i.question !== q.question);
         } else {
-            weakList = weakList.filter(i => i.question !== q.question);
+            if(!weakList.some(i => i.question === q.question)) weakList.push(q);
         }
         syncToFirebase();
         currentIdx++;
-        if(currentIdx < selectedQuestions.length) showQuestion();
-        else quitQuiz();
+        if(currentIdx < selectedQuestions.length) showQuestion(); else quitQuiz();
     }
 
-    function quitQuiz() {
-        document.getElementById("quizArea").style.display = "none";
-        document.getElementById("setupArea").style.display = "block";
-        document.getElementById("pCont").style.display = "none";
-        document.getElementById("quitBtn").style.display = "none";
-        updateUIButtons();
-    }
-
-    function handleBookmarkClick() {
+    function handleHeartClick() {
         const q = selectedQuestions[currentIdx];
-        const idx = savedList.findIndex(i => i.question === q.question);
-        if(idx > -1) savedList.splice(idx, 1); else savedList.push(q);
-        document.getElementById("bookmarkActionBtn").classList.toggle("active");
+        // Identify sub/ch
+        let sName = "Other", cName = "Other";
+        for(let s in quizData) for(let c in quizData[s]) if(quizData[s][c].some(i => i.question === q.question)) { sName = s; cName = c; }
+        
+        if(!collections[sName]) collections[sName] = {};
+        if(!collections[sName][cName]) collections[sName][cName] = [];
+        
+        const idx = collections[sName][cName].findIndex(i => i.question === q.question);
+        if(idx > -1) collections[sName][cName].splice(idx, 1);
+        else collections[sName][cName].push(q);
+        
+        document.getElementById("heartActionBtn").classList.toggle("active");
         syncToFirebase();
     }
 
-    function toggleTheme() {
-        const b = document.body;
-        b.hasAttribute("data-theme") ? b.removeAttribute("data-theme") : b.setAttribute("data-theme", "dark");
+    function toggleCollection() {
+        const div = document.getElementById("collectionArea");
+        div.style.display = div.style.display === "none" ? "block" : "none";
+        const s = document.getElementById("collSubFilter");
+        s.innerHTML = "<option value='all'>-- All Collections --</option>";
+        Object.keys(collections).forEach(k => s.add(new Option(k, k)));
     }
 
-    function toggleProfileMenu(e) {
-        e.stopPropagation();
-        const menu = document.getElementById("profileDropdown");
-        menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    function updateCollChapters() {
+        const s = document.getElementById("collSubFilter").value, c = document.getElementById("collChFilter");
+        c.innerHTML = "<option value='all'>-- All Chapters --</option>";
+        if(s !== "all" && collections[s]) Object.keys(collections[s]).forEach(k => c.add(new Option(k, k)));
     }
 
+    function startCollectionPractice() {
+        const sub = document.getElementById("collSubFilter").value, ch = document.getElementById("collChFilter").value;
+        let qs = [];
+        if(sub === "all") Object.keys(collections).forEach(s => Object.keys(collections[s]).forEach(c => qs = qs.concat(collections[s][c])));
+        else if(ch === "all") Object.keys(collections[sub]).forEach(c => qs = qs.concat(collections[sub][c]));
+        else qs = collections[sub][ch];
+        if(qs.length) { selectedQuestions = qs.sort(() => Math.random() - 0.5); initQuizUI(); }
+    }
+
+    function toggleExp() { const eb = document.getElementById("expBox"); eb.style.display = eb.style.display === "none" ? "block" : "none"; }
+    function toggleTheme() { document.body.hasAttribute("data-theme") ? document.body.removeAttribute("data-theme") : document.body.setAttribute("data-theme", "dark"); }
+    function toggleProfileMenu(e) { e.stopPropagation(); const m = document.getElementById("profileDropdown"); m.style.display = m.style.display === "flex" ? "none" : "flex"; }
     window.onclick = () => document.getElementById("profileDropdown").style.display = "none";
-
+    function speak(t) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.rate = document.getElementById("voiceSpeed").value; window.speechSynthesis.speak(u); }
+    function startTimer(m) { let t = m * 60; document.getElementById("timerDisplay").style.display = "block"; timerInterval = setInterval(() => { let mi = Math.floor(t/60), se = t%60; document.getElementById("timerDisplay").innerText = `⏳ ${mi}:${se < 10 ? '0'+se : se}`; if(--t < 0) { clearInterval(timerInterval); quitQuiz(); } }, 1000); }
+    function handleBookmarkClick() { const q = selectedQuestions[currentIdx]; const i = savedList.findIndex(x => x.question === q.question); if(i > -1) savedList.splice(i, 1); else savedList.push(q); syncToFirebase(); document.getElementById("bookmarkActionBtn").classList.toggle("active"); }
+    function saveSession() { localStorage.setItem("subj_session", JSON.stringify({ selectedQuestions, currentIdx, score, isWeakMode, currentSub, currentCh })); }
+    function checkResumeStatus() { if(localStorage.getItem("subj_session")) document.getElementById("resumeBtn").style.display = "block"; }
+    function resumeQuiz() { const s = JSON.parse(localStorage.getItem("subj_session")); Object.assign(window, s); selectedQuestions = s.selectedQuestions; currentIdx = s.currentIdx; initQuizUI(); }
+    function startWeakAreasQuiz() { isWeakMode = true; selectedQuestions = [...weakList].sort(() => Math.random() - 0.5); initQuizUI(); }
+    function startSavedPractice() { isWeakMode = false; selectedQuestions = [...savedList].sort(() => Math.random() - 0.5); initQuizUI(); }
+    function quitQuiz() { clearInterval(timerInterval); localStorage.removeItem("subj_session"); document.getElementById("quizArea").style.display = "none"; document.getElementById("setupArea").style.display = "block"; document.getElementById("pCont").style.display = "none"; document.getElementById("quitBtn").style.display = "none"; updateUIButtons(); }
+    
+    function toggleTracker() {
+        const div = document.getElementById("trackerArea");
+        div.style.display = div.style.display === "none" ? "block" : "none";
+        div.innerHTML = "<h3>📊 Revision Tracker</h3>";
+        Object.keys(quizData).forEach(s => {
+            let h = `<div style="margin-bottom:10px"><b>${s}</b><br>`;
+            Object.keys(quizData[s]).forEach(c => h += `<small>• ${c}</small><br>`);
+            div.innerHTML += h + "</div>";
+        });
+    }
   </script>
 </body>
 </html>
