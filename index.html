@@ -6,13 +6,13 @@
   <title>📖 Subjective Pro - Premium Edition</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
   
-  <!-- Firebase SDK (Website 2 से) -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
   <style>
-    /* ========== मूल Website 1 के स्टाइल (थीम वेरिएबल, बेस) ========== */
+    /* ========== वही स्टाइल जैसा पिछली बार दिया था ========== */
     :root {
       --bg-color: #f5f2eb; --card-bg: #ffffff; --text-color: #2c3e50;
       --question-bg: #ffffff; --border-color: #e0dcd0; --btn-bg: #faf9f6; 
@@ -26,7 +26,6 @@
     body { font-family: 'Rubik', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 15px; transition: 0.3s; }
     .container { max-width: 700px; margin: auto; background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; border: 1px solid var(--border-color); }
     
-    /* प्रिंट स्टाइल (Website 1) */
     @media print {
       body { background: white !important; color: black !important; }
       .container, .header-btns, .modal, .no-print { display: none !important; }
@@ -37,7 +36,6 @@
     .progress-container { width: 100%; background: #e0dcd0; height: 8px; border-radius: 5px; margin-bottom: 15px; display: none; }
     #progressBar { height: 100%; width: 0%; background: var(--progress-color); border-radius: 5px; transition: 0.4s; }
 
-    /* ========== हेडर बटन (मर्ज) ========== */
     .header-btns { display: none; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; flex-wrap: nowrap; }
     .header-left { display: flex; align-items: center; gap: 8px; }
     .header-right { display: flex; align-items: center; gap: 12px; }
@@ -49,7 +47,6 @@
     #bookmarkActionBtn.active svg { fill: var(--text-color); }
     #heartActionBtn.active svg { fill: #e74c3c; stroke: #e74c3c; }
     
-    /* वॉयस स्विच */
     .voice-switch { position: relative; display: inline-block; width: 34px; height: 18px; }
     .voice-switch input { opacity: 0; width: 0; height: 0; }
     .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
@@ -58,7 +55,7 @@
     input:checked + .slider:before { transform: translateX(16px); }
     #timerDisplay { font-weight: bold; font-size: 18px; color: #e74c3c; display: none; text-align: center; flex-grow: 1; }
 
-    /* ========== लॉगिन एरिया (Website 2) ========== */
+    /* लॉगिन एरिया */
     #loginArea { 
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: linear-gradient(135deg, #f5f2eb 0%, #e0dcd0 100%);
@@ -96,7 +93,7 @@
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* ========== प्रोफाइल मेनू (Website 2) ========== */
+    /* प्रोफाइल मेनू */
     .user-profile { position: relative; display: none; align-items: center; cursor: pointer; }
     .user-profile img { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--primary-color); }
     
@@ -115,11 +112,10 @@
       padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; font-size: 13px; color: var(--primary-color);
     }
 
-    /* ========== मुख्य कंटेनर एलिमेंट्स ========== */
     h2 { text-align: center; margin-top: 0; color: var(--primary-color); }
     select, input, .main-btn { padding: 12px; font-size: 16px; margin-bottom: 12px; width: 100%; border-radius: 10px; border: 1px solid var(--border-color); background-color: var(--btn-bg); color: var(--text-color); box-sizing: border-box; cursor: pointer; }
 
-    /* ========== नया ग्रिड बटन स्टाइल (Website 2 से बड़े) ========== */
+    /* ग्रिड बटन */
     .button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
     
     .grid-card { 
@@ -148,14 +144,12 @@
     .card-title { font-weight: 600; font-size: 17px; }
     .card-sub { font-size: 11.5px; opacity: 0.8; margin-top: 5px; line-height: 1.3; }
 
-    /* क्विज एरिया स्टाइल (Website 1 + 2) */
     .challenge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; background: var(--bg-color); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); }
     .challenge-grid label { font-size: 13px; font-weight: bold; margin-bottom: 5px; display: block; }
     
     .question-card { background: var(--question-bg); border-left: 6px solid var(--primary-color); padding: 20px; border-radius: 12px; margin-bottom: 20px; font-size: 22px; font-weight: 550; line-height: 1.5; position: relative; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
     .speak-btn { position: absolute; right: 10px; top: 10px; background: none; border: none; cursor: pointer; font-size: 20px; opacity: 0.6; }
     
-    /* Website 2 के ऑप्शन बटन */
     .option-btn { display: block; background: var(--card-bg); border: 2px solid var(--border-color); color: var(--text-color); padding: 14px; margin: 10px 0; border-radius: 10px; cursor: pointer; width: 100%; text-align: left; font-size: 19px; font-weight: 500; transition: 0.2s; }
     .option-btn:hover { border-color: var(--primary-color); background: var(--btn-bg); }
     #nextBtn { display: none; background: #28a745 !important; color: white !important; border: none; text-align: center; margin-top: 15px; width: 100%; padding: 14px; border-radius: 10px; font-size: 18px; cursor: pointer; }
@@ -163,18 +157,12 @@
     .explanation-box { display: none; background: #eef2f7; border-left: 5px solid #3498db; padding: 15px; margin-top: 15px; border-radius: 8px; font-size: 16px; line-height: 1.6; color: var(--text-color); }
     [data-theme="dark"] .explanation-box { background: #3a3a3a; border-left-color: #8da2b5; }
     
-    /* Website 1 का एक्सप्लेनेशन बॉक्स (पुराना) - हम नए का उपयोग करेंगे */
-    /* .exp-box को हटाकर explanation-box का उपयोग करेंगे */
-    
-    /* इमेज स्टाइल (Website 1) */
     .exp-img { width: 100%; max-width: 100%; border-radius: 8px; margin-top: 10px; cursor: zoom-in; border: 1px solid var(--border-color); }
     
-    /* फुल स्क्रीन इमेज मोडल (Website 1) */
     #imageModal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); text-align: center; }
     #fullImage { max-width: 95%; max-height: 90%; margin-top: 50px; border-radius: 5px; }
     .close-img-modal { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; }
 
-    /* मोडल स्टाइल */
     .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); }
     .modal-content { background: var(--card-bg); margin: 5% auto; padding: 20px; border-radius: 15px; width: 90%; max-width: 550px; max-height: 80vh; overflow-y: auto; position: relative; border: 1px solid var(--border-color); }
     .close-modal { position: sticky; top: 0; float: right; font-size: 28px; cursor: pointer; color: #e74c3c; font-weight: bold; background: var(--card-bg); width: 30px; text-align: center; border-radius: 50%; z-index: 10; }
@@ -202,23 +190,23 @@
 </head>
 <body>
 
-  <!-- ========== इमेज मोडल (Website 1) ========== -->
+  <!-- इमेज मोडल -->
   <div id="imageModal" onclick="this.style.display='none'">
     <span class="close-img-modal">&times;</span>
     <img id="fullImage">
   </div>
 
-  <!-- ========== प्रिंट सेक्शन (Website 1) ========== -->
+  <!-- प्रिंट सेक्शन -->
   <div id="printSection" style="display:none; padding: 20px;">
     <h2 style="text-align:center; border-bottom: 2px solid #333;">Saved Questions Bank</h2>
     <div id="printBody"></div>
   </div>
 
-  <!-- ========== लॉगिन एरिया (Website 2) ========== -->
+  <!-- लॉगिन एरिया -->
   <div id="loginArea">
     <div class="login-glass-card">
         <span class="login-brand-icon">📖</span>
-        <h1>Quiz 3 Pro</h1>
+        <h1>Quiz Pro</h1>
         <div style="margin-top:20px;">
           <div class="input-group">
             <input type="email" id="emailInput" class="login-input" placeholder="Gmail ID">
@@ -243,7 +231,7 @@
     </div>
   </div>
 
-  <!-- ========== हेडर बटन्स (मर्ज) ========== -->
+  <!-- हेडर बटन्स -->
   <div class="header-btns" id="mainHeader">
     <div class="header-left">
       <button id="themeBtn" onclick="toggleTheme()">🌙</button>
@@ -270,7 +258,7 @@
     </div>
   </div>
 
-  <!-- ========== मुख्य कंटेनर ========== -->
+  <!-- मुख्य कंटेनर -->
   <div class="container" id="mainContainer" style="display:none;">
     <div class="progress-container" id="pCont"><div id="progressBar"></div></div>
 
@@ -288,7 +276,7 @@
 
         <button class="main-btn" onclick="startQuiz()" style="background: #5d6d7e; color: white;">🎯 शुरू करें</button>
         
-        <!-- ग्रिड बटन (Website 2) -->
+        <!-- ग्रिड बटन -->
         <div class="button-grid">
             <button id="weakAreasBtn" class="grid-card orange-card" style="display:none;" onclick="startWeakAreasQuiz()">
                 <div class="card-icon">🎯</div>
@@ -333,7 +321,7 @@
           <button class="main-btn" onclick="startCollectionPractice()" style="background: #27ae60; color: white; margin-top: 10px;">🚀 Practice Start</button>
         </div>
 
-        <!-- बैकअप बटन (Website 1) -->
+        <!-- बैकअप बटन -->
         <div class="backup-area">
           <button class="backup-btn" onclick="exportData()">📤 Export Data</button>
           <button class="backup-btn" onclick="document.getElementById('importFile').click()">📥 Import Data</button>
@@ -341,11 +329,11 @@
         </div>
     </div>
 
-    <!-- क्विज एरिया (JS से डायनामिक रूप से भरेगा) -->
+    <!-- क्विज एरिया -->
     <div id="quizArea" style="display:none;"></div>
   </div>
 
-  <!-- मोडल्स (Website 1) -->
+  <!-- मोडल्स -->
   <div id="reviewModal" class="modal no-print">
     <div class="modal-content">
       <span class="close-modal" onclick="closeReview()">&times;</span>
@@ -364,7 +352,7 @@
   </div>
 
   <script>
-    // ========== फायरबेस कॉन्फिग (Website 2) ==========
+    // ========== फायरबेस कॉन्फिग (वही) ==========
     const firebaseConfig = {
       apiKey: "AIzaSyA_Wm4oRPvdHJ_9NVHrGGWaom5Y3lu6MBE",
       authDomain: "mystudyquiz-ac0d9.firebaseapp.com",
@@ -381,20 +369,23 @@
     const database = firebase.database();
 
     // ========== ग्लोबल वेरिएबल्स ==========
-    let quizData = {}; // डेटा Demo.json से लोड होगा
+    let quizData = {}; // डेटा sub.json से लोड होगा (Website 1 वाला)
     let selectedQuestions = [], wrongQuestions = [], currentIdx = 0, score = 0, questionsAttempted = 0, timerInterval;
     let currentSub = "", currentCh = "", isWeakMode = false;
     let savedList = [], revisionDates = {}, weakList = [], collections = {};
     let isGuest = false;
 
-    // ========== ऑथ स्टेट लिसनर (Website 2) ==========
+    // ========== डेटा स्टोरेज के लिए अलग पहचान (Website 1 के लिए) ==========
+    const STORAGE_PREFIX = 'website1_';  // Website 1 के लिए अलग प्रीफिक्स
+
+    // ========== ऑथ स्टेट लिसनर ==========
     auth.onAuthStateChanged((user) => {
         const up = document.getElementById("userProfile");
-        const guestStored = localStorage.getItem("quiz_guest_mode");
+        const guestStored = localStorage.getItem(STORAGE_PREFIX + 'guest_mode');
 
         if (user) {
             isGuest = false;
-            localStorage.removeItem("quiz_guest_mode"); 
+            localStorage.removeItem(STORAGE_PREFIX + 'guest_mode'); 
             document.getElementById("loginArea").style.display = "none";
             document.getElementById("mainContainer").style.display = "block";
             document.getElementById("mainHeader").style.display = "flex";
@@ -437,7 +428,7 @@
     // ========== लॉगिन/लॉगआउट फंक्शन ==========
     function logoutUser() {
         if(confirm("Logout karein?")) {
-            localStorage.removeItem("quiz_guest_mode");
+            localStorage.removeItem(STORAGE_PREFIX + 'guest_mode');
             auth.signOut().then(() => location.reload());
         }
     }
@@ -485,9 +476,9 @@
 
     function continueAsGuest() {
         isGuest = true;
-        localStorage.setItem("quiz_guest_mode", "true");
+        localStorage.setItem(STORAGE_PREFIX + 'guest_mode', "true");
         
-        const guestData = localStorage.getItem("quiz_guest_data");
+        const guestData = localStorage.getItem(STORAGE_PREFIX + 'guest_data');
         if(guestData) {
             const data = JSON.parse(guestData);
             savedList = data.bookmarks || [];
@@ -511,11 +502,11 @@
     }
 
     function clearGuestAndLogin() {
-        localStorage.removeItem("quiz_guest_mode");
+        localStorage.removeItem(STORAGE_PREFIX + 'guest_mode');
         location.reload();
     }
 
-    // ========== फायरबेस/लोकल स्टोरेज सिंक ==========
+    // ========== फायरबेस/लोकल स्टोरेज सिंक (Website 1 के लिए अलग पाथ) ==========
     function syncToFirebase() {
         const dataToSave = {
             bookmarks: savedList,
@@ -525,16 +516,17 @@
         };
 
         if(isGuest) {
-            localStorage.setItem("quiz_guest_data", JSON.stringify(dataToSave));
+            localStorage.setItem(STORAGE_PREFIX + 'guest_data', JSON.stringify(dataToSave));
         } else {
             const user = auth.currentUser;
             if (!user) return;
-            database.ref('users/' + user.uid).set(dataToSave);
+            // Website 1 के लिए अलग पाथ: users_website1/{uid}
+            database.ref('users_website1/' + user.uid).set(dataToSave);
         }
     }
 
     function syncFromFirebase(uid) {
-        database.ref('users/' + uid).once('value').then((snapshot) => {
+        database.ref('users_website1/' + uid).once('value').then((snapshot) => {
             const data = snapshot.val() || {};
             savedList = data.bookmarks || [];
             revisionDates = data.revision || {};
@@ -544,29 +536,24 @@
         });
     }
 
-    // ========== ऐप इनिशियलाइजेशन ==========
+    // ========== ऐप इनिशियलाइजेशन (Website 1 की JSON फाइल लोड करेगा) ==========
     function initApp() { 
       checkSavedBtn(); updateWeakBtn(); checkResumeStatus(); updateCollectionBtn();
-      // डेटा लोड करें (sub.json या Demo.json) - यहाँ Website 1 के अनुसार sub.json
+      // Website 1 के लिए sub.json लोड करें (बिना ऑप्शन वाले सवाल)
       fetch("sub.json?v=" + Math.random()).then(r => r.json()).then(j => {
         quizData = j;
         const s = document.getElementById("subjectSelect");
         s.innerHTML = "<option value='all'>-- सभी विषय --</option>";
         Object.keys(j).forEach(k => s.add(new Option(k, k)));
       }).catch(e => {
-        // अगर sub.json न मिले तो Demo.json ट्राई करें
-        fetch("Demo.json?v=" + Math.random()).then(r => r.json()).then(j => {
-          quizData = j;
-          const s = document.getElementById("subjectSelect");
-          s.innerHTML = "<option value='all'>-- सभी विषय --</option>";
-          Object.keys(j).forEach(k => s.add(new Option(k, k)));
-        });
+        console.error("sub.json load nahi hua:", e);
+        alert("sub.json file nahi mili. Please check file name.");
       });
     }
 
     // ========== सेशन मैनेजमेंट ==========
     function checkResumeStatus() {
-      const session = JSON.parse(localStorage.getItem("quiz_session"));
+      const session = JSON.parse(localStorage.getItem(STORAGE_PREFIX + 'session'));
       const btn = document.getElementById("resumeBtn");
       if (session) {
         btn.innerText = `🕒 पिछला क्विज़ जारी रखें (Q. ${session.currentIdx + 1})`;
@@ -575,18 +562,18 @@
     }
 
     function saveCurrentSession() {
-      localStorage.setItem("quiz_session", JSON.stringify({
+      localStorage.setItem(STORAGE_PREFIX + 'session', JSON.stringify({
         selectedQuestions, currentIdx, score, questionsAttempted, currentSub, currentCh, isWeakMode
       }));
     }
 
     function clearSession() {
-      localStorage.removeItem("quiz_session");
+      localStorage.removeItem(STORAGE_PREFIX + 'session');
       document.getElementById("resumeBtn").style.display = "none";
     }
 
     function resumeQuiz() {
-      const session = JSON.parse(localStorage.getItem("quiz_session"));
+      const session = JSON.parse(localStorage.getItem(STORAGE_PREFIX + 'session'));
       if (session) {
         selectedQuestions = session.selectedQuestions;
         currentIdx = session.currentIdx; score = session.score;
@@ -603,7 +590,7 @@
       const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = `quiz_backup.json`;
+      a.download = `quiz_backup_website1.json`;
       a.click();
     }
 
@@ -630,19 +617,21 @@
       document.body.hasAttribute("data-theme") ? document.body.removeAttribute("data-theme") : document.body.setAttribute("data-theme", "dark");
     }
 
-    function saveVoiceSpeed(val) { localStorage.setItem("quiz_voice_speed", val); }
+    function saveVoiceSpeed(val) { localStorage.setItem(STORAGE_PREFIX + 'voice_speed', val); }
 
     function speak(text) {
       window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text);
-      u.rate = parseFloat(localStorage.getItem("quiz_voice_speed")) || 1;
+      u.rate = parseFloat(localStorage.getItem(STORAGE_PREFIX + 'voice_speed')) || 1;
       window.speechSynthesis.speak(u);
     }
 
     function readFullQuestion() {
       const q = selectedQuestions[currentIdx];
       let optText = "";
-      if(q.options) optText = ". विकल्प हैं . . " + q.options.join(", , ");
+      if(q.options && q.options.length > 0) {
+        optText = ". विकल्प हैं . . " + q.options.join(", , ");
+      }
       speak(`${q.question}${optText}`);
     }
 
@@ -732,10 +721,8 @@
       document.getElementById("progressBar").style.width = (currentIdx / selectedQuestions.length) * 100 + "%";
       document.getElementById("qCount").innerText = `सवाल: ${currentIdx + 1} / ${selectedQuestions.length}`;
       
-      // क्वेश्चन टेक्स्ट के साथ इमेज भी दिखा सकते हैं, लेकिन यहाँ ऑप्शनल
-      let questionHTML = q.question;
-      if(q.image) questionHTML += `<img src="${q.image}" class="exp-img" onclick="openFullImg(this.src)">`;
-      document.getElementById("questionBox").innerHTML = `${questionHTML} <button class="speak-btn" onclick="readFullQuestion()">🔊</button>`;
+      // सवाल दिखाएं (बिना इमेज के, क्योंकि इमेज एक्सप्लेनेशन में दिखेगी)
+      document.getElementById("questionBox").innerHTML = `${q.question} <button class="speak-btn" onclick="readFullQuestion()">🔊</button>`;
       
       if(document.getElementById("autoReadSwitch").checked) setTimeout(readFullQuestion, 500);
       
@@ -750,6 +737,7 @@
       oBox.innerHTML = ""; rBox.innerText = ""; nBtn.style.display = "none"; eBox.style.display = "none"; 
       
       if(q.options && q.options.length > 0) {
+        // अगर ऑप्शन हैं (मल्टीपल चॉइस)
         q.options.forEach((opt) => {
           const b = document.createElement("button"); b.className = "option-btn"; b.innerText = opt;
           b.onclick = () => {
@@ -763,7 +751,7 @@
               wrongQuestions.push(q); 
               if(!weakList.some(i => i.question === q.question)) { weakList.push(q); syncToFirebase(); }
             }
-            // एक्सप्लेनेशन और इमेज दिखाएं
+            // एक्सप्लेनेशन और इमेज दिखाएं (यहाँ दिखेगा)
             let expHTML = "";
             if(q.explanation) expHTML += `<strong>💡 व्याख्या:</strong><br>${q.explanation}`;
             if(q.image) expHTML += `<img src="${q.image}" class="exp-img" onclick="openFullImg(this.src)">`;
@@ -775,32 +763,53 @@
           oBox.appendChild(b);
         });
       } else {
-        // अगर ऑप्शन नहीं हैं (सब्जेक्टिव), तो Website 1 का तरीका
-        // हम यहाँ सिर्फ एक्सप्लेनेशन बटन दिखा सकते हैं, लेकिन इसे सरल रखते हैं
-        oBox.innerHTML = "<p style='color: var(--primary-color);'>यह सब्जेक्टिव सवाल है। नीचे दिए बटन से जवाब देखें।</p>";
-        // एक्सप्लेनेशन बॉक्स में ही जवाब दिखाएंगे
-        let expHTML = "";
-        if(q.explanation) expHTML += `<strong>💡 व्याख्या:</strong><br>${q.explanation}`;
-        if(q.image) expHTML += `<img src="${q.image}" class="exp-img" onclick="openFullImg(this.src)">`;
-        eBox.innerHTML = expHTML;
-        eBox.style.display = "none"; // पहले छुपा कर रखें
-        nBtn.style.display = "block"; // अगला बटन दिखाएं, लेकिन पहले जवाब देखना होगा
-        // जवाब देखने के लिए एक बटन जोड़ें
+        // सब्जेक्टिव सवाल (बिना ऑप्शन के) - Website 1 का तरीका
+        oBox.innerHTML = ""; // पहले से कोई ऑप्शन नहीं
+        
+        // "जवाब देखें" बटन
         const viewAnsBtn = document.createElement("button");
         viewAnsBtn.className = "main-btn";
-        viewAnsBtn.style.background = "#3498db"; viewAnsBtn.style.color = "#fff";
+        viewAnsBtn.style.background = "#3498db"; 
+        viewAnsBtn.style.color = "#fff";
         viewAnsBtn.innerText = "👁️ जवाब देखें";
         viewAnsBtn.onclick = () => {
+          // जवाब/व्याख्या दिखाएं
+          let expHTML = "";
+          if(q.explanation) expHTML += `<strong>💡 व्याख्या:</strong><br>${q.explanation}`;
+          if(q.image) expHTML += `<img src="${q.image}" class="exp-img" onclick="openFullImg(this.src)">`;
+          eBox.innerHTML = expHTML;
           eBox.style.display = "block";
-          questionsAttempted++;
-          // गलत/सही का विकल्प नहीं, इसलिए सीधे अगला
-          // हम इसे "सही था" मान सकते हैं या यूजर को चॉइस दे सकते हैं
-          // सरलता के लिए, हम इसे सही मानेंगे और स्कोर नहीं बढ़ाएंगे? 
-          // Website 1 के अनुसार, यहाँ दो बटन थे (सही/गलत)। हम उन्हें भी जोड़ सकते हैं।
-          // लेकिन समय की कमी में, हम इसे ऐसे ही छोड़ते हैं। 
+          
+          // अब "सही था" और "सुधार चाहिए" बटन दिखाएं (Website 1 की तरह)
+          oBox.innerHTML = `
+            <div class="action-btns" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+              <button onclick="handleSubjectiveResponse(true)" class="main-btn" style="background:var(--progress-color); color:#fff;">✅ सही था</button>
+              <button onclick="handleSubjectiveResponse(false)" class="main-btn" style="background:#e67e22; color:#fff;">⚠️ सुधार चाहिए</button>
+            </div>
+          `;
         };
         oBox.appendChild(viewAnsBtn);
       }
+    }
+
+    // सब्जेक्टिव रिस्पॉन्स हैंडलर
+    function handleSubjectiveResponse(isCorrect) {
+      const q = selectedQuestions[currentIdx];
+      questionsAttempted++;
+      if(isCorrect) {
+        if(isWeakMode) { 
+          weakList = weakList.filter(i => i.question !== q.question); 
+          syncToFirebase(); 
+        }
+      } else {
+        wrongQuestions.push(q);
+        if(!weakList.some(i => i.question === q.question)) { 
+          weakList.push(q); 
+          syncToFirebase(); 
+        }
+      }
+      document.getElementById("nextBtn").style.display = "block";
+      saveCurrentSession();
     }
 
     // ========== हार्ट/कलेक्शन हैंडलिंग ==========
@@ -868,7 +877,6 @@
         revisionDates[`${currentSub}_${currentCh}`] = Date.now(); syncToFirebase();
       }
       
-      // Website 1 के अनुसार रिजल्ट एरिया, लेकिन यहाँ quizArea में ही दिखाएंगे
       let wrongCount = wrongQuestions.length;
       let resultHTML = `<div style="text-align:center;"><h3>🏁 रिजल्ट: ${score}/${selectedQuestions.length}</h3>`;
       if(wrongCount > 0) {
@@ -884,7 +892,7 @@
       updateWeakBtn(); updateCollectionBtn();
     }
 
-    // ========== रिव्यू मोडल (Website 1) ==========
+    // ========== रिव्यू मोडल ==========
     function openReview() {
       const list = document.getElementById("reviewList"); list.innerHTML = "";
       wrongQuestions.forEach(q => {
@@ -899,7 +907,7 @@
 
     function closeReview() { document.getElementById("reviewModal").style.display = "none"; }
 
-    // ========== सहेजे गए सवालों की लिस्ट (Website 1) ==========
+    // ========== सहेजे गए सवालों की लिस्ट ==========
     function openSavedListModal() {
       const list = document.getElementById("savedListContent");
       const printBody = document.getElementById("printBody");
@@ -928,8 +936,6 @@
 
     function checkSavedBtn() { 
       document.getElementById("savedPracticeBtn").style.display = savedList.length > 0 ? "flex" : "none"; 
-      // View Saved List बटन भी दिखाना है तो उसे भी अपडेट करें (हालांकि यह ग्रिड में नहीं है, पर मोडल खोलने के लिए एक बटन चाहिए? हम ग्रिड में ही Saved Practice से काम चला लेंगे)
-      // अगर फिर भी चाहिए तो नीचे बटन बना सकते हैं, लेकिन फिलहाल नहीं।
     }
 
     function startSavedPractice() { 
@@ -973,14 +979,11 @@
       }, 1000); 
     }
 
-    // ========== इमेज फुलस्क्रीन (Website 1) ==========
+    // ========== इमेज फुलस्क्रीन ==========
     function openFullImg(src) {
       document.getElementById("fullImage").src = src;
       document.getElementById("imageModal").style.display = "block";
     }
-
-    // ========== इनिशियलाइज ==========
-    // पेज लोड होते ही ऑथ चेक हो जाएगा
   </script>
 </body>
 </html>
