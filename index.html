@@ -3,65 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>📖 Subjective Pro - Premium Edition</title>
+  <title>📖 Smart Subjective Pro</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
-  
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+  <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
   <style>
-    /* ========== स्टाइल (पहले जैसी ही) ========== */
     :root {
       --bg-color: #f5f2eb; --card-bg: #ffffff; --text-color: #2c3e50;
       --question-bg: #ffffff; --border-color: #e0dcd0; --btn-bg: #faf9f6; 
-      --primary-color: #5d6d7e; --progress-color: #27ae60;
+      --primary-color: #4f46e5; --progress-color: #10b981;
+      --exp-bg: #f8fafc; --exp-border: #3b82f6;
     }
     [data-theme="dark"] {
-      --bg-color: #1a1a1a; --card-bg: #2d2d2d; --text-color: #e0e0e0;
-      --question-bg: #3d3d3d; --border-color: #444; --btn-bg: #3a3a3a;
-      --primary-color: #8da2b5;
+      --bg-color: #111827; --card-bg: #1f2937; --text-color: #f3f4f6;
+      --question-bg: #374151; --border-color: #4b5563; --btn-bg: #374151;
+      --primary-color: #818cf8; --exp-bg: #1f2937; --exp-border: #60a5fa;
     }
     body { font-family: 'Rubik', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 15px; transition: 0.3s; }
-    .container { max-width: 700px; margin: auto; background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; border: 1px solid var(--border-color); }
-    
+
     @media print {
       body { background: white !important; color: black !important; }
-      .container, .header-btns, .modal, .no-print { display: none !important; }
+      .container, .header-btns, .modal, .modal-overlay, .no-print { display: none !important; }
       #printSection { display: block !important; }
       .print-box { border-bottom: 1px solid #eee; padding: 10px; page-break-inside: avoid; }
     }
 
-    .progress-container { width: 100%; background: #e0dcd0; height: 8px; border-radius: 5px; margin-bottom: 15px; display: none; }
-    #progressBar { height: 100%; width: 0%; background: var(--progress-color); border-radius: 5px; transition: 0.4s; }
+    /* --- LOADING SCREEN --- */
+    #loadingScreen {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: var(--bg-color); display: flex; align-items: center; justify-content: center;
+      z-index: 10001;
+    }
+    #loadingScreen .loading-icon { font-size: 50px; animation: pulseLoad 1.1s ease-in-out infinite; }
+    @keyframes pulseLoad { 0%,100% { opacity: 0.4; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1.05); } }
 
-    .header-btns { display: none; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; flex-wrap: nowrap; }
-    .header-left { display: flex; align-items: center; gap: 8px; }
-    .header-right { display: flex; align-items: center; gap: 12px; }
-    
-    #themeBtn, #quitBtn, #bookmarkActionBtn, #heartActionBtn { padding: 8px 12px; font-size: 13px; background: var(--primary-color); color: white; border: none; cursor: pointer; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-    #quitBtn { background: #e74c3c; display: none; }
-    #bookmarkActionBtn, #heartActionBtn { background: transparent; font-size: 20px; padding: 0; display: none; }
-    #bookmarkActionBtn svg, #heartActionBtn svg { width: 28px; height: 28px; fill: none; stroke: var(--text-color); stroke-width: 2; }
-    #bookmarkActionBtn.active svg { fill: var(--text-color); }
-    #heartActionBtn.active svg { fill: #e74c3c; stroke: #e74c3c; }
-    
-    .voice-switch { position: relative; display: inline-block; width: 34px; height: 18px; }
-    .voice-switch input { opacity: 0; width: 0; height: 0; }
-    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
-    .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
-    input:checked + .slider { background-color: var(--progress-color); }
-    input:checked + .slider:before { transform: translateX(16px); }
-    #timerDisplay { font-weight: bold; font-size: 18px; color: #e74c3c; display: none; text-align: center; flex-grow: 1; }
-
-    /* लॉगिन एरिया */
+    /* --- LOGIN --- */
     #loginArea { 
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: linear-gradient(135deg, #f5f2eb 0%, #e0dcd0 100%);
       display: flex; align-items: center; justify-content: center; z-index: 9999;
     }
-    [data-theme="dark"] #loginArea { background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%); }
+    [data-theme="dark"] #loginArea { background: linear-gradient(135deg, #111827 0%, #030712 100%); }
 
     .login-glass-card {
       background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px);
@@ -69,13 +54,14 @@
       border-radius: 30px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.1);
       max-width: 400px; width: 90%; animation: fadeIn 0.8s ease-out;
     }
-    [data-theme="dark"] .login-glass-card { background: rgba(45, 45, 45, 0.7); border-color: rgba(255, 255, 255, 0.1); }
+    [data-theme="dark"] .login-glass-card { background: rgba(31, 41, 55, 0.7); border-color: rgba(255, 255, 255, 0.1); }
 
     .login-brand-icon { font-size: 50px; margin-bottom: 10px; display: block; }
     .login-glass-card h1 { margin: 0; font-size: 26px; color: var(--text-color); font-weight: 600; }
     
     .input-group { margin-bottom: 15px; text-align: left; }
-    .login-input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; background: white; font-family: inherit; box-sizing: border-box; }
+    .input-group label { display: block; font-size: 12px; margin-bottom: 5px; font-weight: bold; }
+    .login-input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); font-family: inherit; box-sizing: border-box; }
 
     .modern-google-btn {
       background: white; color: #2c3e50; border: 1px solid #ddd; padding: 12px 24px;
@@ -88,126 +74,181 @@
     .email-login-btn { background: #3498db; color: white; border: none; padding: 12px; border-radius: 12px; width: 100%; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.3s; }
     .email-login-btn:hover { background: #2980b9; }
 
-    .guest-btn { background: white; color: #3c4043; border: 1px solid #ddd; padding: 12px 24px; border-radius: 12px; width: 100%; margin-top: 15px; cursor: pointer; font-size: 14px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .guest-btn { background: white; color: #3c4043; border: 1px solid #ddd; padding: 12px 24px; border-radius: 12px;
+      width: 100%; margin-top: 15px; cursor: pointer; font-size: 14px; font-weight: 500; display: flex;
+      align-items: center; justify-content: center; gap: 10px; transition: all 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
     .guest-btn:hover { background-color: #f8f9fa; box-shadow: 0 1px 4px rgba(0,0,0,0.15); }
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* प्रोफाइल मेनू */
+    /* --- PROFILE MENU --- */
     .user-profile { position: relative; display: none; align-items: center; cursor: pointer; }
     .user-profile img { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--primary-color); }
     
     .profile-dropdown {
       position: absolute; top: 45px; right: 0; background: var(--card-bg);
-      border: 1px solid var(--border-color); border-radius: 12px; min-width: 160px;
+      border: 1px solid var(--border-color); border-radius: 12px; min-width: 200px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: none; flex-direction: column;
       z-index: 10000; overflow: hidden;
     }
-    .profile-dropdown button {
-      padding: 12px 15px; border: none; background: transparent; color: var(--text-color);
-      text-align: left; cursor: pointer; font-size: 14px; transition: 0.2s;
-    }
+    .profile-dropdown button { padding: 12px 15px; border: none; background: transparent; color: var(--text-color); text-align: left; cursor: pointer; font-size: 14px; transition: 0.2s; }
     .profile-dropdown button:hover { background: var(--btn-bg); }
-    .profile-dropdown .user-info-header {
-      padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; font-size: 13px; color: var(--primary-color);
-    }
+    .profile-dropdown .user-info-header { padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600; font-size: 13px; color: var(--primary-color); }
+    .profile-dropdown .voice-speed-row { padding: 10px 15px; display: flex; align-items: center; gap: 8px; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
+    .profile-dropdown .voice-speed-row span { font-size: 12px; white-space: nowrap; }
+    .profile-dropdown .voice-speed-row input[type="range"] { flex: 1; width: auto; margin: 0; }
 
-    h2 { text-align: center; margin-top: 0; color: var(--primary-color); }
-    select, input, .main-btn { padding: 12px; font-size: 16px; margin-bottom: 12px; width: 100%; border-radius: 10px; border: 1px solid var(--border-color); background-color: var(--btn-bg); color: var(--text-color); box-sizing: border-box; cursor: pointer; }
-
-    /* ग्रिड बटन */
-    .button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+    .container { max-width: 700px; margin: auto; background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; border: 1px solid var(--border-color); }
+    .progress-container { width: 100%; background: var(--border-color); height: 8px; border-radius: 5px; margin-bottom: 15px; display: none; }
+    #progressBar { height: 100%; width: 0%; background: var(--progress-color); border-radius: 5px; transition: 0.4s; }
     
-    .grid-card { 
-      display: flex; 
-      align-items: center; 
-      padding: 20px 15px;
-      min-height: 100px;
-      border-radius: 20px; 
-      border: none; 
-      cursor: pointer; 
-      text-align: left; 
-      transition: 0.3s ease; 
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+    .header-btns { display: none; justify-content: space-between; align-items: center; margin: 0 auto 15px; gap: 10px; flex-wrap: nowrap; background: var(--card-bg); padding: 10px 15px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.04); max-width: 750px; box-sizing: border-box; }
+    .header-left { display: flex; align-items: center; gap: 8px; }
+    .header-right { display: flex; align-items: center; gap: 12px; }
+
+    #quitBtn, #bookmarkActionBtn, #heartActionBtn { padding: 8px 12px; font-size: 13px; background: var(--primary-color); color: white; border: none; cursor: pointer; border-radius: 8px; display: flex; align-items: center; justify-content: center; height: 36px; box-sizing: border-box; }
+    #quitBtn { background: #e74c3c; display: none; }
+    #bookmarkActionBtn, #heartActionBtn { background: transparent; font-size: 20px; padding: 0; display: none; }
+    #bookmarkActionBtn svg, #heartActionBtn svg { width: 28px; height: 28px; fill: none; stroke: var(--text-color); stroke-width: 2; }
+    #bookmarkActionBtn.active svg { fill: var(--text-color); }
+    #heartActionBtn.active svg { fill: #e74c3c; stroke: #e74c3c; }
+    
+    #timerDisplay { font-weight: bold; font-size: 18px; color: #e74c3c; display: none; text-align: center; flex-grow: 1; }
+    h2 { text-align: center; margin-top: 0; color: var(--primary-color); }
+    select, input, .main-btn { padding: 12px; font-size: 16px; margin-bottom: 12px; width: 100%; border-radius: 10px; border: 1px solid var(--border-color); background-color: var(--btn-bg); color: var(--text-color); box-sizing: border-box; }
+
+    .cta-btn {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      border: none; border-radius: 16px; font-size: 17px; font-weight: 600;
+      letter-spacing: 0.2px; color: #ffffff; cursor: pointer;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
     }
+    .cta-btn:hover  { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.22); filter: brightness(1.05); }
+    .cta-btn:active { transform: translateY(0); box-shadow: 0 4px 10px rgba(0,0,0,0.18); }
+
+    .start-quiz-btn { background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); }
+    .resume-quiz-btn { background: linear-gradient(135deg, #c084fc 0%, #8e44ad 100%); }
+    [data-theme="dark"] .start-quiz-btn  { background: linear-gradient(135deg, #818cf8 0%, #4f46e5 100%); }
+    [data-theme="dark"] .resume-quiz-btn { background: linear-gradient(135deg, #d8b4fe 0%, #9b59b6 100%); }
+    
+    .button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+    .grid-card { display: flex; align-items: center; padding: 20px 15px; min-height: 100px; border-radius: 20px; border: none; cursor: pointer; text-align: left; transition: 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
     .grid-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
     
     .orange-card { background: linear-gradient(135deg, #fff9f0 0%, #ffe8cc 100%); color: #d9480f; border: 1px solid #ffdec0; }
     .blue-card   { background: linear-gradient(135deg, #f0f7ff 0%, #d0ebff 100%); color: #1971c2; border: 1px solid #b2dfff; }
     .red-card    { background: linear-gradient(135deg, #fff5f5 0%, #ffe3e3 100%); color: #c92a2a; border: 1px solid #ffc9c9; }
     .yellow-card { background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); color: #92400e; border: 1px solid #fde68a; }
-    
     [data-theme="dark"] .grid-card { opacity: 0.95; filter: brightness(0.9); }
 
-    .card-icon { font-size: 38px; margin-right: 15px; }
+    .card-icon { font-size: 38px; margin-right: 15px; } 
     .card-content { display: flex; flex-direction: column; }
-    .card-title { font-weight: 600; font-size: 17px; }
-    .card-sub { font-size: 11.5px; opacity: 0.8; margin-top: 5px; line-height: 1.3; }
+    .card-title { font-weight: 600; font-size: 17px; } 
+    .card-sub { font-size: 11.5px; opacity: 0.8; margin-top: 5px; line-height: 1.3; } 
 
     .challenge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; background: var(--bg-color); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); }
     .challenge-grid label { font-size: 13px; font-weight: bold; margin-bottom: 5px; display: block; }
-    
-    .question-card { background: var(--question-bg); border-left: 6px solid var(--primary-color); padding: 20px; border-radius: 12px; margin-bottom: 20px; font-size: 22px; font-weight: 550; line-height: 1.5; position: relative; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
-    .speak-btn { position: absolute; right: 10px; top: 10px; background: none; border: none; cursor: pointer; font-size: 20px; opacity: 0.6; }
+
+    /* --- SUBJECT / CHAPTER PANELS --- */
+    .select-panels { display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 15px; }
+    @media (min-width: 700px) { .select-panels { grid-template-columns: 1fr 1fr; } }
+    .subject-panel, .chapter-panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+    .panel-header { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; margin-bottom: 10px; color: var(--text-color); }
+    .step-badge { background: var(--primary-color); color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+    .subject-list, .chapter-list { height: 316px; max-height: 316px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 2px; }
+    .subject-item, .chapter-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1.5px solid var(--border-color); border-radius: 12px; cursor: pointer; background: var(--btn-bg); transition: 0.2s; font-size: 14.5px; color: var(--text-color); height: 46px; box-sizing: border-box; flex-shrink: 0; }
+    .subject-item:hover, .chapter-item:hover { border-color: var(--primary-color); }
+    .subject-item.active { border-color: var(--primary-color); background: var(--card-bg); box-shadow: 0 2px 8px rgba(79,70,229,0.15); }
+    .subject-item .subj-icon { font-size: 18px; width: 26px; text-align: center; flex-shrink: 0; }
+    .subject-item .subj-name { flex: 1; font-weight: 500; }
+    .subject-item .subj-arrow { opacity: 0.4; font-size: 14px; }
+    .subject-item.active .subj-arrow { opacity: 1; color: var(--primary-color); }
+
+    .chapter-item { font-weight: 500; }
+    .chapter-item input[type="checkbox"] { width: 17px; height: 17px; flex-shrink: 0; cursor: pointer; }
+    .chapter-item .ch-badge { background: var(--primary-color); color: white; min-width: 20px; height: 20px; border-radius: 6px; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 0 4px; }
+    .chapter-item.select-all-item { background: var(--exp-bg); border-style: dashed; }
+    .chapter-empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; gap: 6px; padding: 10px; }
+    .chapter-empty-state img { width: 100%; max-width: 340px; height: auto; }
+    .ces-title { font-weight: 700; font-size: 15.5px; color: var(--text-color); }
+    .ces-sub { font-size: 12.5px; color: #888; max-width: 220px; line-height: 1.4; }
+
+    .question-card { background: var(--question-bg); border-left: 6px solid var(--primary-color); padding: 20px; border-radius: 12px; margin-bottom: 20px; font-size: 24px; font-weight: 550; line-height: 1.5; position: relative; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+    .speak-btn { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; background: var(--btn-bg); border: none; cursor: pointer; font-size: 18px; opacity: 1; border-radius: 8px; width: 36px; height: 36px; transition: 0.2s; color: var(--text-color); }
+    .speak-btn.auto-active { opacity: 1; background: var(--primary-color); color: white; box-shadow: 0 2px 8px rgba(79,70,229,0.4); }
     
     .option-btn { display: block; background: var(--card-bg); border: 2px solid var(--border-color); color: var(--text-color); padding: 14px; margin: 10px 0; border-radius: 10px; cursor: pointer; width: 100%; text-align: left; font-size: 19px; font-weight: 500; transition: 0.2s; }
     .option-btn:hover { border-color: var(--primary-color); background: var(--btn-bg); }
+    #nextBtn { display: none; background: #10b981 !important; color: white !important; border: none; text-align: center; margin-top: 15px; width: 100%; padding: 14px; border-radius: 12px; font-size: 18px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); transition: 0.2s; }
+    #nextBtn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3); }
+
+    /* --- EXPLANATION BOX --- */
+    .explanation-box { display: none; background: var(--exp-bg); border-left: 5px solid var(--exp-border); padding: 18px; margin-top: 20px; border-radius: 14px; font-size: 17px; line-height: 1.75; color: var(--text-color); box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: relative; white-space: pre-line; }
+    .explanation-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px dashed var(--border-color); padding-bottom: 6px; }
+    .explanation-title { font-weight: 600; color: var(--exp-border); display: flex; align-items: center; gap: 6px; }
+    .edit-exp-toggle-btn { background: none; border: none; color: var(--primary-color); font-size: 13px; font-weight: 500; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: 0.2s; }
+    .edit-exp-toggle-btn:hover { background: var(--btn-bg); text-decoration: underline; }
     
-    /* Next Button हटा दिया गया है - अब इसकी जरूरत नहीं */
-    
-    .explanation-box { display: none; background: #eef2f7; border-left: 5px solid #3498db; padding: 15px; margin-top: 15px; border-radius: 8px; font-size: 16px; line-height: 1.6; color: var(--text-color); }
-    [data-theme="dark"] .explanation-box { background: #3a3a3a; border-left-color: #8da2b5; }
-    
+    .explanation-input-area { display: none; margin-top: 15px; padding: 16px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); animation: fadeIn 0.3s ease-out; }
+    .explanation-input-area textarea { width: 100%; height: 80px; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--btn-bg); color: var(--text-color); resize: vertical; box-sizing: border-box; font-family: inherit; font-size: 14px; transition: 0.3s; }
+    .explanation-input-area textarea:focus { border-color: var(--primary-color); outline: none; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
+    .save-exp-btn { background: var(--primary-color); color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; margin-top: 10px; font-size: 14px; font-weight: 600; transition: 0.2s; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2); }
+    .save-exp-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 14px rgba(79, 70, 229, 0.3); }
+
     .exp-img { width: 100%; max-width: 100%; border-radius: 8px; margin-top: 10px; cursor: zoom-in; border: 1px solid var(--border-color); }
-    
     #imageModal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); text-align: center; }
     #fullImage { max-width: 95%; max-height: 90%; margin-top: 50px; border-radius: 5px; }
     .close-img-modal { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; }
+    
+    .backup-area { display: flex; gap: 10px; margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 15px; }
+    .backup-btn { flex: 1; padding: 10px; font-size: 12px; cursor: pointer; border-radius: 8px; border: 1px solid var(--border-color); background: var(--btn-bg); color: var(--text-color); font-weight: bold; }
+    .tracker-card { display: none; margin-top: 10px; border: 1px solid var(--border-color); padding: 15px; border-radius: 12px; background: var(--card-bg); animation: fadeIn 0.35s ease-out; }
 
-    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); }
+    /* --- old-style modals (review / saved list) --- */
+    .modal { display: none; position: fixed; z-index: 1500; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); }
     .modal-content { background: var(--card-bg); margin: 5% auto; padding: 20px; border-radius: 15px; width: 90%; max-width: 550px; max-height: 80vh; overflow-y: auto; position: relative; border: 1px solid var(--border-color); }
     .close-modal { position: sticky; top: 0; float: right; font-size: 28px; cursor: pointer; color: #e74c3c; font-weight: bold; background: var(--card-bg); width: 30px; text-align: center; border-radius: 50%; z-index: 10; }
-
     .list-item { background: var(--bg-color); padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid var(--primary-color); position: relative; }
     .list-q { font-weight: 600; display: block; margin-bottom: 5px; padding-right: 25px; }
-    .list-e { font-size: 14px; opacity: 0.8; border-top: 1px solid #ddd; padding-top: 5px; margin-top: 5px; }
-    
-    .tracker-card, .collection-card { display: none; margin-top: 15px; padding: 10px; background: var(--btn-bg); border-radius: 10px; border: 1px solid var(--border-color); }
-    .subject-group { margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
-    .subject-title { background: var(--primary-color); color: white; padding: 8px; font-weight: bold; }
-    .chapter-row { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid var(--border-color); font-size: 14px; align-items: center; }
+    .list-e { font-size: 14px; opacity: 0.8; border-top: 1px solid var(--border-color); padding-top: 5px; margin-top: 5px; }
+
+    /* --- collection popup (mirrors homepage panel style) --- */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9990; display: none; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; backdrop-filter: blur(2px); box-sizing: border-box; }
+    .modal-card { background: var(--card-bg); border-radius: 22px; width: 100%; max-width: 760px; padding: 22px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; border: 1px solid var(--border-color); box-sizing: border-box; max-height: calc(100vh - 40px); overflow-y: auto; animation: fadeIn 0.3s ease-out; }
+    .modal-close-btn { position: absolute; top: 14px; right: 14px; background: var(--btn-bg); border: 1px solid var(--border-color); width: 34px; height: 34px; border-radius: 50%; font-size: 16px; cursor: pointer; color: var(--text-color); display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+    .modal-close-btn:hover { background: var(--border-color); transform: rotate(90deg); }
+    .modal-title { text-align: center; font-weight: 700; font-size: 18px; margin: 0 0 16px; color: var(--primary-color); display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .chapter-item.active { border-color: var(--primary-color); background: var(--card-bg); box-shadow: 0 2px 8px rgba(79,70,229,0.15); }
+    .subject-group { margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; }
+    .subject-title { background: var(--primary-color); color: white; padding: 10px; font-weight: bold; }
+    .chapter-row { display: flex; justify-content: space-between; padding: 10px; background: var(--card-bg); border-bottom: 1px solid var(--border-color); align-items: center; }
     .status-badge { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px; }
     .status-green { background: #2ecc71; }
     .status-yellow { background: #f1c40f; }
     .status-red { background: #e74c3c; }
 
-    .backup-area { display: flex; gap: 10px; margin-top: 20px; padding-top: 15px; border-top: 2px dashed var(--border-color); }
-    .backup-btn { flex: 1; padding: 10px; font-size: 12px; background: #95a5a6; color: white; border: none; border-radius: 8px; cursor: pointer; }
-
-    @media (max-width: 500px) {
-      .button-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 500px) { .button-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 
-  <!-- इमेज मोडल -->
+  <div id="loadingScreen"><div class="loading-icon">📖</div></div>
+
   <div id="imageModal" onclick="this.style.display='none'">
     <span class="close-img-modal">&times;</span>
     <img id="fullImage">
   </div>
 
-  <!-- प्रिंट सेक्शन -->
   <div id="printSection" style="display:none; padding: 20px;">
     <h2 style="text-align:center; border-bottom: 2px solid #333;">Saved Questions Bank</h2>
     <div id="printBody"></div>
   </div>
 
-  <!-- लॉगिन एरिया -->
-  <div id="loginArea">
+  <div id="loginArea" style="display:none;">
     <div class="login-glass-card">
         <span class="login-brand-icon">📖</span>
-        <h1>Quiz Pro</h1>
+        <h1>Subjective Pro</h1>
         <div style="margin-top:20px;">
           <div class="input-group">
             <input type="email" id="emailInput" class="login-input" placeholder="Gmail ID">
@@ -226,58 +267,50 @@
             Continue with Google
         </button>
         <button class="guest-btn" onclick="continueAsGuest()">
-          <span style="font-size: 18px;">👤</span> 
-          Bina login ke chalayein (Guest)
+            <span style="font-size: 18px;">👤</span> Bina login ke chalayein (Guest)
         </button>
     </div>
   </div>
 
-  <!-- हेडर बटन्स -->
   <div class="header-btns" id="mainHeader">
     <div class="header-left">
-      <button id="themeBtn" onclick="toggleTheme()">🌙</button>
-      <div style="display:flex; align-items:center; gap:5px;">
-        <span style="font-size:12px;">🔊</span>
-        <label class="voice-switch">
-          <input type="checkbox" id="autoReadSwitch">
-          <span class="slider"></span>
-        </label>
-        <input type="range" id="voiceSpeed" min="0.5" max="1.5" step="0.1" value="1" style="width:50px;" onchange="saveVoiceSpeed(this.value)">
-      </div>
+      <span id="headerTitle" style="font-weight:600; color:var(--primary-color); font-size:16px; white-space:nowrap;">🔥 Smart Subjective Pro</span>
+      <button id="quitBtn" onclick="quitQuiz()">⏹️ Quit</button>
+      <button id="speakBtn" class="speak-btn" onclick="handleSpeakClick()" style="display:none;">🔊</button>
     </div>
-    
-    <div id="timerDisplay">⏳ 00:00</div>
+
+    <div id="timerDisplay" onclick="toggleStopwatch()" style="cursor:pointer;">⏰ 00:00</div>
     
     <div class="header-right">
       <button id="heartActionBtn" title="Subject-wise Collection" onclick="handleHeartClick()"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg></button>
       <button id="bookmarkActionBtn" onclick="handleBookmarkClick()"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button>
-      
-      <div id="userProfile" class="user-profile" onclick="toggleProfileMenu(event)">
-          <!-- प्रोफाइल JS से भरेगा -->
-      </div>
-      <button id="quitBtn" onclick="quitQuiz()">⏹️ Quit</button>
+      <div id="userProfile" class="user-profile" onclick="toggleProfileMenu(event)"></div>
     </div>
   </div>
 
-  <!-- मुख्य कंटेनर -->
   <div class="container" id="mainContainer" style="display:none;">
     <div class="progress-container" id="pCont"><div id="progressBar"></div></div>
 
-    <!-- सेटअप एरिया -->
     <div id="setupArea">
-        <h2>🔥 Smart Subjective Pro</h2>
-        <button id="resumeBtn" class="main-btn" style="background: #9b59b6; color: white; display: none;" onclick="resumeQuiz()">🕒 पिछला सेशन जारी रखें</button>
-        <select id="subjectSelect" onchange="updateChapters()"><option value="all">-- लोड हो रहा है --</option></select>
-        <select id="chapterSelect"><option value="all">-- सभी अध्याय --</option></select>
-        
-        <div class="challenge-grid">
-          <div><label style="font-size: 11px;">सवाल:</label><input type="number" id="customLimit" placeholder="10"></div>
-          <div><label style="font-size: 11px;">मिनट:</label><input type="number" id="customTime" placeholder="5"></div>
+        <div class="select-panels">
+          <div class="subject-panel">
+            <div class="panel-header"><span class="step-badge">1</span> विषय चुनें</div>
+            <div class="subject-list" id="subjectList"></div>
+          </div>
+          <div class="chapter-panel">
+            <div class="panel-header"><span class="step-badge">2</span> अध्याय चुनें</div>
+            <div class="chapter-list" id="chapterList"></div>
+          </div>
         </div>
 
-        <button class="main-btn" onclick="startQuiz()" style="background: #5d6d7e; color: white;">🎯 शुरू करें</button>
-        
-        <!-- ग्रिड बटन -->
+        <div class="challenge-grid">
+          <div><label style="font-size: 11px;">सवाल (खाली = सभी):</label><input type="number" id="customLimit" placeholder="10"></div>
+          <div><label style="font-size: 11px;">मिनट (खाली = बिना टाइमर):</label><input type="number" id="customTime" placeholder="5"></div>
+        </div>
+
+        <button class="main-btn cta-btn start-quiz-btn" onclick="startQuiz()">🎯 शुरू करें</button>
+        <button id="resumeBtn" class="main-btn cta-btn resume-quiz-btn" style="display: none;" onclick="resumeQuiz()">🕒 पिछला सेशन जारी रखें</button>
+
         <div class="button-grid">
             <button id="weakAreasBtn" class="grid-card orange-card" style="display:none;" onclick="startWeakAreasQuiz()">
                 <div class="card-icon">🎯</div>
@@ -308,33 +341,41 @@
                 </div>
             </button>
         </div>
+        <button class="main-btn" style="background:var(--btn-bg); margin-top:10px;" onclick="openSavedListModal()">🖨️ सहेजे गए सवालों की लिस्ट देखें / प्रिंट करें</button>
 
-        <!-- ट्रैकर और कलेक्शन एरिया -->
+        <div class="backup-area">
+          <button class="backup-btn" onclick="exportData()">📤 Backup Data</button>
+          <button class="backup-btn" onclick="document.getElementById('importFile').click()">📥 Restore Data</button>
+          <input type="file" id="importFile" style="display:none" onchange="importData(event)">
+        </div>
+
         <div id="trackerArea" class="tracker-card">
           <h3 style="text-align:center;">📅 रिवीजन स्टेटस</h3>
           <div id="trackerContent"></div>
         </div>
 
-        <div id="collectionArea" class="collection-card">
-          <h3 style="text-align:center;">❤️ Collection Practice</h3>
-          <select id="collSubFilter" onchange="updateCollChapters()"><option value="all">-- विषय चुनें --</option></select>
-          <select id="collChFilter"><option value="all">-- अध्याय चुनें --</option></select>
-          <button class="main-btn" onclick="startCollectionPractice()" style="background: #27ae60; color: white; margin-top: 10px;">🚀 Practice Start</button>
-        </div>
-
-        <!-- बैकअप बटन -->
-        <div class="backup-area">
-          <button class="backup-btn" onclick="exportData()">📤 Export Data</button>
-          <button class="backup-btn" onclick="document.getElementById('importFile').click()">📥 Import Data</button>
-          <input type="file" id="importFile" style="display:none" onchange="importData(event)" accept=".json">
+        <div id="collectionArea" class="modal-overlay" onclick="if(event.target===this) toggleCollection()">
+          <div class="modal-card">
+            <button class="modal-close-btn" onclick="toggleCollection()">✕</button>
+            <h3 class="modal-title">❤️ Collection Practice</h3>
+            <div class="select-panels">
+              <div class="subject-panel">
+                <div class="panel-header"><span class="step-badge">1</span> विषय चुनें</div>
+                <div class="subject-list" id="collSubjectList"></div>
+              </div>
+              <div class="chapter-panel">
+                <div class="panel-header"><span class="step-badge">2</span> अध्याय चुनें</div>
+                <div class="chapter-list" id="collChapterList"></div>
+              </div>
+            </div>
+            <button class="main-btn cta-btn start-quiz-btn" onclick="startCollectionPractice()">🚀 Practice Start</button>
+          </div>
         </div>
     </div>
 
-    <!-- क्विज एरिया -->
     <div id="quizArea" style="display:none;"></div>
   </div>
 
-  <!-- मोडल्स -->
   <div id="reviewModal" class="modal no-print">
     <div class="modal-content">
       <span class="close-modal" onclick="closeReview()">&times;</span>
@@ -353,7 +394,8 @@
   </div>
 
   <script>
-    // ========== फायरबेस कॉन्फिग ==========
+    document.addEventListener("DOMContentLoaded", function () {
+
     const firebaseConfig = {
       apiKey: "AIzaSyA_Wm4oRPvdHJ_9NVHrGGWaom5Y3lu6MBE",
       authDomain: "mystudyquiz-ac0d9.firebaseapp.com",
@@ -369,25 +411,35 @@
     const auth = firebase.auth();
     const database = firebase.database();
 
-    // ========== ग्लोबल वेरिएबल्स ==========
-    let quizData = {};
-    let selectedQuestions = [], wrongQuestions = [], currentIdx = 0, score = 0, questionsAttempted = 0, timerInterval;
-    let currentSub = "", currentCh = "", isWeakMode = false;
-    let savedList = [], revisionDates = {}, weakList = [], collections = {};
-    let isGuest = false;
-    let autoNextTimer = null; // ऑटो नेक्स्ट के लिए टाइमर
-
-    // ========== डेटा स्टोरेज के लिए अलग पहचान (Website 1 के लिए) ==========
     const STORAGE_PREFIX = 'website1_';
 
-    // ========== ऑथ स्टेट लिसनर ==========
+    let quizData = {}, allQuestionsFlat = [], selectedQuestions = [], wrongQuestions = [], currentIdx = 0, score = 0, timerInterval;
+    let questionsAttempted = 0, currentSub = "", currentCh = "", isWeakMode = false;
+    let savedList = [], revisionDates = {}, weakList = [], collections = {};
+    let selectedSubject = "all";
+    let isGuest = false;
+    let speakClickTimer = null;
+    let autoNextTimer = null;
+    let usingCountdown = false;
+
+    window.onpopstate = function(event) {
+      if (document.getElementById("quizArea").style.display === "block" || 
+          document.getElementById("trackerArea").style.display === "block" ||
+          document.getElementById("collectionArea").style.display === "flex") {
+        goToHome();
+      }
+    };
+
     auth.onAuthStateChanged((user) => {
+        const loader = document.getElementById("loadingScreen");
+        if (loader) loader.style.display = "none";
+
         const up = document.getElementById("userProfile");
-        const guestStored = localStorage.getItem(STORAGE_PREFIX + 'guest_mode');
+        const guestStored = localStorage.getItem(STORAGE_PREFIX + "guest_mode");
 
         if (user) {
             isGuest = false;
-            localStorage.removeItem(STORAGE_PREFIX + 'guest_mode'); 
+            localStorage.removeItem(STORAGE_PREFIX + "guest_mode"); 
             document.getElementById("loginArea").style.display = "none";
             document.getElementById("mainContainer").style.display = "block";
             document.getElementById("mainHeader").style.display = "flex";
@@ -399,10 +451,16 @@
                 <img src="${photo}" alt="User">
                 <div id="profileDropdown" class="profile-dropdown">
                     <div class="user-info-header">Hi, ${name.split(' ')[0]}</div>
+                    <button onclick="toggleTheme()">🌙 Dark Mode</button>
+                    <div class="voice-speed-row">
+                      <span>🔊 Speed</span>
+                      <input type="range" id="voiceSpeed" min="0.5" max="1.5" step="0.1" value="1" onchange="saveVoiceSpeed(this.value)">
+                    </div>
                     <button onclick="changeDisplayName()">✏️ Name Change</button>
                     <button onclick="logoutUser()" style="color:#e74c3c; border-top:1px solid #eee;">🚪 Logout</button>
                 </div>`;
             up.style.display = "flex";
+            initVoiceSpeedUI();
             syncFromFirebase(user.uid);
         } else if(guestStored === "true") {
             continueAsGuest();
@@ -413,7 +471,6 @@
         }
     });
 
-    // ========== प्रोफाइल मेनू टॉगल ==========
     function toggleProfileMenu(e) {
         e.stopPropagation();
         const menu = document.getElementById("profileDropdown");
@@ -422,15 +479,12 @@
 
     window.onclick = function(event) {
         const menu = document.getElementById("profileDropdown");
-        if (menu && !event.target.closest('#userProfile')) {
-            menu.style.display = "none";
-        }
+        if (menu && !event.target.closest('#userProfile')) menu.style.display = "none";
     }
 
-    // ========== लॉगिन/लॉगआउट फंक्शन ==========
     function logoutUser() {
         if(confirm("Logout karein?")) {
-            localStorage.removeItem(STORAGE_PREFIX + 'guest_mode');
+            localStorage.removeItem(STORAGE_PREFIX + "guest_mode");
             auth.signOut().then(() => location.reload());
         }
     }
@@ -439,10 +493,8 @@
         const newName = prompt("Naya Display Name likhein:");
         if (newName && auth.currentUser) {
             auth.currentUser.updateProfile({ displayName: newName })
-            .then(() => {
-                alert("Naam update ho gaya! Refresh kar rahe hain...");
-                location.reload();
-            }).catch(e => alert(e.message));
+            .then(() => { alert("Naam update ho gaya! Refresh kar rahe hain..."); location.reload(); })
+            .catch(e => alert(e.message));
         }
     }
 
@@ -478,9 +530,9 @@
 
     function continueAsGuest() {
         isGuest = true;
-        localStorage.setItem(STORAGE_PREFIX + 'guest_mode', "true");
+        localStorage.setItem(STORAGE_PREFIX + "guest_mode", "true");
         
-        const guestData = localStorage.getItem(STORAGE_PREFIX + 'guest_data');
+        const guestData = localStorage.getItem(STORAGE_PREFIX + "guest_data");
         if(guestData) {
             const data = JSON.parse(guestData);
             savedList = data.bookmarks || [];
@@ -497,32 +549,31 @@
             <div style="font-size:24px;">👤</div>
             <div id="profileDropdown" class="profile-dropdown">
                 <div class="user-info-header">Guest Mode</div>
+                <button onclick="toggleTheme()">🌙 Dark Mode</button>
+                <div class="voice-speed-row">
+                  <span>🔊 Speed</span>
+                  <input type="range" id="voiceSpeed" min="0.5" max="1.5" step="0.1" value="1" onchange="saveVoiceSpeed(this.value)">
+                </div>
                 <button onclick="clearGuestAndLogin()">✨ Sign Up / Login</button>
             </div>`;
         up.style.display = "flex";
+        initVoiceSpeedUI();
         initApp();
     }
 
     function clearGuestAndLogin() {
-        localStorage.removeItem(STORAGE_PREFIX + 'guest_mode');
+        localStorage.removeItem(STORAGE_PREFIX + "guest_mode");
         location.reload();
     }
 
-    // ========== फायरबेस/लोकल स्टोरेज सिंक ==========
     function syncToFirebase() {
-        const dataToSave = {
-            bookmarks: savedList,
-            revision: revisionDates,
-            weak: weakList,
-            collections: collections
-        };
-
+        const dataToSave = { bookmarks: savedList, revision: revisionDates, weak: weakList, collections: collections };
         if(isGuest) {
-            localStorage.setItem(STORAGE_PREFIX + 'guest_data', JSON.stringify(dataToSave));
+            localStorage.setItem(STORAGE_PREFIX + "guest_data", JSON.stringify(dataToSave));
         } else {
             const user = auth.currentUser;
             if (!user) return;
-            database.ref('users_website1/' + user.uid).set(dataToSave);
+            database.ref('users_website1/' + user.uid).update(dataToSave);
         }
     }
 
@@ -537,60 +588,114 @@
         });
     }
 
-    // ========== ऐप इनिशियलाइजेशन ==========
-    function initApp() { 
+    function initApp() {
       checkSavedBtn(); updateWeakBtn(); checkResumeStatus(); updateCollectionBtn();
-      fetch("sub.json?v=" + Math.random()).then(r => r.json()).then(j => {
+
+      fetch("sub.json?v=" + Math.random(), { cache: "no-cache" }).then(r => r.json()).then(j => {
         quizData = j;
-        const s = document.getElementById("subjectSelect");
-        s.innerHTML = "<option value='all'>-- सभी विषय --</option>";
-        Object.keys(j).forEach(k => s.add(new Option(k, k)));
+
+        allQuestionsFlat = [];
+        Object.keys(quizData).forEach(sub => {
+          Object.keys(quizData[sub]).forEach(ch => {
+            quizData[sub][ch].forEach((q, idx) => {
+              q.id = `${sub}__${ch}__${idx}`;
+              q.sub = sub; q.ch = ch;
+              allQuestionsFlat.push(q);
+            });
+          });
+        });
+
+        migrateOldDataToIds();
+        renderSubjectList();
+        renderChapterList();
+        checkSavedBtn(); updateWeakBtn(); updateCollectionBtn();
       }).catch(e => {
         console.error("sub.json load nahi hua:", e);
         alert("sub.json file nahi mili. Please check file name.");
       });
     }
 
-    // ========== सेशन मैनेजमेंट ==========
+    function findFreshByText(qText) {
+      return allQuestionsFlat.find(q => q.question === qText);
+    }
+
+    function migrateOldDataToIds() {
+      let changed = false;
+
+      savedList = savedList.map(item => {
+        if (typeof item === "string") return item;
+        if (item && item.question) { const fresh = findFreshByText(item.question); changed = true; return fresh ? fresh.id : null; }
+        return null;
+      }).filter(Boolean);
+
+      weakList = weakList.map(item => {
+        if (typeof item === "string") return item;
+        if (item && item.question) { const fresh = findFreshByText(item.question); changed = true; return fresh ? fresh.id : null; }
+        return null;
+      }).filter(Boolean);
+
+      Object.keys(collections).forEach(sub => {
+        Object.keys(collections[sub]).forEach(ch => {
+          collections[sub][ch] = collections[sub][ch].map(item => {
+            if (typeof item === "string") return item;
+            if (item && item.question) { const fresh = findFreshByText(item.question); changed = true; return fresh ? fresh.id : null; }
+            return null;
+          }).filter(Boolean);
+        });
+      });
+
+      if (changed) syncToFirebase();
+    }
+
+    function resolveQuestionsByIds(ids) {
+      return ids.map(id => allQuestionsFlat.find(q => q.id === id)).filter(Boolean);
+    }
+
     function checkResumeStatus() {
-      const session = JSON.parse(localStorage.getItem(STORAGE_PREFIX + 'session'));
+      const session = JSON.parse(localStorage.getItem(STORAGE_PREFIX + "session"));
       const btn = document.getElementById("resumeBtn");
       if (session) {
-        btn.innerText = `🕒 पिछला क्विज़ जारी रखें (Q. ${session.currentIdx + 1})`;
+        btn.innerText = `🕒 पिछला सेशन जारी रखें (Q. ${session.currentIdx + 1})`;
         btn.style.display = "block";
       } else btn.style.display = "none";
     }
 
     function saveCurrentSession() {
-      localStorage.setItem(STORAGE_PREFIX + 'session', JSON.stringify({
-        selectedQuestions, currentIdx, score, questionsAttempted, currentSub, currentCh, isWeakMode
+      const idList = selectedQuestions.map(q => q.id);
+      localStorage.setItem(STORAGE_PREFIX + "session", JSON.stringify({
+        idList, currentIdx, score, questionsAttempted, currentSub, currentCh, isWeakMode, stopwatchSeconds, usingCountdown
       }));
     }
 
     function clearSession() {
-      localStorage.removeItem(STORAGE_PREFIX + 'session');
+      localStorage.removeItem(STORAGE_PREFIX + "session");
       document.getElementById("resumeBtn").style.display = "none";
     }
 
     function resumeQuiz() {
-      const session = JSON.parse(localStorage.getItem(STORAGE_PREFIX + 'session'));
+      const session = JSON.parse(localStorage.getItem(STORAGE_PREFIX + "session"));
       if (session) {
-        selectedQuestions = session.selectedQuestions;
+        if (session.idList) {
+          selectedQuestions = resolveQuestionsByIds(session.idList);
+        } else if (session.selectedQuestions) {
+          selectedQuestions = session.selectedQuestions.map(q => findFreshByText(q.question) || q);
+        }
         currentIdx = session.currentIdx; score = session.score;
         questionsAttempted = session.questionsAttempted;
         currentSub = session.currentSub; currentCh = session.currentCh;
         isWeakMode = session.isWeakMode;
-        initQuizUI_Display(); renderLayout(); showQuestion();
+        usingCountdown = !!session.usingCountdown;
+        if (selectedQuestions.length === 0) { clearSession(); return; }
+        initQuizUI_Display(session.stopwatchSeconds || 0); renderLayout(); showQuestion();
       }
     }
 
-    // ========== बैकअप/इम्पोर्ट ==========
     function exportData() {
       const data = { bookmarks: savedList, revision: revisionDates, weak: weakList, collections: collections };
       const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = `quiz_backup_website1.json`;
+      a.download = `subjective_backup.json`;
       a.click();
     }
 
@@ -605,6 +710,7 @@
           revisionDates = data.revision || {};
           weakList = data.weak || [];
           collections = data.collections || {};
+          migrateOldDataToIds();
           syncToFirebase();
           location.reload();
         } catch (err) { alert("गलत फाइल!"); }
@@ -612,41 +718,97 @@
       reader.readAsText(file);
     }
 
-    // ========== थीम, वॉयस ==========
     function toggleTheme() {
-      document.body.hasAttribute("data-theme") ? document.body.removeAttribute("data-theme") : document.body.setAttribute("data-theme", "dark");
+      const b = document.body;
+      b.hasAttribute("data-theme") ? b.removeAttribute("data-theme") : b.setAttribute("data-theme", "dark");
     }
 
-    function saveVoiceSpeed(val) { localStorage.setItem(STORAGE_PREFIX + 'voice_speed', val); }
-
-    function speak(text) {
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      u.rate = parseFloat(localStorage.getItem(STORAGE_PREFIX + 'voice_speed')) || 1;
-      window.speechSynthesis.speak(u);
+    function getSubjectIcon(name) {
+      const n = name.toLowerCase();
+      if(n.includes("phys") || n.includes("भौतिक")) return "⚛️";
+      if(n.includes("chem") || n.includes("रसायन")) return "🧪";
+      if(n.includes("math") || n.includes("गणित")) return "🧮";
+      if(n.includes("bio") || n.includes("जीव")) return "🌿";
+      if(n.includes("english") || n.includes("अंग्रेजी")) return "📖";
+      if(n.includes("history") || n.includes("इतिहास")) return "🏛️";
+      if(n.includes("geo") || n.includes("भूगोल")) return "🌍";
+      if(n.includes("econ") || n.includes("अर्थ")) return "💰";
+      if(n.includes("polity") || n.includes("राजनीति") || n.includes("constitution")) return "⚖️";
+      if(n.includes("bihar") || n.includes("बिहार")) return "🏮";
+      if(n.includes("gk") || n.includes("general") || n.includes("सामान्य")) return "💡";
+      return "📘";
     }
 
-    function readFullQuestion() {
-      const q = selectedQuestions[currentIdx];
-      let optText = "";
-      if(q.options && q.options.length > 0) {
-        optText = ". विकल्प हैं . . " + q.options.join(", , ");
+    function renderSubjectList() {
+      const list = document.getElementById("subjectList");
+      if(!list) return;
+      let html = `
+        <div class="subject-item ${selectedSubject === 'all' ? 'active' : ''}" onclick="selectSubject('all')">
+          <span class="subj-icon">🗂️</span><span class="subj-name">-- सभी विषय --</span><span class="subj-arrow">›</span>
+        </div>`;
+      Object.keys(quizData).forEach(sub => {
+        html += `
+          <div class="subject-item ${selectedSubject === sub ? 'active' : ''}" onclick="selectSubject('${sub.replace(/'/g, "\\'")}')">
+            <span class="subj-icon">${getSubjectIcon(sub)}</span><span class="subj-name">${sub}</span><span class="subj-arrow">›</span>
+          </div>`;
+      });
+      list.innerHTML = html;
+    }
+
+    function selectSubject(sub) { selectedSubject = sub; renderSubjectList(); renderChapterList(); }
+
+    function renderChapterList() {
+      const list = document.getElementById("chapterList");
+      if(!list) return;
+
+      if(selectedSubject === "all" || !quizData[selectedSubject]) {
+        list.innerHTML = `
+          <div class="chapter-empty-state">
+            <img src="image/anime.png" alt="Select a subject" style="margin-bottom:4px;">
+            <div class="ces-title">अपना अध्याय चुनें</div>
+            <div class="ces-sub">सीखने की जादुई दुनिया में प्रवेश करें</div>
+          </div>`;
+        return;
       }
-      speak(`${q.question}${optText}`);
+
+      const checkedBefore = new Set(Array.from(document.querySelectorAll(".chapter-checkbox:checked")).map(cb => cb.value));
+
+      let html = `
+        <div class="chapter-item select-all-item">
+          <input type="checkbox" id="selectAllChapters" onchange="toggleAllChapters(this)">
+          <span style="font-weight:600; color: var(--primary-color);">-- सभी अध्याय (Select All) --</span>
+        </div>`;
+
+      Object.keys(quizData[selectedSubject]).forEach((chapter, idx) => {
+        const isChecked = checkedBefore.has(chapter) ? "checked" : "";
+        html += `
+          <label class="chapter-item">
+            <input type="checkbox" class="chapter-checkbox" value="${chapter}" ${isChecked}>
+            <span class="ch-badge">${idx + 1}</span><span>${chapter}</span>
+          </label>`;
+      });
+
+      list.innerHTML = html;
     }
 
-    // ========== अध्याय अपडेट ==========
-    function updateChapters() {
-      const s = document.getElementById("subjectSelect").value, c = document.getElementById("chapterSelect");
-      c.innerHTML = "<option value='all'>-- सभी अध्याय --</option>";
-      if(s !== "all" && quizData[s]) Object.keys(quizData[s]).forEach(k => c.add(new Option(k, k)));
+    function toggleAllChapters(master) {
+      document.querySelectorAll(".chapter-checkbox").forEach(cb => cb.checked = master.checked);
     }
 
-    // ========== ट्रैकर फंक्शन ==========
     function toggleTracker() {
       const area = document.getElementById("trackerArea");
-      area.style.display = (area.style.display === "block") ? "none" : "block";
-      if(area.style.display === "block") renderTracker();
+      const wasOpen = area.style.display === "block";
+      area.style.display = wasOpen ? "none" : "block";
+      if(!wasOpen) {
+        renderTracker();
+        history.pushState({page: "tracker"}, "Tracker");
+        setTimeout(() => area.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
+      }
+    }
+
+    function toggleEditExplanation() {
+      const inputArea = document.getElementById("inputExpArea");
+      if(inputArea) inputArea.style.display = (inputArea.style.display === "block") ? "none" : "block";
     }
 
     function renderTracker() {
@@ -669,35 +831,105 @@
       });
     }
 
-    // ========== क्विज स्टार्ट फंक्शन ==========
-    function startQuiz() {
-      clearSession(); isWeakMode = false;
-      currentSub = document.getElementById("subjectSelect").value;
-      currentCh = document.getElementById("chapterSelect").value;
-      let allTempQ = [];
-      if (currentSub === "all") {
-        Object.keys(quizData).forEach(s => Object.keys(quizData[s]).forEach(c => allTempQ = allTempQ.concat(quizData[s][c])));
-      } else if (currentCh === "all") {
-        Object.keys(quizData[currentSub]).forEach(c => allTempQ = allTempQ.concat(quizData[currentSub][c]));
-      } else { allTempQ = [...quizData[currentSub][currentCh]]; }
+    function saveVoiceSpeed(val) { localStorage.setItem(STORAGE_PREFIX + "voice_speed", val); }
 
-      if(allTempQ.length === 0) return alert("सवाल नहीं मिले!");
-      const limit = parseInt(document.getElementById("customLimit").value);
-      selectedQuestions = (limit > 0) ? allTempQ.sort(() => Math.random() - 0.5).slice(0, limit) : allTempQ.sort(() => Math.random() - 0.5);
-      const mins = parseInt(document.getElementById("customTime").value);
-      if(mins > 0) startTimer(mins);
-      initQuizUI();
+    function initVoiceSpeedUI() {
+      const slider = document.getElementById("voiceSpeed");
+      if(slider) slider.value = localStorage.getItem(STORAGE_PREFIX + "voice_speed") || 1;
     }
 
-    function initQuizUI() { currentIdx = score = questionsAttempted = 0; wrongQuestions = []; initQuizUI_Display(); renderLayout(); showQuestion(); }
+    function speak(text) {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.rate = parseFloat(localStorage.getItem(STORAGE_PREFIX + "voice_speed")) || 1;
+      window.speechSynthesis.speak(u);
+    }
 
-    function initQuizUI_Display() {
+    function readFullQuestion() {
+      const q = selectedQuestions[currentIdx];
+      let optText = "";
+      if(q.options && q.options.length > 0) optText = `. विकल्प hain . . ${q.options.join(", , ")}`;
+      speak(`${q.question}${optText}`);
+    }
+
+    function isAutoReadOn() { return localStorage.getItem(STORAGE_PREFIX + "auto_read") === "true"; }
+
+    function updateSpeakBtnUI() {
+      const btn = document.getElementById("speakBtn");
+      if(btn) btn.classList.toggle("auto-active", isAutoReadOn());
+    }
+
+    function toggleAutoReadMode() {
+      const newState = !isAutoReadOn();
+      localStorage.setItem(STORAGE_PREFIX + "auto_read", newState);
+      updateSpeakBtnUI();
+      if(newState) readFullQuestion();
+    }
+
+    function handleSpeakClick() {
+      if (speakClickTimer) {
+        clearTimeout(speakClickTimer); speakClickTimer = null; toggleAutoReadMode();
+      } else {
+        speakClickTimer = setTimeout(() => { speakClickTimer = null; readFullQuestion(); }, 280);
+      }
+    }
+
+    function startQuiz() {
+      clearSession(); isWeakMode = false;
+      currentSub = selectedSubject;
+
+      let allTempQ = [];
+
+      if (currentSub === "all") {
+        Object.keys(quizData).forEach(s => Object.keys(quizData[s]).forEach(c => allTempQ = allTempQ.concat(quizData[s][c])));
+        currentCh = "all";
+      } else {
+        const checkedBoxes = document.querySelectorAll(".chapter-checkbox:checked");
+        if(checkedBoxes.length === 0) {
+          Object.keys(quizData[currentSub]).forEach(c => allTempQ = allTempQ.concat(quizData[currentSub][c]));
+          currentCh = "all";
+        } else {
+          let selectedChaps = [];
+          checkedBoxes.forEach(cb => { selectedChaps.push(cb.value); allTempQ = allTempQ.concat(quizData[currentSub][cb.value]); });
+          currentCh = selectedChaps.length === Object.keys(quizData[currentSub]).length ? "all" : "custom_mix";
+        }
+      }
+
+      if(allTempQ.length === 0) return alert("सवाल नहीं मिले! कृपया चैप्टर सेलेक्ट करें।");
+
+      const shuffled = allTempQ.sort(() => Math.random() - 0.5);
+      const limit = parseInt(document.getElementById("customLimit").value);
+      selectedQuestions = (limit > 0) ? shuffled.slice(0, limit) : shuffled;
+
+      const mins = parseInt(document.getElementById("customTime").value);
+      usingCountdown = mins > 0;
+
+      initQuizUI(mins);
+    }
+
+    function initQuizUI(mins) {
+      currentIdx = score = questionsAttempted = 0; wrongQuestions = [];
+      initQuizUI_Display(0, mins);
+      renderLayout(); showQuestion();
+    }
+
+    function initQuizUI_Display(resumeSeconds, mins) {
       document.getElementById("setupArea").style.display = "none";
       document.getElementById("pCont").style.display = "block";
       document.getElementById("quizArea").style.display = "block";
       document.getElementById("quitBtn").style.display = "block";
       document.getElementById("bookmarkActionBtn").style.display = "flex";
       document.getElementById("heartActionBtn").style.display = "flex";
+      document.getElementById("speakBtn").style.display = "flex";
+      document.getElementById("headerTitle").style.display = "none";
+
+      if (usingCountdown) {
+        startTimer(mins || Math.ceil(((selectedQuestions.length * 60) - resumeSeconds) / 60) || 5, resumeSeconds);
+      } else {
+        startStopwatch(resumeSeconds);
+      }
+
+      history.pushState({page: "quiz"}, "Quiz");
     }
 
     function renderLayout() {
@@ -706,237 +938,359 @@
         <div id="questionBox" class="question-card"></div>
         <div id="optionsBox"></div>
         <div id="resultBox" style="text-align:center; font-weight:bold; margin-top:10px;"></div>
-        <div id="explanationBox" class="explanation-box"></div>`;
-        // Next Button हटा दिया गया
+
+        <div id="explanationBox" class="explanation-box"></div>
+
+        <div id="inputExpArea" class="explanation-input-area">
+          <label style="font-size:13px; font-weight:600; display:block; margin-bottom:8px; color: var(--text-color);">📝 व्याख्या लाइव एडिट करें:</label>
+          <textarea id="customExpText" placeholder="यहाँ अपनी व्याख्या या शार्ट नोट्स टाइप करें..."></textarea>
+          <button class="save-exp-btn" onclick="saveCustomExplanation()">✔ व्याख्या सुरक्षित करें</button>
+        </div>`;
     }
 
-    // क्वेश्चन का सब्जेक्ट और चैप्टर ढूंढें
     function findQuestionMeta(q) {
+      if(q.sub && q.ch) return;
       for(let s in quizData) for(let c in quizData[s]) if(quizData[s][c].some(item => item.question === q.question)) { q.sub = s; q.ch = c; return; }
     }
 
-    // ========== ऑटो नेक्स्ट फंक्शन ==========
-    function goToNextQuestion() {
-      // पिछला टाइमर कैंसल करें
-      if(autoNextTimer) {
-        clearTimeout(autoNextTimer);
-        autoNextTimer = null;
+    function getSafeQuestionKey(qText) {
+      return btoa(unescape(encodeURIComponent(qText))).replace(/[/=+]/g, '_');
+    }
+
+    function saveCustomExplanation() {
+      const q = selectedQuestions[currentIdx];
+      const text = document.getElementById("customExpText").value.trim();
+      const qKey = getSafeQuestionKey(q.question);
+      if(!text) return alert("कृपया पहले कुछ व्याख्या लिखें!");
+
+      let localExps = JSON.parse(localStorage.getItem(STORAGE_PREFIX + "custom_explanations") || "{}");
+      localExps[qKey] = text;
+      localStorage.setItem(STORAGE_PREFIX + "custom_explanations", JSON.stringify(localExps));
+      q.customExplanation = text;
+
+      if(!isGuest) {
+        const user = auth.currentUser;
+        if (user) {
+          database.ref('users_website1/' + user.uid + '/custom_explanations/' + qKey).set(text)
+          .catch(e => console.warn("Firebase backup save failed (already safe locally):", e.message));
+        }
       }
-      
-      window.speechSynthesis.cancel(); 
-      currentIdx++; 
-      if(currentIdx < selectedQuestions.length) { 
-        saveCurrentSession(); 
-        showQuestion(); 
-      } else { 
-        showFinalResult(); 
-      }
+
+      alert("व्याख्या सुरक्षित हो गई!");
+
+      const eBox = document.getElementById("explanationBox");
+      eBox.innerHTML = `
+        <div class="explanation-header-row">
+          <span class="explanation-title">✨ व्याख्या (Live Updated)</span>
+          <button class="edit-exp-toggle-btn" onclick="toggleEditExplanation()">Edit ✎</button>
+        </div>
+        <div>${text}</div>
+        ${q.image ? `<img src="${q.image}" class="exp-img" onclick="openFullImg('${q.image}')">` : ""}
+      `;
+      eBox.style.display = "block";
+      document.getElementById("inputExpArea").style.display = "none";
+    }
+
+    function buildExplanationHTML(q, titleText) {
+      const finalText = q.customExplanation || q.explanation;
+      let inner = "";
+      if(finalText) inner += `<div>${finalText}</div>`;
+      else inner += `<div style="color: #888; font-style: italic; font-size: 14px;">इस सवाल की कोई व्याख्या नहीं है। नोट्स जोड़ने के लिए Edit पर क्लिक करें।</div>`;
+      if(q.image) inner += `<img src="${q.image}" class="exp-img" onclick="openFullImg('${q.image}')">`;
+      return `
+        <div class="explanation-header-row">
+          <span class="explanation-title">💡 व्याख्या</span>
+          <button class="edit-exp-toggle-btn" onclick="toggleEditExplanation()">${finalText ? "Edit ✎" : "Add ✎"}</button>
+        </div>
+        ${inner}`;
     }
 
     function showQuestion() {
       const q = selectedQuestions[currentIdx];
       if(!q.sub || !q.ch) findQuestionMeta(q);
+
+      if(document.getElementById("inputExpArea")) document.getElementById("inputExpArea").style.display = "none";
+
+      const qKey = getSafeQuestionKey(q.question);
+      let localExps = JSON.parse(localStorage.getItem(STORAGE_PREFIX + "custom_explanations") || "{}");
+      if(localExps[qKey] !== undefined) {
+        q.customExplanation = localExps[qKey];
+      } else if(!q.customExplanation && !isGuest) {
+        const user = auth.currentUser;
+        if(user) {
+          database.ref('users_website1/' + user.uid + '/custom_explanations/' + qKey).once('value').then(snap => {
+            if(snap.exists() && !q.customExplanation) {
+              q.customExplanation = snap.val();
+              const eBoxNow = document.getElementById("explanationBox");
+              if(eBoxNow && eBoxNow.style.display === "block") eBoxNow.innerHTML = buildExplanationHTML(q);
+            }
+          });
+        }
+      }
+
       document.getElementById("progressBar").style.width = (currentIdx / selectedQuestions.length) * 100 + "%";
       document.getElementById("qCount").innerText = `सवाल: ${currentIdx + 1} / ${selectedQuestions.length}`;
-      
-      // सवाल दिखाएं (बिना इमेज के)
-      document.getElementById("questionBox").innerHTML = `${q.question} <button class="speak-btn" onclick="readFullQuestion()">🔊</button>`;
-      
-      if(document.getElementById("autoReadSwitch").checked) setTimeout(readFullQuestion, 500);
-      
-      // बुकमार्क बटन स्टेट
-      document.getElementById("bookmarkActionBtn").classList.toggle("active", savedList.some(item => item.question === q.question));
-      
-      // हार्ट बटन स्टेट
-      let isHearted = (q.sub && q.ch && collections[q.sub] && collections[q.sub][q.ch]) ? collections[q.sub][q.ch].some(item => item.question === q.question) : false;
+      document.getElementById("questionBox").innerHTML = `${q.question}`;
+      updateSpeakBtnUI();
+      if(isAutoReadOn()) setTimeout(readFullQuestion, 500);
+
+      document.getElementById("bookmarkActionBtn").classList.toggle("active", savedList.includes(q.id));
+      let isHearted = (q.sub && q.ch && collections[q.sub] && collections[q.sub][q.ch]) ? collections[q.sub][q.ch].includes(q.id) : false;
       document.getElementById("heartActionBtn").classList.toggle("active", isHearted);
-      
+
       const oBox = document.getElementById("optionsBox"), rBox = document.getElementById("resultBox"), eBox = document.getElementById("explanationBox");
-      oBox.innerHTML = ""; rBox.innerText = ""; eBox.style.display = "none"; 
-      
+      oBox.innerHTML = ""; rBox.innerText = ""; eBox.style.display = "none";
+
       if(q.options && q.options.length > 0) {
-        // MCQ
         q.options.forEach((opt) => {
           const b = document.createElement("button"); b.className = "option-btn"; b.innerText = opt;
           b.onclick = () => {
             questionsAttempted++;
             document.querySelectorAll(".option-btn").forEach(btn => btn.style.pointerEvents = "none");
-            if(opt === q.answer) { 
-              score++; rBox.innerHTML = "<span style='color:#27ae60'>✅ सही!</span>"; 
-              if(isWeakMode) { weakList = weakList.filter(i => i.question !== q.question); syncToFirebase(); }
-            } else { 
-              rBox.innerHTML = `<span style='color:#e74c3c'>❌ गलत! सही: ${q.answer}</span>`; 
-              wrongQuestions.push(q); 
-              if(!weakList.some(i => i.question === q.question)) { weakList.push(q); syncToFirebase(); }
+            if(opt === q.answer) {
+              score++; rBox.innerHTML = "<span style='color:#10b981'>✅ सही जवाब!</span>";
+              if(isWeakMode) { weakList = weakList.filter(id => id !== q.id); syncToFirebase(); }
+            } else {
+              rBox.innerHTML = `<span style='color:#e74c3c'>❌ गलत जवाब! सही उत्तर: ${q.answer}</span>`;
+              wrongQuestions.push(q);
+              if(!weakList.includes(q.id)) { weakList.push(q.id); syncToFirebase(); }
             }
-            // एक्सप्लेनेशन और इमेज दिखाएं
-            let expHTML = "";
-            if(q.explanation) expHTML += `<strong>💡 व्याख्या:</strong><br>${q.explanation}`;
-            if(q.image) expHTML += `<img src="${q.image}" class="exp-img" onclick="openFullImg(this.src)">`;
-            eBox.innerHTML = expHTML;
-            eBox.style.display = expHTML ? "block" : "none";
-            
+
+            eBox.innerHTML = buildExplanationHTML(q);
+            eBox.style.display = "block";
+            document.getElementById("customExpText").value = q.customExplanation || "";
+
             saveCurrentSession();
-            
-            // 1.5 सेकंड बाद अगला सवाल लोड करें
             if(autoNextTimer) clearTimeout(autoNextTimer);
             autoNextTimer = setTimeout(goToNextQuestion, 1500);
           };
           oBox.appendChild(b);
         });
       } else {
-        // सब्जेक्टिव
-        oBox.innerHTML = ""; 
-        
-        // "जवाब देखें" बटन
         const viewAnsBtn = document.createElement("button");
-        viewAnsBtn.className = "main-btn";
-        viewAnsBtn.style.background = "#3498db"; 
-        viewAnsBtn.style.color = "#fff";
+        viewAnsBtn.className = "main-btn cta-btn start-quiz-btn";
         viewAnsBtn.innerText = "👁️ जवाब देखें";
         viewAnsBtn.onclick = () => {
-          // जवाब/व्याख्या दिखाएं
-          let expHTML = "";
-          if(q.explanation) expHTML += `<strong>💡 व्याख्या:</strong><br>${q.explanation}`;
-          if(q.image) expHTML += `<img src="${q.image}" class="exp-img" onclick="openFullImg(this.src)">`;
-          eBox.innerHTML = expHTML;
+          eBox.innerHTML = buildExplanationHTML(q);
           eBox.style.display = "block";
-          
-          // "सही था" और "सुधार चाहिए" बटन
+          document.getElementById("customExpText").value = q.customExplanation || "";
+
           oBox.innerHTML = `
-            <div class="action-btns" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
               <button onclick="handleSubjectiveResponse(true)" class="main-btn" style="background:var(--progress-color); color:#fff;">✅ सही था</button>
               <button onclick="handleSubjectiveResponse(false)" class="main-btn" style="background:#e67e22; color:#fff;">⚠️ सुधार चाहिए</button>
-            </div>
-          `;
+            </div>`;
         };
         oBox.appendChild(viewAnsBtn);
       }
     }
 
-    // सब्जेक्टिव रिस्पॉन्स हैंडलर
     function handleSubjectiveResponse(isCorrect) {
       const q = selectedQuestions[currentIdx];
       questionsAttempted++;
       if(isCorrect) {
-        if(isWeakMode) { 
-          weakList = weakList.filter(i => i.question !== q.question); 
-          syncToFirebase(); 
-        }
+        if(isWeakMode) { weakList = weakList.filter(id => id !== q.id); syncToFirebase(); }
       } else {
         wrongQuestions.push(q);
-        if(!weakList.some(i => i.question === q.question)) { 
-          weakList.push(q); 
-          syncToFirebase(); 
-        }
+        if(!weakList.includes(q.id)) { weakList.push(q.id); syncToFirebase(); }
       }
       saveCurrentSession();
-      
-      // तुरंत अगला सवाल लोड करें (बिना देरी के)
       goToNextQuestion();
     }
 
-    // ========== हार्ट/कलेक्शन हैंडलिंग ==========
+    function goToNextQuestion() {
+      if(autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = null; }
+      window.speechSynthesis.cancel();
+      currentIdx++;
+      if(currentIdx < selectedQuestions.length) { saveCurrentSession(); showQuestion(); }
+      else { showFinalResult(); }
+    }
+
     function handleHeartClick() {
       const q = selectedQuestions[currentIdx];
       if(!q.sub || !q.ch) findQuestionMeta(q);
       if(!q.sub || !q.ch) return;
       if(!collections[q.sub]) collections[q.sub] = {};
       if(!collections[q.sub][q.ch]) collections[q.sub][q.ch] = [];
-      const idx = collections[q.sub][q.ch].findIndex(i => i.question === q.question);
-      idx > -1 ? collections[q.sub][q.ch].splice(idx, 1) : collections[q.sub][q.ch].push(q);
+      const idx = collections[q.sub][q.ch].indexOf(q.id);
+      idx > -1 ? collections[q.sub][q.ch].splice(idx, 1) : collections[q.sub][q.ch].push(q.id);
       syncToFirebase(); document.getElementById("heartActionBtn").classList.toggle("active"); updateCollectionBtn();
     }
 
+    let collSelectedSub = "all";
+
     function toggleCollection() {
       const area = document.getElementById("collectionArea");
-      area.style.display = (area.style.display === "block") ? "none" : "block";
-      if(area.style.display === "block") fillCollFilters();
+      const wasOpen = area.style.display === "flex";
+      area.style.display = wasOpen ? "none" : "flex";
+      if(!wasOpen) {
+        collSelectedSub = "all";
+        renderCollSubjectList();
+        renderCollChapterList();
+        history.pushState({page: "collection"}, "Collection");
+      }
     }
 
-    function fillCollFilters() {
-      const sFilter = document.getElementById("collSubFilter");
-      sFilter.innerHTML = "<option value='all'>-- All Saved Subjects --</option>";
-      Object.keys(collections).forEach(s => sFilter.add(new Option(s, s)));
-      updateCollChapters();
+    function getCollChapterCount(sub, ch) {
+      return (collections[sub] && collections[sub][ch]) ? collections[sub][ch].length : 0;
     }
 
-    function updateCollChapters() {
-      const s = document.getElementById("collSubFilter").value, cFilter = document.getElementById("collChFilter");
-      cFilter.innerHTML = "<option value='all'>-- All Chapters --</option>";
-      if(s !== "all" && collections[s]) Object.keys(collections[s]).forEach(c => cFilter.add(new Option(c, c)));
+    function renderCollSubjectList() {
+      const list = document.getElementById("collSubjectList");
+      if(!list) return;
+      let html = `
+        <div class="subject-item ${collSelectedSub === 'all' ? 'active' : ''}" onclick="selectCollSubject('all')">
+          <span class="subj-icon">🗂️</span><span class="subj-name">-- सभी विषय --</span><span class="subj-arrow">›</span>
+        </div>`;
+      Object.keys(quizData).forEach(sub => {
+        if(!collections[sub] || Object.keys(collections[sub]).length === 0) return;
+        html += `
+          <div class="subject-item ${collSelectedSub === sub ? 'active' : ''}" onclick="selectCollSubject('${sub.replace(/'/g, "\\'")}')">
+            <span class="subj-icon">${getSubjectIcon(sub)}</span><span class="subj-name">${sub}</span><span class="subj-arrow">›</span>
+          </div>`;
+      });
+      list.innerHTML = html;
+    }
+
+    function selectCollSubject(sub) { collSelectedSub = sub; renderCollSubjectList(); renderCollChapterList(); }
+
+    function renderCollChapterList() {
+      const list = document.getElementById("collChapterList");
+      if(!list) return;
+
+      if(collSelectedSub === "all" || !collections[collSelectedSub]) {
+        list.innerHTML = `
+          <div class="chapter-empty-state">
+            <img src="image/anime.png" alt="Select a subject" style="margin-bottom:4px;">
+            <div class="ces-title">अपना अध्याय चुनें</div>
+            <div class="ces-sub">सीखने की जादुई दुनिया में प्रवेश करें</div>
+          </div>`;
+        return;
+      }
+
+      const checkedBefore = new Set(Array.from(document.querySelectorAll(".coll-chapter-checkbox:checked")).map(cb => cb.value));
+
+      let html = `
+        <div class="chapter-item select-all-item">
+          <input type="checkbox" id="collSelectAllChapters" onchange="toggleAllCollChapters(this)">
+          <span style="font-weight:600; color: var(--primary-color);">-- सभी अध्याय (Select All) --</span>
+        </div>`;
+
+      const homepageOrder = quizData[collSelectedSub] ? Object.keys(quizData[collSelectedSub]) : [];
+      const savedChapters = Object.keys(collections[collSelectedSub]);
+      const orderedChapters = homepageOrder.length ? homepageOrder.filter(ch => savedChapters.includes(ch)) : savedChapters;
+
+      orderedChapters.forEach(chapter => {
+        const count = getCollChapterCount(collSelectedSub, chapter);
+        const isChecked = checkedBefore.has(chapter) ? "checked" : "";
+        html += `
+          <label class="chapter-item">
+            <input type="checkbox" class="coll-chapter-checkbox" value="${chapter}" ${isChecked}>
+            <span class="ch-badge">${count}</span><span>${chapter}</span>
+          </label>`;
+      });
+
+      list.innerHTML = html;
+    }
+
+    function toggleAllCollChapters(master) {
+      document.querySelectorAll(".coll-chapter-checkbox").forEach(cb => cb.checked = master.checked);
     }
 
     function startCollectionPractice() {
-      const sub = document.getElementById("collSubFilter").value, ch = document.getElementById("collChFilter").value;
-      let qs = [];
-      if(sub === "all") Object.keys(collections).forEach(s => Object.keys(collections[s]).forEach(c => qs = qs.concat(collections[s][c])));
-      else if(ch === "all") Object.keys(collections[sub]).forEach(c => qs = qs.concat(collections[sub][c]));
-      else qs = collections[sub][ch];
+      const sub = collSelectedSub;
+      let ids = [];
+
+      if(sub === "all") {
+        Object.keys(collections).forEach(s => Object.keys(collections[s]).forEach(c => ids = ids.concat(collections[s][c])));
+      } else {
+        const checkedBoxes = document.querySelectorAll(".coll-chapter-checkbox:checked");
+        if(checkedBoxes.length === 0) Object.keys(collections[sub]).forEach(c => ids = ids.concat(collections[sub][c]));
+        else checkedBoxes.forEach(cb => ids = ids.concat(collections[sub][cb.value]));
+      }
+
+      let qs = resolveQuestionsByIds(ids);
       if(qs.length === 0) return alert("कोई सवाल नहीं मिला!");
-      clearSession(); isWeakMode = false; selectedQuestions = [...qs].sort(() => Math.random() - 0.5); initQuizUI();
+      document.getElementById("collectionArea").style.display = "none";
+      clearSession(); isWeakMode = false; usingCountdown = false;
+      selectedQuestions = [...qs].sort(() => Math.random() - 0.5);
+      initQuizUI();
     }
 
     function updateCollectionBtn() { document.getElementById("collectionMainBtn").style.display = Object.keys(collections).length > 0 ? "flex" : "none"; }
 
-    // ========== बुकमार्क हैंडलिंग ==========
-    function handleBookmarkClick() { 
-      const q = selectedQuestions[currentIdx], idx = savedList.findIndex(i => i.question === q.question); 
-      idx > -1 ? savedList.splice(idx, 1) : savedList.push(q); 
-      syncToFirebase(); checkSavedBtn(); 
-      document.getElementById("bookmarkActionBtn").classList.toggle("active"); 
+    function handleBookmarkClick() {
+      const q = selectedQuestions[currentIdx], idx = savedList.indexOf(q.id);
+      idx > -1 ? savedList.splice(idx, 1) : savedList.push(q.id);
+      syncToFirebase(); checkSavedBtn(); document.getElementById("bookmarkActionBtn").classList.toggle("active");
     }
 
-    function checkSavedBtn() { 
-      document.getElementById("savedPracticeBtn").style.display = savedList.length > 0 ? "flex" : "none"; 
+    function checkSavedBtn() { document.getElementById("savedPracticeBtn").style.display = savedList.length > 0 ? "flex" : "none"; }
+
+    function startSavedPractice() {
+      clearSession(); isWeakMode = false; usingCountdown = false;
+      selectedQuestions = resolveQuestionsByIds(savedList).sort(() => Math.random() - 0.5);
+      if(selectedQuestions.length === 0) return alert("कोई सवाल नहीं मिला!");
+      initQuizUI();
     }
 
-    function startSavedPractice() { 
-      clearSession(); isWeakMode = false; selectedQuestions = [...savedList].sort(() => Math.random() - 0.5); initQuizUI(); 
+    function updateWeakBtn() {
+      document.getElementById("weakAreasBtn").style.display = (weakList.length > 0) ? "flex" : "none";
+      if(document.getElementById("weakCount")) document.getElementById("weakCount").innerText = weakList.length;
     }
 
-    function updateWeakBtn() { 
-      document.getElementById("weakAreasBtn").style.display = (weakList.length > 0) ? "flex" : "none"; 
-      if(document.getElementById("weakCount")) document.getElementById("weakCount").innerText = weakList.length; 
+    function startWeakAreasQuiz() {
+      clearSession(); isWeakMode = true; usingCountdown = false;
+      selectedQuestions = resolveQuestionsByIds(weakList).sort(() => Math.random() - 0.5);
+      if(selectedQuestions.length === 0) return alert("कोई सवाल नहीं मिला!");
+      initQuizUI();
     }
 
-    function startWeakAreasQuiz() { 
-      clearSession(); isWeakMode = true; selectedQuestions = [...weakList].sort(() => Math.random() - 0.5); initQuizUI(); 
-    }
+    function retryWrong() { selectedQuestions = [...wrongQuestions]; usingCountdown = false; initQuizUI(); }
+    function quitQuiz() { if(confirm("क्विज़ छोड़ें?")) showFinalResult(); }
 
-    function retryWrong() { 
-      selectedQuestions = [...wrongQuestions]; initQuizUI(); 
-    }
-
-    function quitQuiz() { 
-      if(confirm("क्विज़ छोड़ें?")) showFinalResult(); 
-    }
-
-    function goToHome() { 
-      clearInterval(timerInterval); 
-      if(autoNextTimer) clearTimeout(autoNextTimer);
-      window.speechSynthesis.cancel(); 
-      document.getElementById("quizArea").style.display = "none"; 
-      document.getElementById("setupArea").style.display = "block"; 
-      document.getElementById("pCont").style.display = "none"; 
-      document.getElementById("quitBtn").style.display = "none"; 
-      updateWeakBtn(); checkResumeStatus(); 
-    }
-
-    // ========== फाइनल रिजल्ट ==========
-    function showFinalResult() {
-      clearSession(); clearInterval(timerInterval); 
+    function goToHome() {
+      clearInterval(timerInterval);
       if(autoNextTimer) clearTimeout(autoNextTimer);
       window.speechSynthesis.cancel();
+      document.getElementById("quizArea").style.display = "none";
+      document.getElementById("setupArea").style.display = "block";
+      document.getElementById("pCont").style.display = "none";
+      document.getElementById("quitBtn").style.display = "none";
+      document.getElementById("bookmarkActionBtn").style.display = "none";
+      document.getElementById("heartActionBtn").style.display = "none";
+      document.getElementById("speakBtn").style.display = "none";
+      document.getElementById("timerDisplay").style.display = "none";
+      document.getElementById("headerTitle").style.display = "inline";
+
+      document.getElementById("trackerArea").style.display = "none";
+      document.getElementById("collectionArea").style.display = "none";
+
+      updateWeakBtn(); checkResumeStatus();
+      if(window.history.state) history.replaceState(null, "");
+    }
+
+    function showFinalResult() {
+      clearSession(); clearInterval(timerInterval);
+      if(autoNextTimer) clearTimeout(autoNextTimer);
+      window.speechSynthesis.cancel();
+
+      const timeTakenSec = stopwatchSeconds;
+      const ttMin = Math.floor(timeTakenSec / 60), ttSec = timeTakenSec % 60;
+      const timeTakenStr = `${ttMin.toString().padStart(2,'0')}:${ttSec.toString().padStart(2,'0')}`;
+
       document.getElementById("timerDisplay").style.display = "none";
       document.getElementById("bookmarkActionBtn").style.display = "none";
       document.getElementById("heartActionBtn").style.display = "none";
-      if (!isWeakMode && (questionsAttempted / selectedQuestions.length) * 100 >= 80 && currentSub !== "all" && currentCh !== "all") {
+      document.getElementById("speakBtn").style.display = "none";
+
+      if (!isWeakMode && selectedQuestions.length > 0 && (questionsAttempted / selectedQuestions.length) * 100 >= 80 && currentSub !== "all" && currentCh !== "all" && currentCh !== "custom_mix") {
         revisionDates[`${currentSub}_${currentCh}`] = Date.now(); syncToFirebase();
       }
-      
+
       let wrongCount = wrongQuestions.length;
-      let resultHTML = `<div style="text-align:center;"><h3>🏁 रिजल्ट: ${score}/${selectedQuestions.length}</h3>`;
+      let resultHTML = `<div style="text-align:center;"><h3>🏁 रिजल्ट: ${score}/${selectedQuestions.length}</h3>
+        <p style="font-size:15px; color:#888;">⏱️ कुल समय: ${timeTakenStr} में ${questionsAttempted} सवाल हल किए</p>`;
       if(wrongCount > 0) {
         resultHTML += `<button class="main-btn" style="background:#f39c12; color:white;" onclick="retryWrong()">🔄 गलत सुधारें (${wrongCount})</button>`;
         resultHTML += `<button class="main-btn" style="background:#e67e22; color:white;" onclick="openReview()">🔍 Review Wrong Questions</button>`;
@@ -944,18 +1298,18 @@
         resultHTML += `<p style="color:var(--progress-color); font-weight:bold;">🌟 जबरदस्त! सब सही था।</p>`;
       }
       resultHTML += `<button class="main-btn" onclick="goToHome()">🏠 होम</button></div>`;
-      
+
       document.getElementById("quizArea").innerHTML = resultHTML;
       document.getElementById("quitBtn").style.display = "none";
       updateWeakBtn(); updateCollectionBtn();
     }
 
-    // ========== रिव्यू मोडल ==========
     function openReview() {
       const list = document.getElementById("reviewList"); list.innerHTML = "";
       wrongQuestions.forEach(q => {
         let content = `<div class="list-item"><span class="list-q">${q.question}</span>`;
-        if(q.explanation) content += `<div class="list-e">${q.explanation}</div>`;
+        const finalExp = q.customExplanation || q.explanation;
+        if(finalExp) content += `<div class="list-e">${finalExp}</div>`;
         if(q.image) content += `<img src="${q.image}" class="exp-img" style="max-height:100px; width:auto; cursor:pointer;" onclick="openFullImg('${q.image}')">`;
         content += `</div>`;
         list.innerHTML += content;
@@ -965,41 +1319,81 @@
 
     function closeReview() { document.getElementById("reviewModal").style.display = "none"; }
 
-    // ========== सहेजे गए सवालों की लिस्ट ==========
     function openSavedListModal() {
       const list = document.getElementById("savedListContent");
       const printBody = document.getElementById("printBody");
       list.innerHTML = ""; printBody.innerHTML = "";
-      savedList.forEach((q, i) => {
+      const savedQs = resolveQuestionsByIds(savedList);
+      savedQs.forEach((q, i) => {
+        const finalExp = q.customExplanation || q.explanation;
         let content = `<div class="list-item"><span class="list-q">${i+1}. ${q.question}</span>`;
-        if(q.explanation) content += `<div class="list-e">${q.explanation}</div>`;
+        if(finalExp) content += `<div class="list-e">${finalExp}</div>`;
         if(q.image) content += `<img src="${q.image}" class="exp-img" style="max-height:80px; width:auto;" onclick="openFullImg('${q.image}')">`;
         content += `</div>`;
-        
+
         list.innerHTML += content;
-        printBody.innerHTML += `<div class="print-box"><strong>Q${i+1}: ${q.question}</strong><p>Ans: ${q.explanation || '---'}</p>${q.image ? '<img src="'+q.image+'" style="max-width:200px;">' : ''}</div>`;
+        printBody.innerHTML += `<div class="print-box"><strong>Q${i+1}: ${q.question}</strong><p>Ans: ${finalExp || '---'}</p>${q.image ? '<img src="'+q.image+'" style="max-width:200px;">' : ''}</div>`;
       });
       document.getElementById("savedListModal").style.display = "block";
     }
 
     function closeSavedList() { document.getElementById("savedListModal").style.display = "none"; }
 
-    // ========== टाइमर ==========
-    function startTimer(m) { 
-      let t = m * 60; 
-      document.getElementById("timerDisplay").style.display = "block"; 
-      timerInterval = setInterval(() => { 
-        let mins = Math.floor(t/60), secs = t%60; 
-        document.getElementById("timerDisplay").innerText = `⏳ ${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`; 
-        if (--t < 0) { clearInterval(timerInterval); showFinalResult(); } 
-      }, 1000); 
+    function startTimer(m, resumeSeconds) {
+      let t = m * 60 - (resumeSeconds || 0);
+      if (t < 0) t = 0;
+      document.getElementById("timerDisplay").style.display = "block";
+      const render = () => {
+        let mins = Math.floor(t/60), secs = t%60;
+        document.getElementById("timerDisplay").innerText = `⏳ ${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+      };
+      render();
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        render();
+        if (--t < 0) { clearInterval(timerInterval); showFinalResult(); }
+      }, 1000);
     }
 
-    // ========== इमेज फुलस्क्रीन ==========
+    let stopwatchSeconds = 0, stopwatchRunning = false;
+
+    function renderStopwatch() {
+      const mins = Math.floor(stopwatchSeconds / 60), secs = stopwatchSeconds % 60;
+      const icon = stopwatchRunning ? "⏰" : "⏸️";
+      document.getElementById("timerDisplay").innerText = `${icon} ${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+    }
+
+    function startStopwatch(initialSeconds) {
+      stopwatchSeconds = initialSeconds || 0; stopwatchRunning = true;
+      document.getElementById("timerDisplay").style.display = "block";
+      renderStopwatch();
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => { if(stopwatchRunning) { stopwatchSeconds++; renderStopwatch(); } }, 1000);
+    }
+
+    function toggleStopwatch() {
+      if (usingCountdown) return; // countdown mode can't be paused
+      stopwatchRunning = !stopwatchRunning;
+      renderStopwatch();
+    }
+
     function openFullImg(src) {
       document.getElementById("fullImage").src = src;
       document.getElementById("imageModal").style.display = "block";
     }
+
+    Object.assign(window, {
+      toggleProfileMenu, logoutUser, changeDisplayName, loginWithGoogle, loginWithEmail,
+      forgotPassword, continueAsGuest, clearGuestAndLogin, toggleTheme, selectSubject, renderChapterList,
+      toggleAllChapters, toggleTracker, toggleEditExplanation, startQuiz, resumeQuiz,
+      exportData, importData, saveVoiceSpeed, readFullQuestion, saveCustomExplanation,
+      handleHeartClick, toggleCollection, selectCollSubject, toggleAllCollChapters, startCollectionPractice,
+      goToNextQuestion, goToHome, handleBookmarkClick, startSavedPractice, handleSubjectiveResponse,
+      startWeakAreasQuiz, retryWrong, quitQuiz, handleSpeakClick, toggleAutoReadMode, toggleStopwatch,
+      openReview, closeReview, openSavedListModal, closeSavedList, openFullImg
+    });
+
+    }); // end DOMContentLoaded
   </script>
 </body>
 </html>
