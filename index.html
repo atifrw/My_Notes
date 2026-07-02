@@ -303,11 +303,6 @@
           </div>
         </div>
 
-        <div class="challenge-grid">
-          <div><label style="font-size: 11px;">सवाल (खाली = सभी):</label><input type="number" id="customLimit" placeholder="10"></div>
-          <div><label style="font-size: 11px;">मिनट (खाली = बिना टाइमर):</label><input type="number" id="customTime" placeholder="5"></div>
-        </div>
-
         <button class="main-btn cta-btn start-quiz-btn" onclick="startQuiz()">🎯 शुरू करें</button>
         <button id="resumeBtn" class="main-btn cta-btn resume-quiz-btn" style="display: none;" onclick="resumeQuiz()">🕒 पिछला सेशन जारी रखें</button>
 
@@ -420,7 +415,6 @@
     let isGuest = false;
     let speakClickTimer = null;
     let autoNextTimer = null;
-    let usingCountdown = false;
 
     window.onpopstate = function(event) {
       if (document.getElementById("quizArea").style.display === "block" || 
@@ -663,7 +657,7 @@
     function saveCurrentSession() {
       const idList = selectedQuestions.map(q => q.id);
       localStorage.setItem(STORAGE_PREFIX + "session", JSON.stringify({
-        idList, currentIdx, score, questionsAttempted, currentSub, currentCh, isWeakMode, stopwatchSeconds, usingCountdown
+        idList, currentIdx, score, questionsAttempted, currentSub, currentCh, isWeakMode, stopwatchSeconds
       }));
     }
 
@@ -684,7 +678,6 @@
         questionsAttempted = session.questionsAttempted;
         currentSub = session.currentSub; currentCh = session.currentCh;
         isWeakMode = session.isWeakMode;
-        usingCountdown = !!session.usingCountdown;
         if (selectedQuestions.length === 0) { clearSession(); return; }
         initQuizUI_Display(session.stopwatchSeconds || 0); renderLayout(); showQuestion();
       }
@@ -897,23 +890,18 @@
 
       if(allTempQ.length === 0) return alert("सवाल नहीं मिले! कृपया चैप्टर सेलेक्ट करें।");
 
-      const shuffled = allTempQ.sort(() => Math.random() - 0.5);
-      const limit = parseInt(document.getElementById("customLimit").value);
-      selectedQuestions = (limit > 0) ? shuffled.slice(0, limit) : shuffled;
+      selectedQuestions = allTempQ.sort(() => Math.random() - 0.5);
 
-      const mins = parseInt(document.getElementById("customTime").value);
-      usingCountdown = mins > 0;
-
-      initQuizUI(mins);
+      initQuizUI();
     }
 
-    function initQuizUI(mins) {
+    function initQuizUI() {
       currentIdx = score = questionsAttempted = 0; wrongQuestions = [];
-      initQuizUI_Display(0, mins);
+      initQuizUI_Display(0);
       renderLayout(); showQuestion();
     }
 
-    function initQuizUI_Display(resumeSeconds, mins) {
+    function initQuizUI_Display(resumeSeconds) {
       document.getElementById("setupArea").style.display = "none";
       document.getElementById("pCont").style.display = "block";
       document.getElementById("quizArea").style.display = "block";
@@ -923,11 +911,7 @@
       document.getElementById("speakBtn").style.display = "flex";
       document.getElementById("headerTitle").style.display = "none";
 
-      if (usingCountdown) {
-        startTimer(mins || Math.ceil(((selectedQuestions.length * 60) - resumeSeconds) / 60) || 5, resumeSeconds);
-      } else {
-        startStopwatch(resumeSeconds);
-      }
+      startStopwatch(resumeSeconds);
 
       history.pushState({page: "quiz"}, "Quiz");
     }
@@ -1212,7 +1196,7 @@
       let qs = resolveQuestionsByIds(ids);
       if(qs.length === 0) return alert("कोई सवाल नहीं मिला!");
       document.getElementById("collectionArea").style.display = "none";
-      clearSession(); isWeakMode = false; usingCountdown = false;
+      clearSession(); isWeakMode = false;
       selectedQuestions = [...qs].sort(() => Math.random() - 0.5);
       initQuizUI();
     }
@@ -1228,7 +1212,7 @@
     function checkSavedBtn() { document.getElementById("savedPracticeBtn").style.display = savedList.length > 0 ? "flex" : "none"; }
 
     function startSavedPractice() {
-      clearSession(); isWeakMode = false; usingCountdown = false;
+      clearSession(); isWeakMode = false;
       selectedQuestions = resolveQuestionsByIds(savedList).sort(() => Math.random() - 0.5);
       if(selectedQuestions.length === 0) return alert("कोई सवाल नहीं मिला!");
       initQuizUI();
@@ -1240,13 +1224,13 @@
     }
 
     function startWeakAreasQuiz() {
-      clearSession(); isWeakMode = true; usingCountdown = false;
+      clearSession(); isWeakMode = true;
       selectedQuestions = resolveQuestionsByIds(weakList).sort(() => Math.random() - 0.5);
       if(selectedQuestions.length === 0) return alert("कोई सवाल नहीं मिला!");
       initQuizUI();
     }
 
-    function retryWrong() { selectedQuestions = [...wrongQuestions]; usingCountdown = false; initQuizUI(); }
+    function retryWrong() { selectedQuestions = [...wrongQuestions]; initQuizUI(); }
     function quitQuiz() { if(confirm("क्विज़ छोड़ें?")) showFinalResult(); }
 
     function goToHome() {
@@ -1339,22 +1323,6 @@
 
     function closeSavedList() { document.getElementById("savedListModal").style.display = "none"; }
 
-    function startTimer(m, resumeSeconds) {
-      let t = m * 60 - (resumeSeconds || 0);
-      if (t < 0) t = 0;
-      document.getElementById("timerDisplay").style.display = "block";
-      const render = () => {
-        let mins = Math.floor(t/60), secs = t%60;
-        document.getElementById("timerDisplay").innerText = `⏳ ${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
-      };
-      render();
-      clearInterval(timerInterval);
-      timerInterval = setInterval(() => {
-        render();
-        if (--t < 0) { clearInterval(timerInterval); showFinalResult(); }
-      }, 1000);
-    }
-
     let stopwatchSeconds = 0, stopwatchRunning = false;
 
     function renderStopwatch() {
@@ -1372,7 +1340,6 @@
     }
 
     function toggleStopwatch() {
-      if (usingCountdown) return; // countdown mode can't be paused
       stopwatchRunning = !stopwatchRunning;
       renderStopwatch();
     }
