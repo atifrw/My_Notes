@@ -410,6 +410,7 @@
 
     let quizData = {}, allQuestionsFlat = [], selectedQuestions = [], wrongQuestions = [], currentIdx = 0, score = 0, timerInterval;
     let questionsAttempted = 0, currentSub = "", currentCh = "", isWeakMode = false;
+    let attemptedThisSession = new Set();
     let savedList = [], revisionDates = {}, weakList = [], collections = {};
     let selectedSubject = "all";
     let isGuest = false;
@@ -657,7 +658,8 @@
     function saveCurrentSession() {
       const idList = selectedQuestions.map(q => q.id);
       localStorage.setItem(STORAGE_PREFIX + "session", JSON.stringify({
-        idList, currentIdx, score, questionsAttempted, currentSub, currentCh, isWeakMode, stopwatchSeconds
+        idList, currentIdx, score, questionsAttempted, currentSub, currentCh, isWeakMode, stopwatchSeconds,
+        attemptedIds: Array.from(attemptedThisSession)
       }));
     }
 
@@ -678,6 +680,7 @@
         questionsAttempted = session.questionsAttempted;
         currentSub = session.currentSub; currentCh = session.currentCh;
         isWeakMode = session.isWeakMode;
+        attemptedThisSession = new Set(session.attemptedIds || []);
         if (selectedQuestions.length === 0) { clearSession(); return; }
         initQuizUI_Display(session.stopwatchSeconds || 0); renderLayout(); showQuestion();
       }
@@ -811,14 +814,15 @@
         let subHtml = `<div class="subject-group"><div class="subject-title">${subject}</div>`;
         Object.keys(quizData[subject]).forEach(chapter => {
           const lastDate = revisionDates[`${subject}_${chapter}`];
-          let statusClass = "status-red", dateText = "कभी नहीं";
+          let statusClass = "status-red", dateText = "कभी नहीं", agoText = "";
           if(lastDate) {
             const diffDays = Math.floor((now - lastDate) / (1000 * 60 * 60 * 24));
             dateText = new Date(lastDate).toLocaleDateString();
+            agoText = diffDays <= 0 ? "आज" : (diffDays === 1 ? "1 दिन पहले" : `${diffDays} दिन पहले`);
             if(diffDays <= 15) statusClass = "status-green";
             else if(diffDays <= 30) statusClass = "status-yellow";
           }
-          subHtml += `<div class="chapter-row"><div><span class="status-badge ${statusClass}"></span>${chapter}</div><span style="font-size:11px; color:#888;">${dateText}</span></div>`;
+          subHtml += `<div class="chapter-row"><div><span class="status-badge ${statusClass}"></span>${chapter}</div><span style="font-size:11px; color:#888; text-align:right;">${dateText}${agoText ? `<br>${agoText}` : ""}</span></div>`;
         });
         content.innerHTML += subHtml + `</div>`;
       });
@@ -897,6 +901,7 @@
 
     function initQuizUI() {
       currentIdx = score = questionsAttempted = 0; wrongQuestions = [];
+      attemptedThisSession = new Set();
       initQuizUI_Display(0);
       renderLayout(); showQuestion();
     }
@@ -1030,6 +1035,7 @@
           const b = document.createElement("button"); b.className = "option-btn"; b.innerText = opt;
           b.onclick = () => {
             questionsAttempted++;
+            attemptedThisSession.add(q.id);
             document.querySelectorAll(".option-btn").forEach(btn => btn.style.pointerEvents = "none");
             if(opt === q.answer) {
               score++; rBox.innerHTML = "<span style='color:#10b981'>✅ सही जवाब!</span>";
@@ -1072,6 +1078,7 @@
     function handleSubjectiveResponse(isCorrect) {
       const q = selectedQuestions[currentIdx];
       questionsAttempted++;
+      attemptedThisSession.add(q.id);
       if(isCorrect) {
         if(isWeakMode) { weakList = weakList.filter(id => id !== q.id); syncToFirebase(); }
       } else {
@@ -1268,8 +1275,24 @@
       document.getElementById("heartActionBtn").style.display = "none";
       document.getElementById("speakBtn").style.display = "none";
 
-      if (!isWeakMode && selectedQuestions.length > 0 && (questionsAttempted / selectedQuestions.length) * 100 >= 80 && currentSub !== "all" && currentCh !== "all" && currentCh !== "custom_mix") {
-        revisionDates[`${currentSub}_${currentCh}`] = Date.now(); syncToFirebase();
+      if (!isWeakMode) {
+        const chapterAttempts = {};
+        attemptedThisSession.forEach(id => {
+          const q = allQuestionsFlat.find(qq => qq.id === id);
+          if (!q || !q.sub || !q.ch) return;
+          const key = `${q.sub}_${q.ch}`;
+          if (!chapterAttempts[key]) chapterAttempts[key] = { sub: q.sub, ch: q.ch, count: 0 };
+          chapterAttempts[key].count++;
+        });
+        let revisionChanged = false;
+        Object.values(chapterAttempts).forEach(({ sub, ch, count }) => {
+          const total = (quizData[sub] && quizData[sub][ch]) ? quizData[sub][ch].length : 0;
+          if (total > 0 && (count / total) * 100 >= 90) {
+            revisionDates[`${sub}_${ch}`] = Date.now();
+            revisionChanged = true;
+          }
+        });
+        if (revisionChanged) syncToFirebase();
       }
 
       let wrongCount = wrongQuestions.length;
