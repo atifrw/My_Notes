@@ -97,6 +97,19 @@
     .profile-dropdown .voice-speed-row { padding: 10px 15px; display: flex; align-items: center; gap: 8px; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
     .profile-dropdown .voice-speed-row span { font-size: 12px; white-space: nowrap; }
     .profile-dropdown .voice-speed-row input[type="range"] { flex: 1; width: auto; margin: 0; }
+    .order-toggle-wrap { display: flex; gap: 6px; flex: 1; }
+    .order-toggle-btn {
+      flex: 1; padding: 8px 4px !important; font-size: 11.5px !important;
+      border: 1.5px solid var(--border-color) !important; border-radius: 8px !important;
+      background: var(--btn-bg) !important; color: var(--text-color) !important;
+      cursor: pointer; transition: 0.2s; margin: 0 !important;
+      display: flex !important; align-items: center; justify-content: center;
+      gap: 4px; white-space: nowrap; overflow: hidden;
+    }
+    .order-toggle-btn.order-active {
+      background: var(--primary-color) !important; color: white !important; border-color: var(--primary-color) !important;
+      font-weight: 600;
+    }
 
     .container { max-width: 700px; margin: auto; background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; border: 1px solid var(--border-color); }
     .progress-container { width: 100%; background: var(--border-color); height: 8px; border-radius: 5px; margin-bottom: 15px; display: none; }
@@ -189,12 +202,65 @@
     .explanation-title { font-weight: 600; color: var(--exp-border); display: flex; align-items: center; gap: 6px; }
     .edit-exp-toggle-btn { background: none; border: none; color: var(--primary-color); font-size: 13px; font-weight: 500; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: 0.2s; }
     .edit-exp-toggle-btn:hover { background: var(--btn-bg); text-decoration: underline; }
-    
-    .explanation-input-area { display: none; margin-top: 15px; padding: 16px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); animation: fadeIn 0.3s ease-out; }
-    .explanation-input-area textarea { width: 100%; height: 80px; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--btn-bg); color: var(--text-color); resize: vertical; box-sizing: border-box; font-family: inherit; font-size: 14px; transition: 0.3s; }
-    .explanation-input-area textarea:focus { border-color: var(--primary-color); outline: none; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
-    .save-exp-btn { background: var(--primary-color); color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; margin-top: 10px; font-size: 14px; font-weight: 600; transition: 0.2s; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2); }
-    .save-exp-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 14px rgba(79, 70, 229, 0.3); }
+
+    /* --- RICH TEXT EXPLANATION EDITOR (fullscreen modal, Notes-app style) --- */
+    .exp-editor-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.55); z-index: 10050;
+      display: none; align-items: center; justify-content: center;
+      padding: 6px; box-sizing: border-box;
+    }
+    .exp-editor-card {
+      background: var(--card-bg); border-radius: 18px; width: 100%; max-width: 960px;
+      max-height: calc(100vh - 32px); display: flex; flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3); border: 1px solid var(--border-color);
+      overflow: hidden; animation: fadeIn 0.25s ease-out;
+    }
+    .exp-editor-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px; border-bottom: 1px solid var(--border-color); flex-shrink: 0;
+    }
+    .exp-editor-header h3 { margin: 0; font-size: 16px; color: var(--primary-color); }
+    .exp-editor-close {
+      background: var(--btn-bg); border: 1px solid var(--border-color); width: 32px; height: 32px;
+      border-radius: 50%; cursor: pointer; font-size: 15px; color: var(--text-color);
+      display: flex; align-items: center; justify-content: center; transition: 0.2s;
+    }
+    .exp-editor-close:hover { background: var(--border-color); }
+    .exp-editable {
+      flex: 1; overflow-y: auto; padding: 16px; min-height: 260px; max-height: 55vh;
+      font-size: 16px; line-height: 1.7; color: var(--text-color); outline: none;
+    }
+    .exp-editable:empty:before {
+      content: "यहाँ अपनी व्याख्या या शार्ट नोट्स टाइप करें...";
+      color: #888; font-style: italic;
+    }
+    .exp-bottom-bar {
+      border-top: 1px solid var(--border-color); background: var(--bg-color);
+      padding: 10px 12px; display: flex; flex-direction: row; align-items: center; gap: 10px; flex-shrink: 0;
+    }
+    .exp-toolbar-bottom {
+      display: flex; flex-wrap: nowrap; gap: 6px; justify-content: flex-start;
+      overflow-x: auto; -webkit-overflow-scrolling: touch; flex: 1; min-width: 0;
+    }
+    .exp-toolbar-bottom .exp-tool-btn { flex-shrink: 0; }
+    .exp-tool-btn {
+      border: 1.5px solid var(--border-color); background: var(--btn-bg); color: var(--text-color);
+      border-radius: 8px; padding: 7px 11px; font-size: 13.5px; cursor: pointer;
+      transition: 0.2s; font-weight: 600; outline: none;
+    }
+    .exp-tool-btn:hover { border-color: var(--primary-color); }
+    .exp-tool-btn.exp-active {
+      background: var(--primary-color); color: white; border-color: var(--primary-color);
+    }
+    .exp-save-btn2 {
+      flex-shrink: 0; padding: 11px 22px; border-radius: 10px; border: none;
+      font-weight: 600; cursor: pointer; font-size: 15.5px; transition: 0.2s;
+      background: var(--primary-color); color: white; box-shadow: 0 4px 10px rgba(79,70,229,0.25);
+    }
+    .exp-save-btn2:hover { transform: translateY(-1px); }
+    .exp-img-add-row { display:flex; gap:8px; padding: 8px 12px 0; }
+    .exp-img-add-row input[type="text"] { flex:1; font-size:13px; padding:8px; border-radius:8px; border:1px solid var(--border-color); background:var(--btn-bg); color:var(--text-color); box-sizing:border-box; }
 
     .exp-img { width: 100%; max-width: 100%; border-radius: 8px; margin-top: 10px; cursor: zoom-in; border: 1px solid var(--border-color); }
     #imageModal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); text-align: center; }
@@ -222,8 +288,16 @@
     .chapter-item.active { border-color: var(--primary-color); background: var(--card-bg); box-shadow: 0 2px 8px rgba(79,70,229,0.15); }
     .subject-group { margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; }
     .subject-title { background: var(--primary-color); color: white; padding: 10px; font-weight: bold; }
-    .chapter-row { display: flex; justify-content: space-between; padding: 10px; background: var(--card-bg); border-bottom: 1px solid var(--border-color); align-items: center; }
+    .chapter-row { display: flex; justify-content: space-between; padding: 10px; background: var(--card-bg); border-bottom: 1px solid var(--border-color); align-items: center; gap: 10px; flex-wrap: wrap; }
     .status-badge { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+    .tracker-stat-box {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--btn-bg); border: 1px solid var(--border-color);
+      border-radius: 10px; padding: 4px 10px; font-size: 11.5px; font-weight: 600;
+      color: var(--text-color); white-space: nowrap; flex-shrink: 0;
+    }
+    .tracker-stat-item { display: inline-flex; align-items: center; gap: 3px; }
+    .tracker-stat-divider { opacity: 0.35; }
     .status-green { background: #2ecc71; }
     .status-yellow { background: #f1c40f; }
     .status-red { background: #e74c3c; }
@@ -388,6 +462,32 @@
     </div>
   </div>
 
+  <!-- RICH TEXT EXPLANATION EDITOR MODAL -->
+  <div id="expEditorOverlay" class="exp-editor-overlay no-print" onclick="if(event.target===this) closeExplanationEditor()">
+    <div class="exp-editor-card">
+      <div class="exp-editor-header">
+        <h3>📝 व्याख्या एडिट करें</h3>
+        <button class="exp-editor-close" onclick="closeExplanationEditor()">✕</button>
+      </div>
+      <div id="expEditableArea" class="exp-editable" contenteditable="true"></div>
+      <div class="exp-img-add-row">
+        <input type="text" id="expImageUrlInput" placeholder="🖼️ Image URL (optional) यहाँ डालें">
+      </div>
+      <div class="exp-bottom-bar">
+        <div class="exp-toolbar-bottom">
+          <button type="button" id="expBoldBtn" class="exp-tool-btn" onmousedown="event.preventDefault()" onclick="applyExpFormat('bold')"><b>B</b></button>
+          <button type="button" id="expUnderlineBtn" class="exp-tool-btn" onmousedown="event.preventDefault()" onclick="applyExpFormat('underline')"><u>U</u></button>
+          <button type="button" id="expSizeSmallBtn" class="exp-tool-btn" onmousedown="event.preventDefault()" onclick="applyExpFontSize('small')">A-</button>
+          <button type="button" id="expSizeNormalBtn" class="exp-tool-btn" onmousedown="event.preventDefault()" onclick="applyExpFontSize('normal')">A</button>
+          <button type="button" id="expSizeLargeBtn" class="exp-tool-btn" onmousedown="event.preventDefault()" onclick="applyExpFontSize('large')">A+</button>
+          <button type="button" id="expListBtn" class="exp-tool-btn" onmousedown="event.preventDefault()" onclick="applyExpFormat('insertUnorderedList')">• सूची</button>
+          <button type="button" class="exp-tool-btn" onmousedown="event.preventDefault()" onclick="clearExpFormatting()">🧹 Clear</button>
+        </div>
+        <button class="exp-save-btn2" onclick="saveCustomExplanationFromEditor()">✔ Save</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     document.addEventListener("DOMContentLoaded", function () {
 
@@ -412,18 +512,33 @@
     let questionsAttempted = 0, currentSub = "", currentCh = "", isWeakMode = false;
     let attemptedThisSession = new Set();
     let savedList = [], revisionDates = {}, weakList = [], collections = {};
+    let questionResults = {};
     let selectedSubject = "all";
     let isGuest = false;
     let speakClickTimer = null;
     let autoNextTimer = null;
+    let hasInitializedOnce = false;
+    let expEditorOriginalHTML = "";
 
     window.onpopstate = function(event) {
+      const expOverlay = document.getElementById("expEditorOverlay");
+      if (expOverlay && expOverlay.style.display === "flex") {
+        expOverlay.style.display = "none";
+        return;
+      }
       if (document.getElementById("quizArea").style.display === "block" || 
           document.getElementById("trackerArea").style.display === "block" ||
           document.getElementById("collectionArea").style.display === "flex") {
         goToHome();
       }
     };
+
+    document.addEventListener("selectionchange", function() {
+      const overlay = document.getElementById("expEditorOverlay");
+      if (overlay && overlay.style.display === "flex") {
+        updateExpToolbarState();
+      }
+    });
 
     auth.onAuthStateChanged((user) => {
         const loader = document.getElementById("loadingScreen");
@@ -451,12 +566,24 @@
                       <span>🔊 Speed</span>
                       <input type="range" id="voiceSpeed" min="0.5" max="1.5" step="0.1" value="1" onchange="saveVoiceSpeed(this.value)">
                     </div>
+                    <div class="voice-speed-row">
+                      <span>🔀 Order</span>
+                      <div class="order-toggle-wrap">
+                        <button type="button" id="orderRandomBtn" class="order-toggle-btn" onclick="setOrderMode('random')">🔀 Random</button>
+                        <button type="button" id="orderSequenceBtn" class="order-toggle-btn" onclick="setOrderMode('sequence')">📋 Sequence</button>
+                      </div>
+                    </div>
                     <button onclick="changeDisplayName()">✏️ Name Change</button>
                     <button onclick="logoutUser()" style="color:#e74c3c; border-top:1px solid #eee;">🚪 Logout</button>
                 </div>`;
             up.style.display = "flex";
             initVoiceSpeedUI();
-            syncFromFirebase(user.uid);
+            updateOrderModeUI();
+
+            if (!hasInitializedOnce) {
+              hasInitializedOnce = true;
+              syncFromFirebase(user.uid);
+            }
         } else if(guestStored === "true") {
             continueAsGuest();
         } else {
@@ -534,6 +661,7 @@
             revisionDates = data.revision || {};
             weakList = data.weak || [];
             collections = data.collections || {};
+            questionResults = data.questionResults || {};
         }
 
         document.getElementById("loginArea").style.display = "none";
@@ -549,11 +677,22 @@
                   <span>🔊 Speed</span>
                   <input type="range" id="voiceSpeed" min="0.5" max="1.5" step="0.1" value="1" onchange="saveVoiceSpeed(this.value)">
                 </div>
+                <div class="voice-speed-row">
+                  <span>🔀 Order</span>
+                  <div class="order-toggle-wrap">
+                    <button type="button" id="orderRandomBtn" class="order-toggle-btn" onclick="setOrderMode('random')">🔀 Random</button>
+                    <button type="button" id="orderSequenceBtn" class="order-toggle-btn" onclick="setOrderMode('sequence')">📋 Sequence</button>
+                  </div>
+                </div>
                 <button onclick="clearGuestAndLogin()">✨ Sign Up / Login</button>
             </div>`;
         up.style.display = "flex";
         initVoiceSpeedUI();
-        initApp();
+        updateOrderModeUI();
+        if (!hasInitializedOnce) {
+          hasInitializedOnce = true;
+          initApp();
+        }
     }
 
     function clearGuestAndLogin() {
@@ -562,13 +701,25 @@
     }
 
     function syncToFirebase() {
-        const dataToSave = { bookmarks: savedList, revision: revisionDates, weak: weakList, collections: collections };
-        if(isGuest) {
-            localStorage.setItem(STORAGE_PREFIX + "guest_data", JSON.stringify(dataToSave));
-        } else {
-            const user = auth.currentUser;
-            if (!user) return;
-            database.ref('users_website1/' + user.uid).update(dataToSave);
+        try {
+            const dataToSave = {
+                bookmarks: savedList,
+                revision: revisionDates,
+                weak: weakList,
+                collections: collections,
+                questionResults: questionResults
+            };
+
+            if(isGuest) {
+                localStorage.setItem(STORAGE_PREFIX + "guest_data", JSON.stringify(dataToSave));
+            } else {
+                const user = auth.currentUser;
+                if (!user) return;
+                database.ref('users_website1/' + user.uid).update(dataToSave)
+                    .catch(e => console.warn("syncToFirebase background update failed:", e.message));
+            }
+        } catch (e) {
+            console.warn("syncToFirebase failed synchronously (ignored so UI keeps working):", e.message);
         }
     }
 
@@ -579,6 +730,7 @@
             revisionDates = data.revision || {};
             weakList = data.weak || [];
             collections = data.collections || {};
+            questionResults = data.questionResults || {};
             initApp();
         });
     }
@@ -687,7 +839,7 @@
     }
 
     function exportData() {
-      const data = { bookmarks: savedList, revision: revisionDates, weak: weakList, collections: collections };
+      const data = { bookmarks: savedList, revision: revisionDates, weak: weakList, collections: collections, questionResults: questionResults };
       const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
@@ -706,6 +858,7 @@
           revisionDates = data.revision || {};
           weakList = data.weak || [];
           collections = data.collections || {};
+          questionResults = data.questionResults || {};
           migrateOldDataToIds();
           syncToFirebase();
           location.reload();
@@ -802,9 +955,193 @@
       }
     }
 
-    function toggleEditExplanation() {
-      const inputArea = document.getElementById("inputExpArea");
-      if(inputArea) inputArea.style.display = (inputArea.style.display === "block") ? "none" : "block";
+    // --- RICH TEXT EXPLANATION EDITOR: open / close / format / save ---
+
+    function openExplanationEditor() {
+      const q = selectedQuestions[currentIdx];
+      const current = q.customExplanation || q.explanation || "";
+      const area = document.getElementById("expEditableArea");
+      area.innerHTML = normalizeExpHtmlForEditing(current);
+      expEditorOriginalHTML = area.innerHTML;
+      const imgInput = document.getElementById("expImageUrlInput");
+      if(imgInput) imgInput.value = q.image || "";
+      document.getElementById("expEditorOverlay").style.display = "flex";
+      history.pushState({page: "expEditor"}, "Explanation Editor");
+      setTimeout(() => {
+        area.focus();
+        moveExpCursorToEnd(area);
+        updateExpToolbarState();
+      }, 50);
+    }
+
+    function normalizeExpHtmlForEditing(html) {
+      if (!html) return "";
+      const tmp = document.createElement("div");
+      tmp.innerHTML = html;
+      if (tmp.querySelector("div,p,li")) return html;
+      const lines = tmp.innerHTML.split(/<br\s*\/?>/i);
+      return lines.map(l => `<div>${l || "<br>"}</div>`).join("");
+    }
+
+    function moveExpCursorToEnd(el) {
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      range.collapse(false);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+
+    function closeExplanationEditor() {
+      if (window.history.state && window.history.state.page === "expEditor") {
+        history.back();
+      } else {
+        document.getElementById("expEditorOverlay").style.display = "none";
+      }
+    }
+
+    function updateExpToolbarState() {
+      try {
+        const boldBtn = document.getElementById("expBoldBtn");
+        const underlineBtn = document.getElementById("expUnderlineBtn");
+        const listBtn = document.getElementById("expListBtn");
+        const smallBtn = document.getElementById("expSizeSmallBtn");
+        const normalBtn = document.getElementById("expSizeNormalBtn");
+        const largeBtn = document.getElementById("expSizeLargeBtn");
+
+        if (boldBtn) boldBtn.classList.toggle("exp-active", document.queryCommandState("bold"));
+        if (underlineBtn) underlineBtn.classList.toggle("exp-active", document.queryCommandState("underline"));
+        if (listBtn) listBtn.classList.toggle("exp-active", document.queryCommandState("insertUnorderedList"));
+
+        const area = document.getElementById("expEditableArea");
+        let currentSize = null;
+        const sel = window.getSelection();
+        if (sel && sel.anchorNode && area) {
+          let node = sel.anchorNode;
+          if (node.nodeType === 3) node = node.parentElement;
+          while (node && node !== area) {
+            if (node.style && node.style.fontSize) { currentSize = node.style.fontSize; break; }
+            node = node.parentElement;
+          }
+        }
+        const sizeMap = { "17px": smallBtn, "19px": normalBtn, "22px": largeBtn };
+        [smallBtn, normalBtn, largeBtn].forEach(b => b && b.classList.remove("exp-active"));
+        if (currentSize && sizeMap[currentSize]) sizeMap[currentSize].classList.add("exp-active");
+      } catch(e) { /* ignore in unsupported browsers */ }
+    }
+
+    function applyExpFormat(cmd) {
+      const area = document.getElementById("expEditableArea");
+      area.focus();
+      try { document.execCommand(cmd, false, null); } catch(e) { console.warn(e); }
+      updateExpToolbarState();
+    }
+
+    function applyExpFontSize(size) {
+      const area = document.getElementById("expEditableArea");
+      area.focus();
+      const map = { small: "17px", normal: "19px", large: "22px" };
+      const sel = window.getSelection();
+      if (!sel || sel.rangeCount === 0) return;
+      const range = sel.getRangeAt(0);
+
+      if (sel.isCollapsed) {
+        const span = document.createElement("span");
+        span.style.fontSize = map[size];
+        const placeholder = document.createTextNode("\u200b");
+        span.appendChild(placeholder);
+        range.insertNode(span);
+
+        const newRange = document.createRange();
+        newRange.setStart(placeholder, placeholder.length);
+        newRange.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(newRange);
+        updateExpToolbarState();
+        return;
+      }
+
+      const span = document.createElement("span");
+      span.style.fontSize = map[size];
+      try {
+        range.surroundContents(span);
+      } catch(e) {
+        const content = range.extractContents();
+        span.appendChild(content);
+        range.insertNode(span);
+      }
+      sel.removeAllRanges();
+      updateExpToolbarState();
+    }
+
+    function clearExpFormatting() {
+      if (!confirm("सारी फॉर्मेटिंग (bold/size/list) हटाकर सिर्फ प्लेन टेक्स्ट रखें?")) return;
+      const area = document.getElementById("expEditableArea");
+      const text = area.innerText;
+      area.innerHTML = text.split("\n").map(line => line || "<br>").join("<br>");
+      updateExpToolbarState();
+    }
+
+    function saveCustomExplanationFromEditor() {
+      const area = document.getElementById("expEditableArea");
+      const html = area.innerHTML.trim();
+      const imgInput = document.getElementById("expImageUrlInput");
+      const imgUrl = imgInput ? imgInput.value.trim() : "";
+      if ((!html || html === "<br>") && !imgUrl) return alert("कृपया पहले कुछ व्याख्या लिखें!");
+
+      const q = selectedQuestions[currentIdx];
+      const qKey = getSafeQuestionKey(q.question);
+
+      let localExps = JSON.parse(localStorage.getItem(STORAGE_PREFIX + "custom_explanations") || "{}");
+      localExps[qKey] = html;
+      localStorage.setItem(STORAGE_PREFIX + "custom_explanations", JSON.stringify(localExps));
+
+      q.customExplanation = html;
+      if (imgUrl) q.image = imgUrl;
+
+      if(!isGuest) {
+        const user = auth.currentUser;
+        if (user) {
+          database.ref('users_website1/' + user.uid + '/custom_explanations/' + qKey).set(html)
+          .catch(e => console.warn("Firebase backup save failed (already safe locally):", e.message));
+        }
+      }
+
+      expEditorOriginalHTML = html;
+      if (window.history.state && window.history.state.page === "expEditor") {
+        history.back();
+      } else {
+        document.getElementById("expEditorOverlay").style.display = "none";
+      }
+
+      const eBox = document.getElementById("explanationBox");
+      eBox.innerHTML = buildExplanationHTML(q);
+      eBox.style.display = "block";
+    }
+
+    // --- Chapter-level stats used by the Revision Tracker ---
+    function getChapterStats(subject, chapter) {
+      const chapterQuestions = quizData[subject][chapter];
+      const total = chapterQuestions.length;
+      let attempted = 0, correct = 0;
+      chapterQuestions.forEach((q, idx) => {
+        const id = `${subject}__${chapter}__${idx}`;
+        if (questionResults.hasOwnProperty(id)) {
+          attempted++;
+          if (questionResults[id] === true) correct++;
+        }
+      });
+      const attemptedPct = total > 0 ? (attempted / total) * 100 : 0;
+      const accuracyPct = total > 0 ? Math.round((correct / total) * 100) : 0;
+      return { total, attempted, correct, attemptedPct, accuracyPct };
+    }
+
+    function maybeUpdateRevisionForQuestion(q) {
+      if (!q.sub || !q.ch || !quizData[q.sub] || !quizData[q.sub][q.ch]) return;
+      const stats = getChapterStats(q.sub, q.ch);
+      if (stats.attemptedPct >= 90) {
+        revisionDates[`${q.sub}_${q.ch}`] = Date.now();
+      }
     }
 
     function renderTracker() {
@@ -814,15 +1151,24 @@
         let subHtml = `<div class="subject-group"><div class="subject-title">${subject}</div>`;
         Object.keys(quizData[subject]).forEach(chapter => {
           const lastDate = revisionDates[`${subject}_${chapter}`];
-          let statusClass = "status-red", dateText = "कभी नहीं", agoText = "";
+          let statusClass = "status-red";
+          let diffDays = null;
           if(lastDate) {
-            const diffDays = Math.floor((now - lastDate) / (1000 * 60 * 60 * 24));
-            dateText = new Date(lastDate).toLocaleDateString();
-            agoText = diffDays <= 0 ? "आज" : (diffDays === 1 ? "1 दिन पहले" : `${diffDays} दिन पहले`);
+            diffDays = Math.floor((now - lastDate) / (1000 * 60 * 60 * 24));
             if(diffDays <= 15) statusClass = "status-green";
             else if(diffDays <= 30) statusClass = "status-yellow";
           }
-          subHtml += `<div class="chapter-row"><div><span class="status-badge ${statusClass}"></span>${chapter}</div><span style="font-size:11px; color:#888; text-align:right;">${dateText}${agoText ? `<br>${agoText}` : ""}</span></div>`;
+          const stats = getChapterStats(subject, chapter);
+          const daysLabel = lastDate ? (diffDays <= 0 ? "आज" : `${diffDays} दिन पहले`) : "कभी नहीं";
+          subHtml += `
+            <div class="chapter-row">
+              <div><span class="status-badge ${statusClass}"></span>${chapter}</div>
+              <div class="tracker-stat-box">
+                <span class="tracker-stat-item">🎯 ${stats.accuracyPct}%</span>
+                <span class="tracker-stat-divider">|</span>
+                <span class="tracker-stat-item">⏳ ${daysLabel}</span>
+              </div>
+            </div>`;
         });
         content.innerHTML += subHtml + `</div>`;
       });
@@ -835,6 +1181,24 @@
       if(slider) slider.value = localStorage.getItem(STORAGE_PREFIX + "voice_speed") || 1;
     }
 
+    function setOrderMode(mode) {
+      localStorage.setItem(STORAGE_PREFIX + "order_mode", mode);
+      updateOrderModeUI();
+    }
+
+    function updateOrderModeUI() {
+      const mode = localStorage.getItem(STORAGE_PREFIX + "order_mode") || "random";
+      const rBtn = document.getElementById("orderRandomBtn");
+      const sBtn = document.getElementById("orderSequenceBtn");
+      if(rBtn) rBtn.classList.toggle("order-active", mode === "random");
+      if(sBtn) sBtn.classList.toggle("order-active", mode === "sequence");
+    }
+
+    function orderQuestions(arr) {
+      const mode = localStorage.getItem(STORAGE_PREFIX + "order_mode") || "random";
+      return mode === "sequence" ? [...arr] : [...arr].sort(() => Math.random() - 0.5);
+    }
+
     function speak(text) {
       window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text);
@@ -842,11 +1206,22 @@
       window.speechSynthesis.speak(u);
     }
 
+    function stripHtmlForSpeech(html) {
+      if (!html) return "";
+      const tmp = document.createElement('div');
+      tmp.innerHTML = html;
+      return tmp.textContent.replace(/\s+/g, ' ').trim();
+    }
+
     function readFullQuestion() {
       const q = selectedQuestions[currentIdx];
+      const cleanQuestion = stripHtmlForSpeech(q.question);
       let optText = "";
-      if(q.options && q.options.length > 0) optText = `. विकल्प hain . . ${q.options.join(", , ")}`;
-      speak(`${q.question}${optText}`);
+      if(q.options && q.options.length > 0) {
+        const cleanOptions = q.options.map(opt => stripHtmlForSpeech(opt));
+        optText = `. विकल्प hain . . ${cleanOptions.join(", , ")}`;
+      }
+      speak(`${cleanQuestion}${optText}`);
     }
 
     function isAutoReadOn() { return localStorage.getItem(STORAGE_PREFIX + "auto_read") === "true"; }
@@ -894,7 +1269,7 @@
 
       if(allTempQ.length === 0) return alert("सवाल नहीं मिले! कृपया चैप्टर सेलेक्ट करें।");
 
-      selectedQuestions = allTempQ.sort(() => Math.random() - 0.5);
+      selectedQuestions = orderQuestions(allTempQ);
 
       initQuizUI();
     }
@@ -928,13 +1303,7 @@
         <div id="optionsBox"></div>
         <div id="resultBox" style="text-align:center; font-weight:bold; margin-top:10px;"></div>
 
-        <div id="explanationBox" class="explanation-box"></div>
-
-        <div id="inputExpArea" class="explanation-input-area">
-          <label style="font-size:13px; font-weight:600; display:block; margin-bottom:8px; color: var(--text-color);">📝 व्याख्या लाइव एडिट करें:</label>
-          <textarea id="customExpText" placeholder="यहाँ अपनी व्याख्या या शार्ट नोट्स टाइप करें..."></textarea>
-          <button class="save-exp-btn" onclick="saveCustomExplanation()">✔ व्याख्या सुरक्षित करें</button>
-        </div>`;
+        <div id="explanationBox" class="explanation-box"></div>`;
     }
 
     function findQuestionMeta(q) {
@@ -946,40 +1315,6 @@
       return btoa(unescape(encodeURIComponent(qText))).replace(/[/=+]/g, '_');
     }
 
-    function saveCustomExplanation() {
-      const q = selectedQuestions[currentIdx];
-      const text = document.getElementById("customExpText").value.trim();
-      const qKey = getSafeQuestionKey(q.question);
-      if(!text) return alert("कृपया पहले कुछ व्याख्या लिखें!");
-
-      let localExps = JSON.parse(localStorage.getItem(STORAGE_PREFIX + "custom_explanations") || "{}");
-      localExps[qKey] = text;
-      localStorage.setItem(STORAGE_PREFIX + "custom_explanations", JSON.stringify(localExps));
-      q.customExplanation = text;
-
-      if(!isGuest) {
-        const user = auth.currentUser;
-        if (user) {
-          database.ref('users_website1/' + user.uid + '/custom_explanations/' + qKey).set(text)
-          .catch(e => console.warn("Firebase backup save failed (already safe locally):", e.message));
-        }
-      }
-
-      alert("व्याख्या सुरक्षित हो गई!");
-
-      const eBox = document.getElementById("explanationBox");
-      eBox.innerHTML = `
-        <div class="explanation-header-row">
-          <span class="explanation-title">✨ व्याख्या (Live Updated)</span>
-          <button class="edit-exp-toggle-btn" onclick="toggleEditExplanation()">Edit ✎</button>
-        </div>
-        <div>${text}</div>
-        ${q.image ? `<img src="${q.image}" class="exp-img" onclick="openFullImg('${q.image}')">` : ""}
-      `;
-      eBox.style.display = "block";
-      document.getElementById("inputExpArea").style.display = "none";
-    }
-
     function buildExplanationHTML(q, titleText) {
       const finalText = q.customExplanation || q.explanation;
       let inner = "";
@@ -989,16 +1324,15 @@
       return `
         <div class="explanation-header-row">
           <span class="explanation-title">💡 व्याख्या</span>
-          <button class="edit-exp-toggle-btn" onclick="toggleEditExplanation()">${finalText ? "Edit ✎" : "Add ✎"}</button>
+          <button class="edit-exp-toggle-btn" onclick="openExplanationEditor()">${finalText ? "Edit ✎" : "Add ✎"}</button>
         </div>
         ${inner}`;
     }
 
     function showQuestion() {
       const q = selectedQuestions[currentIdx];
+      const questionIdAtRenderTime = q.id;
       if(!q.sub || !q.ch) findQuestionMeta(q);
-
-      if(document.getElementById("inputExpArea")) document.getElementById("inputExpArea").style.display = "none";
 
       const qKey = getSafeQuestionKey(q.question);
       let localExps = JSON.parse(localStorage.getItem(STORAGE_PREFIX + "custom_explanations") || "{}");
@@ -1010,8 +1344,12 @@
           database.ref('users_website1/' + user.uid + '/custom_explanations/' + qKey).once('value').then(snap => {
             if(snap.exists() && !q.customExplanation) {
               q.customExplanation = snap.val();
+              const stillOnSameQuestion = selectedQuestions[currentIdx] &&
+                                           selectedQuestions[currentIdx].id === questionIdAtRenderTime;
               const eBoxNow = document.getElementById("explanationBox");
-              if(eBoxNow && eBoxNow.style.display === "block") eBoxNow.innerHTML = buildExplanationHTML(q);
+              if(stillOnSameQuestion && eBoxNow && eBoxNow.style.display === "block") {
+                eBoxNow.innerHTML = buildExplanationHTML(q);
+              }
             }
           });
         }
@@ -1037,22 +1375,31 @@
             questionsAttempted++;
             attemptedThisSession.add(q.id);
             document.querySelectorAll(".option-btn").forEach(btn => btn.style.pointerEvents = "none");
-            if(opt === q.answer) {
-              score++; rBox.innerHTML = "<span style='color:#10b981'>✅ सही जवाब!</span>";
-              if(isWeakMode) { weakList = weakList.filter(id => id !== q.id); syncToFirebase(); }
-            } else {
-              rBox.innerHTML = `<span style='color:#e74c3c'>❌ गलत जवाब! सही उत्तर: ${q.answer}</span>`;
-              wrongQuestions.push(q);
-              if(!weakList.includes(q.id)) { weakList.push(q.id); syncToFirebase(); }
+            try {
+              if(opt === q.answer) {
+                score++; rBox.innerHTML = "<span style='color:#10b981'>✅ सही जवाब!</span>";
+                if(isWeakMode) { weakList = weakList.filter(id => id !== q.id); }
+                questionResults[q.id] = true;
+              } else {
+                rBox.innerHTML = `<span style='color:#e74c3c'>❌ गलत जवाब! सही उत्तर: ${q.answer}</span>`;
+                wrongQuestions.push(q);
+                if(!weakList.includes(q.id)) { weakList.push(q.id); }
+                questionResults[q.id] = false;
+              }
+
+              if(!q.sub || !q.ch) findQuestionMeta(q);
+              maybeUpdateRevisionForQuestion(q);
+              syncToFirebase();
+
+              eBox.innerHTML = buildExplanationHTML(q);
+              eBox.style.display = "block";
+            } catch(e) {
+              console.warn("Answer-handling step failed (quiz will still continue):", e.message);
+            } finally {
+              saveCurrentSession();
+              if(autoNextTimer) clearTimeout(autoNextTimer);
+              autoNextTimer = setTimeout(goToNextQuestion, 1500);
             }
-
-            eBox.innerHTML = buildExplanationHTML(q);
-            eBox.style.display = "block";
-            document.getElementById("customExpText").value = q.customExplanation || "";
-
-            saveCurrentSession();
-            if(autoNextTimer) clearTimeout(autoNextTimer);
-            autoNextTimer = setTimeout(goToNextQuestion, 1500);
           };
           oBox.appendChild(b);
         });
@@ -1063,7 +1410,6 @@
         viewAnsBtn.onclick = () => {
           eBox.innerHTML = buildExplanationHTML(q);
           eBox.style.display = "block";
-          document.getElementById("customExpText").value = q.customExplanation || "";
 
           oBox.innerHTML = `
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
@@ -1079,14 +1425,24 @@
       const q = selectedQuestions[currentIdx];
       questionsAttempted++;
       attemptedThisSession.add(q.id);
-      if(isCorrect) {
-        if(isWeakMode) { weakList = weakList.filter(id => id !== q.id); syncToFirebase(); }
-      } else {
-        wrongQuestions.push(q);
-        if(!weakList.includes(q.id)) { weakList.push(q.id); syncToFirebase(); }
+      try {
+        if(isCorrect) {
+          if(isWeakMode) { weakList = weakList.filter(id => id !== q.id); }
+          questionResults[q.id] = true;
+        } else {
+          wrongQuestions.push(q);
+          if(!weakList.includes(q.id)) { weakList.push(q.id); }
+          questionResults[q.id] = false;
+        }
+        if(!q.sub || !q.ch) findQuestionMeta(q);
+        maybeUpdateRevisionForQuestion(q);
+        syncToFirebase();
+      } catch(e) {
+        console.warn("handleSubjectiveResponse step failed (quiz will still continue):", e.message);
+      } finally {
+        saveCurrentSession();
+        goToNextQuestion();
       }
-      saveCurrentSession();
-      goToNextQuestion();
     }
 
     function goToNextQuestion() {
@@ -1204,7 +1560,7 @@
       if(qs.length === 0) return alert("कोई सवाल नहीं मिला!");
       document.getElementById("collectionArea").style.display = "none";
       clearSession(); isWeakMode = false;
-      selectedQuestions = [...qs].sort(() => Math.random() - 0.5);
+      selectedQuestions = orderQuestions(qs);
       initQuizUI();
     }
 
@@ -1220,7 +1576,7 @@
 
     function startSavedPractice() {
       clearSession(); isWeakMode = false;
-      selectedQuestions = resolveQuestionsByIds(savedList).sort(() => Math.random() - 0.5);
+      selectedQuestions = orderQuestions(resolveQuestionsByIds(savedList));
       if(selectedQuestions.length === 0) return alert("कोई सवाल नहीं मिला!");
       initQuizUI();
     }
@@ -1232,7 +1588,7 @@
 
     function startWeakAreasQuiz() {
       clearSession(); isWeakMode = true;
-      selectedQuestions = resolveQuestionsByIds(weakList).sort(() => Math.random() - 0.5);
+      selectedQuestions = orderQuestions(resolveQuestionsByIds(weakList));
       if(selectedQuestions.length === 0) return alert("कोई सवाल नहीं मिला!");
       initQuizUI();
     }
@@ -1256,6 +1612,7 @@
 
       document.getElementById("trackerArea").style.display = "none";
       document.getElementById("collectionArea").style.display = "none";
+      document.getElementById("expEditorOverlay").style.display = "none";
 
       updateWeakBtn(); checkResumeStatus();
       if(window.history.state) history.replaceState(null, "");
@@ -1274,26 +1631,6 @@
       document.getElementById("bookmarkActionBtn").style.display = "none";
       document.getElementById("heartActionBtn").style.display = "none";
       document.getElementById("speakBtn").style.display = "none";
-
-      if (!isWeakMode) {
-        const chapterAttempts = {};
-        attemptedThisSession.forEach(id => {
-          const q = allQuestionsFlat.find(qq => qq.id === id);
-          if (!q || !q.sub || !q.ch) return;
-          const key = `${q.sub}_${q.ch}`;
-          if (!chapterAttempts[key]) chapterAttempts[key] = { sub: q.sub, ch: q.ch, count: 0 };
-          chapterAttempts[key].count++;
-        });
-        let revisionChanged = false;
-        Object.values(chapterAttempts).forEach(({ sub, ch, count }) => {
-          const total = (quizData[sub] && quizData[sub][ch]) ? quizData[sub][ch].length : 0;
-          if (total > 0 && (count / total) * 100 >= 90) {
-            revisionDates[`${sub}_${ch}`] = Date.now();
-            revisionChanged = true;
-          }
-        });
-        if (revisionChanged) syncToFirebase();
-      }
 
       let wrongCount = wrongQuestions.length;
       let resultHTML = `<div style="text-align:center;"><h3>🏁 रिजल्ट: ${score}/${selectedQuestions.length}</h3>
@@ -1375,8 +1712,10 @@
     Object.assign(window, {
       toggleProfileMenu, logoutUser, changeDisplayName, loginWithGoogle, loginWithEmail,
       forgotPassword, continueAsGuest, clearGuestAndLogin, toggleTheme, selectSubject, renderChapterList,
-      toggleAllChapters, toggleTracker, toggleEditExplanation, startQuiz, resumeQuiz,
-      exportData, importData, saveVoiceSpeed, readFullQuestion, saveCustomExplanation,
+      toggleAllChapters, toggleTracker, startQuiz, resumeQuiz,
+      exportData, importData, saveVoiceSpeed, setOrderMode, readFullQuestion,
+      openExplanationEditor, closeExplanationEditor, applyExpFormat, applyExpFontSize,
+      clearExpFormatting, saveCustomExplanationFromEditor,
       handleHeartClick, toggleCollection, selectCollSubject, toggleAllCollChapters, startCollectionPractice,
       goToNextQuestion, goToHome, handleBookmarkClick, startSavedPractice, handleSubjectiveResponse,
       startWeakAreasQuiz, retryWrong, quitQuiz, handleSpeakClick, toggleAutoReadMode, toggleStopwatch,
