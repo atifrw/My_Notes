@@ -406,7 +406,10 @@
     </div>
 
     <div id="setupArea" style="display:none;">
-        <button class="main-btn change-mode-btn" onclick="backToModeSelect()">🔄 दूसरा मोड चुनें</button>
+        <div style="display:flex; gap:10px; margin-bottom:14px;">
+          <button class="main-btn" style="background:var(--btn-bg); margin:0; flex:1;" onclick="openSavedListModal()">📋 Save List</button>
+          <button class="main-btn change-mode-btn" style="margin:0; flex:1;" onclick="backToModeSelect()">🔄 Change Mode</button>
+        </div>
 
         <div class="select-panels">
           <div class="subject-panel">
@@ -452,8 +455,6 @@
                 </div>
             </button>
         </div>
-        <button class="main-btn" style="background:var(--btn-bg); margin-top:10px;" onclick="openSavedListModal()">🖨️ सहेजे गए सवालों की लिस्ट देखें / प्रिंट करें</button>
-
         <div class="backup-area">
           <button class="backup-btn" onclick="exportData()">📤 Backup Data</button>
           <button class="backup-btn" onclick="document.getElementById('importFile').click()">📥 Restore Data</button>
@@ -562,15 +563,16 @@
     let currentMode = null;
     let STORAGE_PREFIX = "";
     let FIREBASE_PATH = "users";
+    let navStack = []; // JS-only back-button stack: 'setup' | 'quiz' | 'tracker' | 'collection' | 'expEditor'
 
     const MODE_CONFIG = {
-      mcq: { storagePrefix: "", firebasePath: "users", title: "🔥 Smart Quiz Pro", dataFiles: [
+      mcq: { storagePrefix: "hub_mcq_", firebasePath: "quizhub_mcq", title: "🔥 Smart Quiz Pro", dataFiles: [
         "ancient_history.json","medieval_history.json","modern_history.json",
         "indian_geography.json","world_geography.json","indian_economy.json",
         "indian_polity.json","bihar_special.json","physics.json","chemistry.json",
         "biology.json","maths.json"
       ]},
-      subjective: { storagePrefix: "website1_", firebasePath: "users_website1", title: "🔥 Smart Subjective Pro", dataFile: "sub.json" }
+      subjective: { storagePrefix: "hub_subj_", firebasePath: "quizhub_subjective", title: "🔥 Smart Subjective Pro", dataFile: "sub.json" }
     };
 
     let quizData = {}, allQuestionsFlat = [], selectedQuestions = [], wrongQuestions = [], currentIdx = 0, score = 0, timerInterval;
@@ -586,16 +588,53 @@
     let expEditorOriginalHTML = "";
     const GUEST_FLAG_KEY = "quizhub_guest_mode";
 
-    window.onpopstate = function(event) {
-      const expOverlay = document.getElementById("expEditorOverlay");
-      if (expOverlay && expOverlay.style.display === "flex") {
-        expOverlay.style.display = "none";
-        return;
+    // ============================================================
+    // MOBILE BACK BUTTON HANDLING
+    // We never rely on raw browser history depth — it drifts easily
+    // and was exactly why the whole site used to close. Instead we
+    // keep our own JS stack (navStack) of in-app screens. Opening a
+    // screen/overlay pushes one entry to BOTH navStack and browser
+    // history (a "trap"). On back press we pop navStack ourselves,
+    // update the UI, then re-arm one more trap entry so the NEXT
+    // back press is caught too — UNLESS we're back at the true home
+    // screen (mode select), in which case back behaves normally
+    // (exits), exactly like any app's home screen should.
+    // ============================================================
+    function pushScreen(name) {
+      navStack.push(name);
+      history.pushState({trap: true}, "");
+    }
+
+    function closeTopScreen() {
+      // On-screen close/home/change-mode buttons call this so they go
+      // through the exact same code path as the hardware back button.
+      if (navStack.length > 0) history.back();
+    }
+
+    window.onpopstate = function() {
+      const closedName = navStack.pop();
+      switch (closedName) {
+        case "expEditor":
+          document.getElementById("expEditorOverlay").style.display = "none";
+          break;
+        case "tracker":
+          document.getElementById("trackerArea").style.display = "none";
+          break;
+        case "collection":
+          document.getElementById("collectionArea").style.display = "none";
+          break;
+        case "quiz":
+          performGoToHomeCleanup();
+          break;
+        case "setup":
+          currentMode = null;
+          showModeSelectScreen();
+          break;
+        default:
+          break; // stray event or already at true base — nothing to do
       }
-      if (document.getElementById("quizArea").style.display === "block" || 
-          document.getElementById("trackerArea").style.display === "block" ||
-          document.getElementById("collectionArea").style.display === "flex") {
-        goToHome();
+      if (navStack.length > 0) {
+        history.pushState({trap: true}, "");
       }
     };
 
@@ -773,11 +812,7 @@
     }
 
     function backToModeSelect() {
-      clearInterval(timerInterval);
-      if(autoNextTimer) clearTimeout(autoNextTimer);
-      window.speechSynthesis.cancel();
-      currentMode = null;
-      showModeSelectScreen();
+      closeTopScreen();
     }
 
     function selectMode(mode) {
@@ -789,6 +824,7 @@
 
       document.getElementById("modeSelectArea").style.display = "none";
       document.getElementById("setupArea").style.display = "block";
+      pushScreen("setup");
 
       // Reset in-memory per-mode state before loading fresh data for this mode
       quizData = {}; allQuestionsFlat = [];
@@ -1078,12 +1114,11 @@
     function toggleTracker() {
       const area = document.getElementById("trackerArea");
       const wasOpen = area.style.display === "block";
-      area.style.display = wasOpen ? "none" : "block";
-      if(!wasOpen) {
-        renderTracker();
-        history.pushState({page: "tracker"}, "Tracker");
-        setTimeout(() => area.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
-      }
+      if (wasOpen) { closeTopScreen(); return; }
+      area.style.display = "block";
+      renderTracker();
+      pushScreen("tracker");
+      setTimeout(() => area.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
     }
 
     // --- RICH TEXT EXPLANATION EDITOR: open / close / format / save ---
@@ -1097,7 +1132,7 @@
       const imgInput = document.getElementById("expImageUrlInput");
       if(imgInput) imgInput.value = q.image || "";
       document.getElementById("expEditorOverlay").style.display = "flex";
-      history.pushState({page: "expEditor"}, "Explanation Editor");
+      pushScreen("expEditor");
       setTimeout(() => {
         area.focus();
         moveExpCursorToEnd(area);
@@ -1124,11 +1159,7 @@
     }
 
     function closeExplanationEditor() {
-      if (window.history.state && window.history.state.page === "expEditor") {
-        history.back();
-      } else {
-        document.getElementById("expEditorOverlay").style.display = "none";
-      }
+      closeTopScreen();
     }
 
     function updateExpToolbarState() {
@@ -1239,11 +1270,7 @@
       }
 
       expEditorOriginalHTML = html;
-      if (window.history.state && window.history.state.page === "expEditor") {
-        history.back();
-      } else {
-        document.getElementById("expEditorOverlay").style.display = "none";
-      }
+      closeTopScreen();
 
       const eBox = document.getElementById("explanationBox");
       eBox.innerHTML = buildExplanationHTML(q);
@@ -1424,7 +1451,26 @@
 
       startStopwatch(resumeSeconds);
 
-      history.pushState({page: "quiz"}, "Quiz");
+      enterQuizScreen();
+    }
+
+    function enterQuizScreen() {
+      // Silently close any open overlay (tracker/collection) since the
+      // quiz is about to fully cover the screen anyway — keeps navStack
+      // accurate without a visible flash.
+      if (document.getElementById("trackerArea").style.display === "block") {
+        document.getElementById("trackerArea").style.display = "none";
+        navStack.pop();
+      }
+      if (document.getElementById("collectionArea").style.display === "flex") {
+        document.getElementById("collectionArea").style.display = "none";
+        navStack.pop();
+      }
+      // Don't push a second 'quiz' entry if we're already at quiz level
+      // (e.g. "Retry Wrong" or starting again from the result screen).
+      if (navStack[navStack.length - 1] !== "quiz") {
+        pushScreen("quiz");
+      }
     }
 
     function renderLayout() {
@@ -1681,13 +1727,12 @@
     function toggleCollection() {
       const area = document.getElementById("collectionArea");
       const wasOpen = area.style.display === "flex";
-      area.style.display = wasOpen ? "none" : "flex";
-      if(!wasOpen) {
-        collSelectedSub = "all";
-        renderCollSubjectList();
-        renderCollChapterList();
-        history.pushState({page: "collection"}, "Collection");
-      }
+      if (wasOpen) { closeTopScreen(); return; }
+      area.style.display = "flex";
+      collSelectedSub = "all";
+      renderCollSubjectList();
+      renderCollChapterList();
+      pushScreen("collection");
     }
 
     function getCollChapterCount(sub, ch) {
@@ -1770,7 +1815,6 @@
 
       let qs = resolveQuestionsByIds(ids);
       if(qs.length === 0) return alert("कोई सवाल नहीं मिला!");
-      document.getElementById("collectionArea").style.display = "none";
       clearSession(); isWeakMode = false;
       selectedQuestions = orderQuestions(qs);
       initQuizUI();
@@ -1808,7 +1852,7 @@
     function retryWrong() { selectedQuestions = [...wrongQuestions]; initQuizUI(); }
     function quitQuiz() { if(confirm("क्विज़ छोड़ें?")) showFinalResult(); }
 
-    function goToHome() {
+    function performGoToHomeCleanup() {
       clearInterval(timerInterval);
       if(autoNextTimer) clearTimeout(autoNextTimer);
       window.speechSynthesis.cancel();
@@ -1828,7 +1872,10 @@
       document.getElementById("expEditorOverlay").style.display = "none";
 
       updateWeakBtn(); checkResumeStatus();
-      if(window.history.state) history.replaceState(null, "");
+    }
+
+    function goToHome() {
+      closeTopScreen();
     }
 
     function showFinalResult() {
@@ -1910,32 +1957,3 @@
       renderStopwatch();
       clearInterval(timerInterval);
       timerInterval = setInterval(() => { if(stopwatchRunning) { stopwatchSeconds++; renderStopwatch(); } }, 1000);
-    }
-
-    function toggleStopwatch() {
-      stopwatchRunning = !stopwatchRunning;
-      renderStopwatch();
-    }
-
-    function openFullImg(src) {
-      document.getElementById("fullImage").src = src;
-      document.getElementById("imageModal").style.display = "block";
-    }
-
-    Object.assign(window, {
-      toggleProfileMenu, logoutUser, changeDisplayName, loginWithGoogle, loginWithEmail,
-      forgotPassword, continueAsGuest, clearGuestAndLogin, toggleTheme, selectSubject, renderChapterList,
-      toggleAllChapters, toggleTracker, startQuiz, resumeQuiz, selectMode, backToModeSelect,
-      exportData, importData, saveVoiceSpeed, setOrderMode, readFullQuestion,
-      openExplanationEditor, closeExplanationEditor, applyExpFormat, applyExpFontSize,
-      clearExpFormatting, saveCustomExplanationFromEditor,
-      handleHeartClick, toggleCollection, selectCollSubject, toggleAllCollChapters, startCollectionPractice,
-      advanceQuestion, goToHome, handleBookmarkClick, startSavedPractice, handleSubjectiveResponse,
-      startWeakAreasQuiz, retryWrong, quitQuiz, handleSpeakClick, toggleAutoReadMode, toggleStopwatch,
-      openReview, closeReview, openSavedListModal, closeSavedList, openFullImg
-    });
-
-    }); // end DOMContentLoaded
-  </script>
-</body>
-</html>
