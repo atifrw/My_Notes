@@ -22,7 +22,7 @@
       --question-bg: #374151; --border-color: #4b5563; --btn-bg: #374151;
       --primary-color: #818cf8; --exp-bg: #1f2937; --exp-border: #60a5fa;
     }
-    body { font-family: 'Rubik', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 15px; transition: 0.3s; }
+    body { font-family: 'Rubik', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 4px; transition: 0.3s; }
 
     @media print {
       body { background: white !important; color: black !important; }
@@ -111,11 +111,11 @@
       font-weight: 600;
     }
 
-    .container { max-width: 700px; margin: auto; background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; border: 1px solid var(--border-color); }
+    .container { max-width: 960px; width: 100%; margin: 0 auto; box-sizing: border-box; background: var(--card-bg); padding: 12px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; border: 1px solid var(--border-color); }
     .progress-container { width: 100%; background: var(--border-color); height: 8px; border-radius: 5px; margin-bottom: 15px; display: none; }
     #progressBar { height: 100%; width: 0%; background: var(--progress-color); border-radius: 5px; transition: 0.4s; }
     
-    .header-btns { display: none; justify-content: space-between; align-items: center; margin: 0 auto 15px; gap: 10px; flex-wrap: nowrap; background: var(--card-bg); padding: 10px 15px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.04); max-width: 750px; box-sizing: border-box; }
+    .header-btns { display: none; justify-content: space-between; align-items: center; margin: 0 auto 10px; gap: 10px; flex-wrap: nowrap; background: var(--card-bg); padding: 10px 12px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.04); max-width: 960px; width: 100%; box-sizing: border-box; }
     .header-left { display: flex; align-items: center; gap: 8px; }
     .header-right { display: flex; align-items: center; gap: 12px; }
 
