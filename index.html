@@ -407,11 +407,6 @@
     </div>
 
     <div id="setupArea" style="display:none;">
-        <div class="two-col-btn-row">
-          <button class="main-btn secondary-btn" onclick="openSavedListModal()">📋 Save List</button>
-          <button class="main-btn secondary-btn" onclick="backToModeSelect()">🔄 Change Mode</button>
-        </div>
-
         <div class="select-panels">
           <div class="subject-panel">
             <div class="panel-header"><span class="step-badge">1</span> विषय चुनें</div>
@@ -427,14 +422,14 @@
         <button id="resumeBtn" class="main-btn cta-btn resume-quiz-btn" style="display: none;" onclick="resumeQuiz()">🕒 पिछला सेशन जारी रखें</button>
 
         <div class="button-grid">
-            <button id="weakAreasBtn" class="grid-card orange-card" style="display:none;" onclick="startWeakAreasQuiz()">
+            <button id="weakAreasBtn" class="grid-card orange-card" onclick="startWeakAreasQuiz()">
                 <div class="card-icon">🎯</div>
                 <div class="card-content">
                     <div class="card-title">Weak Areas (<span id="weakCount">0</span>)</div>
                     <div class="card-sub">Focus on your weak areas & improve them.</div>
                 </div>
             </button>
-            <button id="collectionMainBtn" class="grid-card blue-card" style="display:none;" onclick="toggleCollection()">
+            <button id="collectionMainBtn" class="grid-card blue-card" onclick="toggleCollection()">
                 <div class="card-icon">📚</div>
                 <div class="card-content">
                     <div class="card-title">My Collections</div>
@@ -448,7 +443,7 @@
                     <div class="card-sub">Monitor your scores and track progress.</div>
                 </div>
             </button>
-            <button id="savedPracticeBtn" class="grid-card yellow-card" style="display:none;" onclick="startSavedPractice()">
+            <button id="savedPracticeBtn" class="grid-card yellow-card" onclick="startSavedPractice()">
                 <div class="card-icon">⭐</div>
                 <div class="card-content">
                     <div class="card-title">Save Question</div>
@@ -456,6 +451,12 @@
                 </div>
             </button>
         </div>
+
+        <div class="two-col-btn-row">
+          <button class="main-btn secondary-btn" onclick="openSavedListModal()">📋 Save List</button>
+          <button class="main-btn secondary-btn" onclick="backToModeSelect()">🔄 Change Mode</button>
+        </div>
+
         <div class="backup-area">
           <button class="backup-btn" onclick="exportData()">📤 Backup Data</button>
           <button class="backup-btn" onclick="document.getElementById('importFile').click()">📥 Restore Data</button>
@@ -1821,7 +1822,7 @@
       initQuizUI();
     }
 
-    function updateCollectionBtn() { document.getElementById("collectionMainBtn").style.display = Object.keys(collections).length > 0 ? "flex" : "none"; }
+    function updateCollectionBtn() { document.getElementById("collectionMainBtn").style.display = "flex"; }
 
     function handleBookmarkClick() {
       const q = selectedQuestions[currentIdx], idx = savedList.indexOf(q.id);
@@ -1829,7 +1830,7 @@
       syncToFirebase(); checkSavedBtn(); document.getElementById("bookmarkActionBtn").classList.toggle("active");
     }
 
-    function checkSavedBtn() { document.getElementById("savedPracticeBtn").style.display = savedList.length > 0 ? "flex" : "none"; }
+    function checkSavedBtn() { document.getElementById("savedPracticeBtn").style.display = "flex"; }
 
     function startSavedPractice() {
       clearSession(); isWeakMode = false;
@@ -1839,7 +1840,7 @@
     }
 
     function updateWeakBtn() {
-      document.getElementById("weakAreasBtn").style.display = (weakList.length > 0) ? "flex" : "none";
+      document.getElementById("weakAreasBtn").style.display = "flex";
       if(document.getElementById("weakCount")) document.getElementById("weakCount").innerText = weakList.length;
     }
 
