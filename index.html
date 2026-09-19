@@ -613,15 +613,13 @@
 
     // ============================================================
     // MOBILE BACK BUTTON HANDLING
-    // We never rely on raw browser history depth — it drifts easily
-    // and was exactly why the whole site used to close. Instead we
-    // keep our own JS stack (navStack) of in-app screens. Opening a
-    // screen/overlay pushes one entry to BOTH navStack and browser
-    // history (a "trap"). On back press we pop navStack ourselves,
-    // update the UI, then re-arm one more trap entry so the NEXT
-    // back press is caught too — UNLESS we're back at the true home
-    // screen (mode select), in which case back behaves normally
-    // (exits), exactly like any app's home screen should.
+    // Each in-app screen pushes exactly ONE browser-history entry
+    // when it opens (pushScreen). One hardware back press = one
+    // history entry consumed = one navStack level popped. This 1:1
+    // mapping is what keeps behaviour reliable: no extra "re-arm"
+    // push happens inside the popstate handler itself, since doing
+    // that races with the hardware back button on some Android
+    // versions and can let a back press escape the app entirely.
     // ============================================================
     function pushScreen(name) {
       navStack.push(name);
@@ -655,9 +653,6 @@
           break;
         default:
           break; // stray event or already at true base — nothing to do
-      }
-      if (navStack.length > 0) {
-        history.pushState({trap: true}, "");
       }
     };
 
