@@ -589,10 +589,10 @@
     ];
 
     const MODE_CONFIG = {
-      mcq: { storagePrefix: "hub_mcq_", firebasePath: "quizhub_mcq", title: "🔥 Smart Quiz Pro", dataFiles: MCQ_BASE_FILES },
-      subjective: { storagePrefix: "hub_subj_", firebasePath: "quizhub_subjective", title: "🔥 Smart Subjective Pro", dataFile: "sub.json" },
-      vijeta: { storagePrefix: "hub_vijeta_", firebasePath: "quizhub_vijeta", title: "🏆 Vijeta Quiz", dataFiles: MCQ_BASE_FILES.map(f => "Vijeta_" + f) },
-      notes: { storagePrefix: "hub_notes_", firebasePath: "quizhub_notes", title: "📒 Notes Quiz", dataFiles: MCQ_BASE_FILES.map(f => "Notes_" + f) }
+      mcq: { storagePrefix: "hub_mcq_", firebasePath: "quizhub_mcq", title: "🔥 Smart Quiz Pro", folder: "mcq", dataFiles: MCQ_BASE_FILES },
+      subjective: { storagePrefix: "hub_subj_", firebasePath: "quizhub_subjective", title: "🔥 Smart Subjective Pro", folder: "subjective", dataFile: "sub.json" },
+      vijeta: { storagePrefix: "hub_vijeta_", firebasePath: "quizhub_vijeta", title: "🏆 Vijeta Quiz", folder: "vijeta", dataFiles: MCQ_BASE_FILES.map(f => "Vijeta_" + f) },
+      notes: { storagePrefix: "hub_notes_", firebasePath: "quizhub_notes", title: "📒 Notes Quiz", folder: "notes", dataFiles: MCQ_BASE_FILES.map(f => "Notes_" + f) }
     };
 
     // Modes that use the MCQ-style question screen (color feedback + manual Next button)
@@ -915,9 +915,9 @@
       if (cfg.dataFiles) {
         Promise.all(
           cfg.dataFiles.map(f =>
-            fetch(f, { cache: "no-cache" })
+            fetch(cfg.folder + "/" + f, { cache: "no-cache" })
               .then(r => r.json())
-              .catch(e => { console.warn(f + " load nahi hua:", e); return {}; })
+              .catch(e => { console.warn(cfg.folder + "/" + f + " load nahi hua:", e); return {}; })
           )
         ).then(results => {
           quizData = {};
@@ -925,12 +925,12 @@
           finishDataLoad();
         });
       } else {
-        fetch(cfg.dataFile + "?v=" + Math.random(), { cache: "no-cache" }).then(r => r.json()).then(j => {
+        fetch(cfg.folder + "/" + cfg.dataFile + "?v=" + Math.random(), { cache: "no-cache" }).then(r => r.json()).then(j => {
           quizData = j;
           finishDataLoad();
         }).catch(e => {
-          console.error(cfg.dataFile + " load nahi hua:", e);
-          alert(cfg.dataFile + " file nahi mili. Please check file name.");
+          console.error(cfg.folder + "/" + cfg.dataFile + " load nahi hua:", e);
+          alert(cfg.folder + "/" + cfg.dataFile + " file nahi mili. Please check file/folder name.");
         });
       }
     }
