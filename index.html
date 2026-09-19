@@ -179,8 +179,12 @@
     .mode-card .mode-sub { font-size: 13px; color: #888; line-height: 1.4; }
     .mode-card.mcq-card { background: linear-gradient(135deg, #f0f7ff 0%, #e2edff 100%); }
     .mode-card.subj-card { background: linear-gradient(135deg, #fff5f0 0%, #ffe9de 100%); }
+    .mode-card.vijeta-card { background: linear-gradient(135deg, #fefce8 0%, #fde68a 100%); }
+    .mode-card.notes-card { background: linear-gradient(135deg, #f0fdf4 0%, #bbf7d0 100%); }
     [data-theme="dark"] .mode-card.mcq-card { background: linear-gradient(135deg, #1e293b 0%, #172033 100%); }
     [data-theme="dark"] .mode-card.subj-card { background: linear-gradient(135deg, #302217 0%, #241a12 100%); }
+    [data-theme="dark"] .mode-card.vijeta-card { background: linear-gradient(135deg, #332b12 0%, #26200d 100%); }
+    [data-theme="dark"] .mode-card.notes-card { background: linear-gradient(135deg, #10261a 0%, #0c1c13 100%); }
     .two-col-btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
     .secondary-btn { background: var(--btn-bg); color: var(--primary-color); font-weight: 600; font-size: 14px; border: 1.5px dashed var(--primary-color); margin-bottom: 0; }
 
@@ -403,6 +407,16 @@
           <div class="mode-title">Subjective Practice</div>
           <div class="mode-sub">खुद सोचें, फिर जवाब देखकर खुद जाँचें</div>
         </div>
+        <div class="mode-card vijeta-card" onclick="selectMode('vijeta')">
+          <span class="mode-icon">🏆</span>
+          <div class="mode-title">Vijeta Quiz</div>
+          <div class="mode-sub">विकल्प चुनकर जवाब दें, instant सही/गलत feedback</div>
+        </div>
+        <div class="mode-card notes-card" onclick="selectMode('notes')">
+          <span class="mode-icon">📒</span>
+          <div class="mode-title">Notes Quiz</div>
+          <div class="mode-sub">विकल्प चुनकर जवाब दें, instant सही/गलत feedback</div>
+        </div>
       </div>
     </div>
 
@@ -567,15 +581,22 @@
     let FIREBASE_PATH = "";
     let navStack = []; // JS-only back-button stack: 'setup' | 'quiz' | 'tracker' | 'collection' | 'expEditor'
 
+    const MCQ_BASE_FILES = [
+      "ancient_history.json","medieval_history.json","modern_history.json",
+      "indian_geography.json","world_geography.json","indian_economy.json",
+      "indian_polity.json","bihar_special.json","physics.json","chemistry.json",
+      "biology.json","maths.json"
+    ];
+
     const MODE_CONFIG = {
-      mcq: { storagePrefix: "hub_mcq_", firebasePath: "quizhub_mcq", title: "🔥 Smart Quiz Pro", dataFiles: [
-        "ancient_history.json","medieval_history.json","modern_history.json",
-        "indian_geography.json","world_geography.json","indian_economy.json",
-        "indian_polity.json","bihar_special.json","physics.json","chemistry.json",
-        "biology.json","maths.json"
-      ]},
-      subjective: { storagePrefix: "hub_subj_", firebasePath: "quizhub_subjective", title: "🔥 Smart Subjective Pro", dataFile: "sub.json" }
+      mcq: { storagePrefix: "hub_mcq_", firebasePath: "quizhub_mcq", title: "🔥 Smart Quiz Pro", dataFiles: MCQ_BASE_FILES },
+      subjective: { storagePrefix: "hub_subj_", firebasePath: "quizhub_subjective", title: "🔥 Smart Subjective Pro", dataFile: "sub.json" },
+      vijeta: { storagePrefix: "hub_vijeta_", firebasePath: "quizhub_vijeta", title: "🏆 Vijeta Quiz", dataFiles: MCQ_BASE_FILES.map(f => "Vijeta_" + f) },
+      notes: { storagePrefix: "hub_notes_", firebasePath: "quizhub_notes", title: "📒 Notes Quiz", dataFiles: MCQ_BASE_FILES.map(f => "Notes_" + f) }
     };
+
+    // Modes that use the MCQ-style question screen (color feedback + manual Next button)
+    const MCQ_STYLE_MODES = ["mcq", "vijeta", "notes"];
 
     let quizData = {}, allQuestionsFlat = [], selectedQuestions = [], wrongQuestions = [], currentIdx = 0, score = 0, timerInterval;
     let questionsAttempted = 0, currentSub = "", currentCh = "", isWeakMode = false;
@@ -889,8 +910,9 @@
     function initApp() {
       checkSavedBtn(); updateWeakBtn(); checkResumeStatus(); updateCollectionBtn();
 
-      if (currentMode === 'mcq') {
-        const cfg = MODE_CONFIG.mcq;
+      const cfg = MODE_CONFIG[currentMode];
+
+      if (cfg.dataFiles) {
         Promise.all(
           cfg.dataFiles.map(f =>
             fetch(f, { cache: "no-cache" })
@@ -903,12 +925,12 @@
           finishDataLoad();
         });
       } else {
-        fetch(MODE_CONFIG.subjective.dataFile + "?v=" + Math.random(), { cache: "no-cache" }).then(r => r.json()).then(j => {
+        fetch(cfg.dataFile + "?v=" + Math.random(), { cache: "no-cache" }).then(r => r.json()).then(j => {
           quizData = j;
           finishDataLoad();
         }).catch(e => {
-          console.error("sub.json load nahi hua:", e);
-          alert("sub.json file nahi mili. Please check file name.");
+          console.error(cfg.dataFile + " load nahi hua:", e);
+          alert(cfg.dataFile + " file nahi mili. Please check file name.");
         });
       }
     }
@@ -1531,7 +1553,7 @@
     }
 
     function showQuestion() {
-      if (currentMode === 'mcq') showQuestionMCQ();
+      if (MCQ_STYLE_MODES.includes(currentMode)) showQuestionMCQ();
       else showQuestionSubjective();
     }
 
