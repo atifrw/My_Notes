@@ -331,6 +331,103 @@
     .status-red { background: #e74c3c; }
 
     @media (max-width: 500px) { .button-grid { grid-template-columns: 1fr; } }
+
+    /* ================= STUDY PLANNER (home) ================= */
+    .pl-wrap { margin-bottom: 20px; }
+    .pl-top { display: flex; align-items: flex-end; justify-content: space-between; padding: 4px 4px 10px; }
+    .pl-hi { font-size: 20px; font-weight: 600; letter-spacing: -.01em; color: var(--text-color); }
+    .pl-hi small { display: block; font-size: 12px; font-weight: 500; color: #8b8f9a; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 2px; }
+    .pl-today-btn { border: 1px solid var(--border-color); background: var(--btn-bg); color: var(--primary-color); font: 600 12px 'Rubik',sans-serif; padding: 7px 13px; border-radius: 999px; cursor: pointer; }
+    .pl-ds { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 12px; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .pl-ds::-webkit-scrollbar { display: none; }
+    .pl-d { flex: 0 0 56px; scroll-snap-align: center; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 0 9px; border-radius: 18px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); cursor: pointer; font-family: inherit; -webkit-tap-highlight-color: transparent; transition: transform .15s, box-shadow .2s; }
+    .pl-d small { font-size: 11px; font-weight: 500; color: #8b8f9a; text-transform: uppercase; letter-spacing: .05em; }
+    .pl-d b { font-size: 19px; font-weight: 600; line-height: 1.1; }
+    .pl-d i { width: 6px; height: 6px; border-radius: 50%; background: transparent; margin-top: 1px; }
+    .pl-d i.g { background: #10b981; } .pl-d i.y { background: #f59e0b; } .pl-d i.r { background: #ef4444; }
+    .pl-d.td { border-color: var(--primary-color); box-shadow: inset 0 0 0 1px var(--primary-color); }
+    .pl-d.on { background: linear-gradient(160deg, #6366f1, #4338ca); border-color: transparent; color: #fff; box-shadow: 0 10px 22px rgba(79,70,229,.38); transform: translateY(-2px); }
+    .pl-d.on small { color: rgba(255,255,255,.75); }
+    .pl-d.on i.g, .pl-d.on i.y, .pl-d.on i.r { box-shadow: 0 0 0 2px rgba(255,255,255,.7); }
+
+    .pl-hero { position: relative; overflow: hidden; border-radius: 24px; padding: 18px; color: #fff; background: radial-gradient(120% 140% at 0% 0%, #7c83ff 0%, transparent 55%), linear-gradient(135deg, #4f46e5 0%, #6d28d9 60%, #a21caf 100%); box-shadow: 0 16px 34px rgba(79,70,229,.3); }
+    .pl-hero::before, .pl-hero::after { content: ""; position: absolute; border-radius: 50%; background: rgba(255,255,255,.09); pointer-events: none; }
+    .pl-hero::before { width: 170px; height: 170px; right: -50px; top: -70px; }
+    .pl-hero::after { width: 110px; height: 110px; right: 40px; bottom: -60px; }
+    .pl-hero-row { position: relative; display: flex; align-items: center; gap: 16px; }
+    .pl-ring { position: relative; width: 84px; height: 84px; flex: none; }
+    .pl-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .pl-ring circle { fill: none; stroke-width: 8; }
+    .pl-ring .r0 { stroke: rgba(255,255,255,.22); }
+    .pl-ring .r1 { stroke: #fff; stroke-linecap: round; transition: stroke-dashoffset .6s cubic-bezier(.4,0,.2,1); }
+    .pl-ring b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 600; }
+    .pl-hl { font-size: 12px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; opacity: .8; }
+    .pl-hb { font-size: 26px; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; margin: 2px 0 3px; }
+    .pl-hb span { font-size: 15px; font-weight: 500; opacity: .85; }
+    .pl-hm { font-size: 13px; opacity: .9; line-height: 1.35; }
+    .pl-stats { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
+    .pl-st { background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.18); border-radius: 14px; padding: 9px 4px; text-align: center; backdrop-filter: blur(4px); }
+    .pl-st b { display: block; font-size: 18px; font-weight: 600; }
+    .pl-st small { font-size: 11px; opacity: .85; }
+
+    .pl-card { margin-top: 14px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 22px; padding: 14px; box-shadow: 0 6px 20px rgba(0,0,0,.05); }
+    .pl-ch { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+    .pl-ch h3 { margin: 0; font-size: 16px; font-weight: 600; }
+    .pl-ch h3 small { font-weight: 500; color: #8b8f9a; font-size: 12px; margin-left: 4px; }
+    .pl-seg { display: inline-flex; padding: 3px; gap: 2px; background: var(--btn-bg); border: 1px solid var(--border-color); border-radius: 11px; }
+    .pl-seg button { border: 0; background: transparent; padding: 5px 11px; border-radius: 8px; font: 500 12px 'Rubik',sans-serif; color: #8b8f9a; cursor: pointer; }
+    .pl-seg button.on { background: var(--card-bg); color: var(--primary-color); font-weight: 600; box-shadow: 0 1px 4px rgba(0,0,0,.12); }
+    .pl-quick { display: flex; gap: 8px; margin-bottom: 10px; }
+    .pl-quick input { flex: 1; min-width: 0; border: 1px solid var(--border-color); background: var(--btn-bg); color: var(--text-color); border-radius: 14px; padding: 11px 14px; font: 400 14px 'Rubik',sans-serif; outline: none; }
+    .pl-quick input:focus { border-color: var(--primary-color); }
+    .pl-quick button { flex: none; width: 44px; border: 0; border-radius: 14px; cursor: pointer; font-size: 20px; color: #fff; background: linear-gradient(135deg, #6366f1, #4f46e5); box-shadow: 0 6px 14px rgba(79,70,229,.3); }
+    .pl-quick button.alt { background: var(--btn-bg); color: var(--primary-color); border: 1px solid var(--border-color); box-shadow: none; font-size: 17px; }
+    .pl-task { position: relative; display: flex; gap: 12px; align-items: flex-start; padding: 12px 12px 12px 14px; margin-top: 8px; border-radius: 16px; background: var(--btn-bg); border: 1px solid var(--border-color); overflow: hidden; }
+    .pl-task::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--pc, #6366f1); }
+    .pl-task.p-h { --pc: #ef4444; } .pl-task.p-m { --pc: #6366f1; } .pl-task.p-l { --pc: #10b981; }
+    .pl-ck { flex: none; width: 26px; height: 26px; margin-top: 1px; border-radius: 50%; border: 2px solid #c4c8d4; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; transition: all .2s; -webkit-tap-highlight-color: transparent; }
+    .pl-ck svg { width: 15px; height: 15px; stroke: #fff; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transform: scale(.4); transition: all .2s; }
+    .pl-task.dn .pl-ck { background: linear-gradient(135deg, #34d399, #10b981); border-color: transparent; box-shadow: 0 4px 10px rgba(16,185,129,.35); }
+    .pl-task.dn .pl-ck svg { opacity: 1; transform: none; }
+    .pl-tb { flex: 1; min-width: 0; cursor: pointer; }
+    .pl-t1 { font-size: 15px; font-weight: 500; line-height: 1.3; word-break: break-word; }
+    .pl-task.dn .pl-t1 { text-decoration: line-through; color: #8b8f9a; }
+    .pl-t3 { font-size: 12.5px; color: #8b8f9a; margin-top: 2px; line-height: 1.35; }
+    .pl-t2 { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
+    .pl-t2 span { font-size: 11.5px; font-weight: 500; padding: 3px 9px; border-radius: 999px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); }
+    .pl-t2 span.sb { color: #1f2937; border-color: transparent; }
+    [data-theme="dark"] .pl-t2 span.sb { background: var(--sbc) !important; color: #111827; }
+    .pl-empty { text-align: center; padding: 26px 10px 18px; color: #8b8f9a; font-size: 14px; line-height: 1.6; }
+    .pl-empty i { display: block; font-style: normal; font-size: 38px; margin-bottom: 4px; }
+    .pl-carry { width: 100%; margin-top: 10px; padding: 10px; border: 1px dashed var(--border-color); background: transparent; color: var(--primary-color); border-radius: 14px; font: 500 13px 'Rubik',sans-serif; cursor: pointer; }
+    .pl-sec-title { margin: 22px 4px 10px; font-size: 15px; font-weight: 600; color: var(--text-color); display: flex; align-items: center; gap: 10px; }
+    .pl-sec-title::after { content: ""; flex: 1; height: 1px; background: var(--border-color); }
+
+    #plSheet { position: fixed; inset: 0; z-index: 9000; display: none; align-items: flex-end; background: rgba(15,18,40,.5); backdrop-filter: blur(3px); }
+    #plSheet.on { display: flex; animation: plFade .2s; }
+    @keyframes plFade { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes plUp { from { transform: translateY(40px); } to { transform: none; } }
+    #plSheet .pl-sh { width: 100%; max-width: 560px; margin: 0 auto; background: var(--card-bg); color: var(--text-color); border-radius: 26px 26px 0 0; padding: 8px 18px calc(18px + env(safe-area-inset-bottom,0px)); max-height: 92vh; overflow-y: auto; animation: plUp .28s ease; box-shadow: 0 -12px 40px rgba(0,0,0,.28); box-sizing: border-box; }
+    #plSheet .pl-gr { width: 42px; height: 5px; border-radius: 3px; background: var(--border-color); margin: 4px auto 10px; }
+    #plSheet .pl-sh-h { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    #plSheet .pl-sh-h b { font-size: 18px; font-weight: 600; }
+    #plSheet .pl-x { width: 34px; height: 34px; border-radius: 50%; border: 0; background: var(--btn-bg); color: var(--text-color); cursor: pointer; font-size: 15px; }
+    #plSheet .pl-note { margin: 6px 0 2px; padding: 9px 12px; border-radius: 12px; font-size: 12.5px; line-height: 1.45; background: #eef2ff; color: #4338ca; }
+    [data-theme="dark"] #plSheet .pl-note { background: #1e1b4b; color: #c7d2fe; }
+    #plSheet .pl-lb { display: block; margin: 14px 2px 7px; font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #8b8f9a; }
+    #plSheet .pl-in { width: 100%; box-sizing: border-box; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--border-color); background: var(--btn-bg); color: var(--text-color); font: 400 15px 'Rubik',sans-serif; outline: none; resize: vertical; }
+    #plSheet .pl-in:focus { border-color: var(--primary-color); }
+    #plSheet .pl-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+    #plSheet .pl-chips button { border: 1px solid var(--border-color); background: var(--btn-bg); color: var(--text-color); padding: 8px 13px; border-radius: 12px; font: 500 13px 'Rubik',sans-serif; cursor: pointer; }
+    #plSheet .pl-chips button.on { background: var(--primary-color); border-color: var(--primary-color); color: #fff; box-shadow: 0 5px 12px rgba(79,70,229,.3); }
+    #plSheet .pl-two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    #plSheet .pl-acts { display: flex; gap: 10px; margin-top: 18px; }
+    #plSheet .pl-acts button { flex: 1; padding: 13px; border-radius: 14px; border: 0; font: 600 15px 'Rubik',sans-serif; cursor: pointer; }
+    #plSheet .pl-save { background: linear-gradient(135deg, #6366f1, #4f46e5); color: #fff; box-shadow: 0 8px 18px rgba(79,70,229,.32); flex: 1.6 !important; }
+    #plSheet .pl-del { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca !important; }
+    [data-theme="dark"] #plSheet .pl-del { background: #3b1219; border-color: #7f1d1d !important; color: #fca5a5; }
+    #plToast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px); background: #1f2937; color: #fff; padding: 10px 18px; border-radius: 999px; font-size: 13px; opacity: 0; pointer-events: none; transition: all .25s; z-index: 9500; max-width: 88vw; text-align: center; }
+    #plToast.on { opacity: 1; transform: translateX(-50%); }
   </style>
 </head>
 <body>
@@ -395,7 +492,8 @@
 
     <!-- MODE SELECT SCREEN -->
     <div id="modeSelectArea" class="mode-select-wrap" style="display:none;">
-      <div class="mode-select-title">✨ आप क्या Practice करना चाहते हैं?</div>
+      <div id="plannerArea" class="pl-wrap"></div>
+      <div class="mode-select-title" style="display:none">✨ आप क्या Practice करना चाहते हैं?</div>
       <div class="mode-select-grid">
         <div class="mode-card mcq-card" onclick="selectMode('mcq')">
           <span class="mode-icon">📝</span>
@@ -556,6 +654,24 @@
     </div>
   </div>
 
+  <div id="plSheet" onclick="if(event.target===this)plClose()">
+    <div class="pl-sh">
+      <div class="pl-gr"></div>
+      <div class="pl-sh-h"><b id="plH">New goal</b><button class="pl-x" onclick="plClose()" aria-label="Close">✕</button></div>
+      <div class="pl-note" id="plSc" style="display:none"></div>
+      <span class="pl-lb">Goal</span>
+      <input id="plT" class="pl-in" type="text" autocomplete="off" autocorrect="off" autocapitalize="sentences" spellcheck="false" placeholder="What do you want to study?">
+      <span class="pl-lb">Note (optional)</span>
+      <textarea id="plN" class="pl-in" rows="2" autocomplete="off" spellcheck="false" placeholder="Chapter, page, topic..."></textarea>
+      <span class="pl-lb">Subject</span><div class="pl-chips" id="plSb"></div>
+      <span class="pl-lb">Priority</span><div class="pl-chips" id="plPr"></div>
+      <span class="pl-lb">Repeat</span><div class="pl-chips" id="plRp"></div><div id="plEx"></div>
+      <div class="pl-two"><div><span class="pl-lb">Date</span><input id="plD" class="pl-in" type="date"></div><div><span class="pl-lb">Time (optional)</span><input id="plTm" class="pl-in" type="time"></div></div>
+      <div class="pl-acts"><button class="pl-del" id="plDel" onclick="plDelete()">Delete</button><button class="pl-save" onclick="plSave()">Save</button></div>
+    </div>
+  </div>
+  <div id="plToast"></div>
+
   <script>
     document.addEventListener("DOMContentLoaded", function () {
 
@@ -658,6 +774,9 @@
           break;
         case "review":
           document.getElementById("reviewModal").style.display = "none";
+          break;
+        case "plsheet":
+          plHideSheet();
           break;
         case "quiz":
           performGoToHomeCleanup();
@@ -836,6 +955,7 @@
     // MODE SELECT / SWITCH
     // ============================================================
     function showModeSelectScreen() {
+      plOnHome();
       document.getElementById("modeSelectArea").style.display = "block";
       document.getElementById("setupArea").style.display = "none";
       document.getElementById("quizArea").style.display = "none";
@@ -2023,6 +2143,204 @@
       startWeakAreasQuiz, retryWrong, quitQuiz, handleSpeakClick, toggleAutoReadMode, toggleStopwatch,
       openReview, closeReview, openSavedListModal, closeSavedList, openFullImg
     });
+
+
+    // ============================================================
+    // STUDY PLANNER (home screen goals)
+    // Data: quizhub_planner/<uid>/tasks/<id>  (guest: localStorage only)
+    // Editing / deleting a repeating goal on day D only affects D and
+    // the days after it: the series is split, earlier days stay as is.
+    // ============================================================
+    const PL_SUBS = [['hist','📜','History','#fde68a'],['geo','🌍','Geography','#bbf7d0'],['pol','🏛️','Polity','#bfdbfe'],['eco','💰','Economy','#fbcfe8'],['sci','🔬','Science','#ddd6fe'],['math','➗','Maths','#fed7aa'],['oth','✨','Other','#e5e7eb']];
+    const PL_SPACED = [1,3,7,15,30];
+    let plTasks = {}, plDay = plIso(new Date()), plFilter = 'all', plUid = null, plReady = false;
+    let plEd = null, plAt = null, plDi = '', plSub = 'hist', plPri = 'm', plRep = 'once', plEv = 5, plCenter = true;
+
+    function plIso(d) { const x = new Date(d); return x.getFullYear() + '-' + String(x.getMonth()+1).padStart(2,'0') + '-' + String(x.getDate()).padStart(2,'0'); }
+    function plAdd(d, n) { const x = new Date(d + 'T00:00'); x.setDate(x.getDate() + n); return plIso(x); }
+    function plEsc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function plUser() { const u = auth.currentUser; return (!isGuest && u) ? u.uid : null; }
+    function plKey() { return 'quizhub_planner_' + (plUid || 'guest'); }
+    function plCache() { try { localStorage.setItem(plKey(), JSON.stringify(plTasks)); } catch (e) {} }
+    function plRef(id) { return database.ref('quizhub_planner/' + plUid + '/tasks/' + id); }
+    function plNewId() { return 't' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+    function plToast(m) { const t = document.getElementById('plToast'); t.textContent = m; t.classList.add('on'); clearTimeout(plToast.h); plToast.h = setTimeout(() => t.classList.remove('on'), 2200); }
+    function plWrite(t) { plCache(); if (plUid) plRef(t.id).set(t).catch(() => plToast('Sync nahi hua, phone me save hai')); }
+
+    const plDayK = (t, d) => Math.round((new Date(d + 'T00:00') - new Date(t.date + 'T00:00')) / 864e5);
+    const plEffS = t => (t.from && t.from > t.date) ? t.from : t.date;
+    function plOnDay(t, d) {
+      if (d < t.date || (t.from && d < t.from) || (t.end && d > t.end)) return false;
+      const k = plDayK(t, d);
+      if (t.rep === 'daily') return true;
+      if (t.rep === 'weekly') return k % 7 === 0;
+      if (t.rep === 'every') return k % Math.max(1, t.ev || 1) === 0;
+      if (t.rep === 'spaced') return k === 0 || PL_SPACED.includes(k) || (k > 30 && k % 30 === 0);
+      return t.date === d;
+    }
+    const plFor = d => Object.values(plTasks).filter(t => plOnDay(t, d));
+    const plIsDone = (t, d) => !!(t.done && t.done[d]);
+    function plStat(d) { const a = plFor(d), n = a.filter(t => plIsDone(t, d)).length; return { n, t: a.length, p: a.length ? Math.round(n / a.length * 100) : 0 }; }
+    function plStreak() {
+      let d = plIso(new Date()), c = 0; const s0 = plStat(d);
+      if (!(s0.t && s0.n === s0.t)) d = plAdd(d, -1);
+      for (let i = 0; i < 400; i++) { const s = plStat(d); if (s.t && s.n === s.t) { c++; d = plAdd(d, -1); } else break; }
+      return c;
+    }
+    function plRepLabel(t, d) {
+      if (t.rep === 'daily') return '🔁 Daily';
+      if (t.rep === 'weekly') return '🔁 Weekly';
+      if (t.rep === 'every') return '📆 Every ' + (t.ev || 1) + ' days';
+      if (t.rep === 'spaced') { const k = plDayK(t, d); return k === 0 ? '📖 New topic' : '🧠 Revision · Day ' + k; }
+      return '';
+    }
+    function plFmtT(s) { let h = +s.slice(0, 2); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return h + ':' + s.slice(3, 5) + ' ' + ap; }
+
+    function plOnHome() {
+      const uid = plUser();
+      if (!plReady || plUid !== uid) {
+        plReady = true; plUid = uid; plDay = plIso(new Date()); plCenter = true;
+        try { plTasks = JSON.parse(localStorage.getItem(plKey()) || '{}') || {}; } catch (e) { plTasks = {}; }
+        Object.keys(plTasks).forEach(k => plTasks[k].id = k);
+        if (uid) {
+          database.ref('quizhub_planner/' + uid + '/tasks').once('value').then(s => {
+            const v = s.val();
+            if (v) { plTasks = v; Object.keys(plTasks).forEach(k => plTasks[k].id = k); plCache(); }
+            plRender();
+          }).catch(() => {});
+        }
+      }
+      plRender();
+    }
+
+    function plRender() {
+      const host = document.getElementById('plannerArea'); if (!host) return;
+      const oldStrip = host.querySelector('.pl-ds'), sl = oldStrip ? oldStrip.scrollLeft : 0;
+      const oldQ = host.querySelector('#plQi'), qv = oldQ ? oldQ.value : '', qf = oldQ && document.activeElement === oldQ;
+      const td = plIso(new Date()), S = plStat(plDay), dObj = new Date(plDay + 'T00:00');
+      const u = auth.currentUser;
+      const nm = (!isGuest && u) ? ((u.displayName || (u.email || '').split('@')[0] || '').split(' ')[0]) : 'Student';
+      const hr = new Date().getHours(), gr = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening';
+      const strip = Array.from({ length: 29 }, (_, i) => plAdd(td, i - 7)).map(d => {
+        const x = new Date(d + 'T00:00'), q = plStat(d);
+        const cls = !q.t ? '' : q.n === q.t ? 'g' : (d < td && q.n === 0) ? 'r' : 'y';
+        return `<button class="pl-d ${d === plDay ? 'on' : ''} ${d === td ? 'td' : ''}" onclick="plDaySel('${d}')"><small>${x.toLocaleDateString('en-US', { weekday: 'short' })}</small><b>${x.getDate()}</b><i class="${cls}"></i></button>`;
+      }).join('');
+      const label = plDay === td ? 'Today' : plDay === plAdd(td, 1) ? 'Tomorrow' : plDay === plAdd(td, -1) ? 'Yesterday' : dObj.toLocaleDateString('en-US', { weekday: 'long' });
+      const msg = !S.t ? 'Add your first goal and start the day 🌱' : S.p === 100 ? '🎉 Perfect! All goals completed' : S.p >= 50 ? 'Great going, just a little more 💪' : S.n ? 'Good start, keep it up ✨' : "Let's begin, one goal at a time ✨";
+      const week = Array.from({ length: 7 }, (_, i) => plStat(plAdd(td, i - 6)).n).reduce((a, b) => a + b, 0);
+      let total = 0; const all = Object.values(plTasks).map(t => t.date).sort();
+      if (all.length) for (let d = all[0], i = 0; d <= td && i < 800; d = plAdd(d, 1), i++) total += plStat(d).n;
+      const PR = { h: 0, m: 1, l: 2 };
+      let list = plFor(plDay).filter(t => plFilter === 'all' || (plFilter === 'todo' ? !plIsDone(t, plDay) : plIsDone(t, plDay)));
+      list.sort((a, b) => (plIsDone(a, plDay) - plIsDone(b, plDay)) || ((a.time || '99:99').localeCompare(b.time || '99:99')) || ((PR[a.pri] || 0) - (PR[b.pri] || 0)) || ((a.created || 0) - (b.created || 0)));
+      const od = Object.values(plTasks).filter(t => t.rep === 'once' && t.date < td && !plIsDone(t, t.date)).length;
+      const CHK = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+      const rows = list.map(t => {
+        const c = PL_SUBS.find(x => x[0] === t.sub) || PL_SUBS[PL_SUBS.length - 1], dn = plIsDone(t, plDay), rl = plRepLabel(t, plDay);
+        return `<div class="pl-task p-${t.pri || 'm'} ${dn ? 'dn' : ''}"><button class="pl-ck" onclick="plTog('${t.id}')" aria-label="Mark done">${CHK}</button><div class="pl-tb" onclick="plOpen('${t.id}')"><div class="pl-t1">${plEsc(t.title)}</div>${t.note ? `<div class="pl-t3">${plEsc(t.note)}</div>` : ''}<div class="pl-t2"><span class="sb" style="background:${c[3]};--sbc:${c[3]}">${c[1]} ${c[2]}</span>${t.time ? `<span>⏰ ${plFmtT(t.time)}</span>` : ''}${rl ? `<span>${rl}</span>` : ''}</div></div></div>`;
+      }).join('');
+      const empty = `<div class="pl-empty"><i>${plFilter === 'done' ? '🎯' : '🌱'}</i>${plFilter === 'all' ? 'No goals for this day yet.<br>Add one above to get started.' : plFilter === 'todo' ? 'Nothing pending 🎉' : 'No completed goals yet.'}</div>`;
+      const R = 34, C = 2 * Math.PI * R;
+      host.innerHTML = `
+        <div class="pl-top"><div class="pl-hi"><small>${dObj.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</small>${gr}, ${plEsc(nm)} 👋</div><button class="pl-today-btn" onclick="plToday()">Today</button></div>
+        <div class="pl-ds" id="plStrip">${strip}</div>
+        <div class="pl-hero">
+          <div class="pl-hero-row">
+            <div class="pl-ring"><svg viewBox="0 0 80 80"><circle class="r0" cx="40" cy="40" r="${R}"/><circle class="r1" cx="40" cy="40" r="${R}" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - S.p / 100)).toFixed(1)}"/></svg><b>${S.p}%</b></div>
+            <div><div class="pl-hl">${label}'s goals</div><div class="pl-hb">${S.n} / ${S.t} <span>done</span></div><div class="pl-hm">${msg}</div></div>
+          </div>
+          <div class="pl-stats"><div class="pl-st"><b>🔥 ${plStreak()}</b><small>Day streak</small></div><div class="pl-st"><b>${week}</b><small>This week</small></div><div class="pl-st"><b>${total}</b><small>Total done</small></div></div>
+        </div>
+        <div class="pl-card">
+          <div class="pl-ch"><h3>Study Plan<small>${dObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</small></h3>
+            <div class="pl-seg">${[['all', 'All'], ['todo', 'Pending'], ['done', 'Done']].map(f => `<button class="${plFilter === f[0] ? 'on' : ''}" onclick="plFilterSet('${f[0]}')">${f[1]}</button>`).join('')}</div></div>
+          <div class="pl-quick"><input id="plQi" type="text" placeholder="Add a goal for this day…" autocomplete="off" onkeydown="if(event.key==='Enter')plQuick()"><button class="alt" onclick="plOpen()" aria-label="More options">⚙️</button><button onclick="plQuick()" aria-label="Add">＋</button></div>
+          ${rows || empty}
+          ${(plDay === td && od) ? `<button class="pl-carry" onclick="plCarry()">↪ Move ${od} missed goal${od > 1 ? 's' : ''} to today</button>` : ''}
+        </div>
+        <div class="pl-sec-title">Practice</div>`;
+      const ns = host.querySelector('.pl-ds');
+      if (plCenter) { const el = ns.querySelector('.on'); if (el) ns.scrollLeft = el.offsetLeft - ns.clientWidth / 2 + el.offsetWidth / 2; plCenter = false; } else ns.scrollLeft = sl;
+      const nq = host.querySelector('#plQi'); if (qv) nq.value = qv; if (qf) nq.focus();
+    }
+
+    function plDaySel(d) { plDay = d; plRender(); }
+    function plToday() { plDay = plIso(new Date()); plCenter = true; plRender(); }
+    function plFilterSet(f) { plFilter = f; plRender(); }
+    function plTog(id) {
+      const t = plTasks[id]; if (!t) return; t.done = t.done || {};
+      const was = plStat(plDay);
+      if (t.done[plDay]) { delete t.done[plDay]; plCache(); if (plUid) plRef(id).child('done/' + plDay).remove().catch(() => {}); }
+      else { t.done[plDay] = 1; plCache(); if (plUid) plRef(id).child('done/' + plDay).set(1).catch(() => {}); }
+      const now = plStat(plDay); plRender();
+      if (now.t && now.n === now.t && was.n < now.t) plToast('🎉 All goals done. Great job!');
+    }
+    function plQuick() {
+      const i = document.getElementById('plQi'), v = i.value.trim(); if (!v) return;
+      const t = { id: plNewId(), title: v, note: '', sub: 'oth', pri: 'm', rep: 'once', time: '', date: plDay, created: Date.now() };
+      plTasks[t.id] = t; plWrite(t); i.value = ''; plRender(); document.getElementById('plQi').focus();
+    }
+    function plCarry() {
+      const td = plIso(new Date());
+      Object.values(plTasks).filter(t => t.rep === 'once' && t.date < td && !plIsDone(t, t.date)).forEach(t => { t.date = td; plWrite(t); });
+      plDay = td; plRender(); plToast('Missed goals moved to today ↪');
+    }
+
+    // ---- add / edit sheet ----
+    function plChips() {
+      document.getElementById('plEx').innerHTML = plRep === 'every' ? `<span class="pl-lb">Repeat every how many days?</span><input class="pl-in" type="number" inputmode="numeric" min="2" max="365" value="${plEv}" oninput="plEv=+this.value||2">` : plRep === 'spaced' ? '<div class="pl-note">🧠 After the study date, this topic comes back for revision on day 1, 3, 7, 15, 30 and then every 30 days.</div>' : '';
+      document.getElementById('plSb').innerHTML = PL_SUBS.map(c => `<button class="${plSub === c[0] ? 'on' : ''}" onclick="plSub='${c[0]}';plChips()">${c[1]} ${c[2]}</button>`).join('');
+      document.getElementById('plPr').innerHTML = [['h', '🔴 High'], ['m', '🟣 Medium'], ['l', '🟢 Low']].map(c => `<button class="${plPri === c[0] ? 'on' : ''}" onclick="plPri='${c[0]}';plChips()">${c[1]}</button>`).join('');
+      document.getElementById('plRp').innerHTML = [['once', 'Once'], ['daily', '🔁 Daily'], ['weekly', '🔁 Weekly'], ['every', '📆 Every N days'], ['spaced', '🧠 Revision']].map(c => `<button class="${plRep === c[0] ? 'on' : ''}" onclick="plRep='${c[0]}';plChips()">${c[1]}</button>`).join('');
+    }
+    function plOpen(id) {
+      plEd = id || null; const t = id ? plTasks[id] : null;
+      plSub = t ? t.sub || 'oth' : 'hist'; plPri = t ? t.pri || 'm' : 'm'; plRep = t ? t.rep || 'once' : 'once'; plEv = t && t.ev ? t.ev : 5;
+      plAt = plDay;
+      const part = !!(t && t.rep !== 'once' && plDay > plEffS(t)), fd = new Date(plDay + 'T00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+      document.getElementById('plH').textContent = t ? 'Edit goal' : 'New goal';
+      document.getElementById('plT').value = t ? t.title : (document.getElementById('plQi') || {}).value || '';
+      document.getElementById('plN').value = t ? t.note || '' : '';
+      document.getElementById('plD').value = (t && !part) ? t.date : plDay; plDi = document.getElementById('plD').value;
+      document.getElementById('plTm').value = t ? t.time || '' : '';
+      const sc = document.getElementById('plSc'); sc.style.display = part ? 'block' : 'none';
+      sc.textContent = part ? 'ℹ️ Changes and delete apply only to ' + fd + ' and the days after it. Earlier days stay as they are.' : '';
+      const dl = document.getElementById('plDel'); dl.style.display = t ? 'block' : 'none'; dl.textContent = part ? '🗑️ Delete from ' + fd : '🗑️ Delete';
+      plChips();
+      document.getElementById('plSheet').classList.add('on'); pushScreen('plsheet');
+      if (!t) setTimeout(() => document.getElementById('plT').focus(), 150);
+    }
+    function plHideSheet() { document.getElementById('plSheet').classList.remove('on'); }
+    function plClose() { if (navStack[navStack.length - 1] === 'plsheet') history.back(); else plHideSheet(); }
+    function plSave() {
+      const title = document.getElementById('plT').value.trim(); if (!title) return plToast('Please write the goal first ✍️');
+      const o = plEd ? plTasks[plEd] || {} : {}, dv = document.getElementById('plD').value || plDay;
+      const split = !!(plEd && o.rep && o.rep !== 'once' && plAt > plEffS(o));
+      const id = (plEd && !split) ? plEd : plNewId();
+      const t = { id, title, note: document.getElementById('plN').value.trim(), sub: plSub, pri: plPri, rep: plRep, time: document.getElementById('plTm').value || '', date: dv, created: o.created || Date.now() };
+      if (plRep === 'every') t.ev = Math.max(2, Math.min(365, plEv || 5));
+      if (split) {
+        if (dv === plDi && plRep === o.rep) t.date = o.date;
+        t.from = plAt;
+        if (o.done) { const dn = {}; Object.keys(o.done).forEach(k => { if (k >= plAt) dn[k] = 1; }); if (Object.keys(dn).length) t.done = dn; }
+        o.end = plAdd(plAt, -1); plTasks[o.id].end = o.end; plCache(); if (plUid) plRef(o.id).child('end').set(o.end).catch(() => {});
+      } else { if (o.done) t.done = o.done; if (o.from) t.from = o.from; if (o.end) t.end = o.end; }
+      plTasks[id] = t; plWrite(t);
+      if (t.rep === 'once') plDay = t.date;
+      plClose(); plRender(); plToast(split ? 'Updated from this day onward ✓' : plEd ? 'Goal updated ✓' : 'Goal added 🎯');
+    }
+    function plDelete() {
+      const t = plTasks[plEd]; if (!t) return;
+      const part = t.rep !== 'once' && plAt > plEffS(t);
+      if (!confirm(part ? 'Delete this goal from this day onward? Earlier days will stay.' : 'Delete this goal?')) return;
+      if (part) { t.end = plAdd(plAt, -1); plCache(); if (plUid) plRef(t.id).child('end').set(t.end).catch(() => {}); }
+      else { delete plTasks[plEd]; plCache(); if (plUid) plRef(plEd).remove().catch(() => {}); }
+      plClose(); plRender(); plToast(part ? 'Removed from this day onward' : 'Goal deleted');
+    }
+    Object.assign(window, { plDaySel, plToday, plFilterSet, plTog, plQuick, plCarry, plOpen, plClose, plSave, plDelete, plChips, plOnHome, plAdd, plIso, plFor,
+      plSetSub: s => { plSub = s; }, });
+    Object.defineProperties(window, { plSub: { get: () => plSub, set: v => { plSub = v; } }, plPri: { get: () => plPri, set: v => { plPri = v; } }, plRep: { get: () => plRep, set: v => { plRep = v; } }, plEv: { get: () => plEv, set: v => { plEv = v; } } });
 
     }); // end DOMContentLoaded
   </script>
