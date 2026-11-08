@@ -503,6 +503,15 @@
     .plh-m { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
     .plh-m span { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: rgba(99,102,241,.1); color: var(--primary-color); }
     .plh-m span.sb { color: #1f2937; } .plh-m span.tm { background: rgba(245,158,11,.16); color: #b45309; }
+    .plh-k.g b { color: #10b981; }
+    .plh-ic.l { background: linear-gradient(135deg, #34d399, #059669); color: #fff; box-shadow: 0 4px 10px -2px rgba(16,185,129,.55); }
+    .plh-it.l .t { color: #8b8f9a; text-decoration: line-through; text-decoration-thickness: 1.5px; }
+    .plh-bt { display: inline-flex; align-items: center; justify-content: center; gap: 6px; margin-top: 11px; padding: 10px 16px; border: 0; border-radius: 14px; cursor: pointer; font: 600 13px 'Rubik',sans-serif; color: #fff; background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 10px 18px -10px rgba(5,150,105,.9); transition: transform .15s; -webkit-tap-highlight-color: transparent; }
+    .plh-bt:active { transform: scale(.95); }
+    .plh-lt { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; padding: 8px 8px 8px 12px; border-radius: 14px; background: rgba(16,185,129,.12); }
+    .plh-lt span { font-size: 12px; font-weight: 600; color: #047857; }
+    .plh-lt button { border: 0; background: rgba(255,255,255,.7); color: #6b7280; font: 600 11.5px 'Rubik',sans-serif; padding: 6px 12px; border-radius: 10px; cursor: pointer; }
+    [data-theme="dark"] .plh-lt span { color: #6ee7b7; } [data-theme="dark"] .plh-lt button { background: rgba(255,255,255,.1); color: #cbd5e1; }
     .plh-empty { text-align: center; padding: 56px 10px; color: #8b8f9a; font-size: 14px; line-height: 1.6; } .plh-empty i { display: block; font-style: normal; font-size: 42px; margin-bottom: 8px; }
     .plh-more { display: block; width: 100%; margin-top: 16px; padding: 14px; border: 0; border-radius: 18px; font: 600 13px 'Rubik',sans-serif; color: var(--primary-color); background: rgba(99,102,241,.1); cursor: pointer; }
     [data-theme="dark"] .plh-back, [data-theme="dark"] .plh-k, [data-theme="dark"] .plh-day { background: #1c2636; }
@@ -2489,6 +2498,12 @@
     function plHistOpen() { plHTab = 'all'; plHLimit = 60; plHistRender(); const e = document.getElementById('plHist'); e.classList.add('on'); pushScreen('plhist'); const b = e.querySelector('.plh-body'); if (b) b.scrollTop = 0; }
     function plHistHide() { document.getElementById('plHist').classList.remove('on'); }
     function plHistClose() { if (navStack[navStack.length - 1] === 'plhist') history.back(); else plHistHide(); }
+    function plLate(id, d) {
+      const t = plTasks[id]; if (!t) return; t.late = t.late || {};
+      if (t.late[d]) { delete t.late[d]; plCache(); if (plUid) plRef(id).child('late/' + d).remove().catch(() => {}); }
+      else { const v = Date.now(); t.late[d] = v; plCache(); if (plUid) plRef(id).child('late/' + d).set(v).catch(() => {}); plToast('✅ Marked complete (late)'); }
+      plHistRender(true);
+    }
     function plHistTab(t) { plHTab = t; plHLimit = 60; plHistRender(); }
     function plHistMore() { plHLimit += 60; plHistRender(true); }
     function plHistRender(keep) {
@@ -2513,26 +2528,29 @@
       let best = 0, run = 0;
       for (let d = from, i = 0; d <= td && i < 900; d = plAdd(d, 1), i++) { const q = plStat(d); if (q.t && q.n === q.t) { run++; if (run > best) best = run; } else if (d !== td) run = 0; }
       const cur = plStreak(); if (cur > best) best = cur;
-      const rate = sch ? Math.round(dn / sch * 100) : 0, avg = days.length ? (dn / days.length).toFixed(1) : '0';
+      const inc = plHTab === 'inc';
+      let iMiss = 0, iLate = 0, iPend = 0;
+      if (inc) days.forEach(x => x.items.forEach(i => { if (i.st === 'm') { iMiss++; if (i.t.late && i.t.late[i.d]) iLate++; } else if (i.st === 'p') iPend++; }));
+      const rate = inc ? (iMiss ? Math.round(iLate / iMiss * 100) : 0) : sch ? Math.round(dn / sch * 100) : 0, avg = days.length ? (dn / days.length).toFixed(1) : '0';
       const R = 40, C = 2 * Math.PI * R;
       const bars = Array.from({ length: 7 }, (_, i) => { const d = plAdd(td, i - 6), q = plStat(d), x = new Date(d + 'T00:00'); const c = !q.t ? '' : q.n === q.t ? 'g' : q.n ? 'y' : d < td ? 'r' : ''; return `<div class="plh-wd"><small>${x.toLocaleDateString('en-US', { weekday: 'short' }).slice(0, 3).toUpperCase()}</small><i class="${c} ${d === td ? 't' : ''}">${c === 'g' ? '✓' : c === 'r' ? '✕' : x.getDate()}</i></div>`; }).join('');
       const tabs = [['all', 'All Time'], ['30', '30 Days'], ['7', '7 Days'], ['inc', 'Incomplete']];
       const tl = { all: 'All time', 30: 'Last 30 days', 7: 'Last 7 days', inc: 'Incomplete goals' }[plHTab];
       // list
-      const shown = plHTab === 'inc' ? days.map(x => ({ d: x.d, items: x.items.filter(i => i.st !== 'd'), n: x.n })).filter(x => x.items.length) : days;
+      const shown = inc ? days.map(x => ({ d: x.d, items: x.items.filter(i => i.st !== 'd').map(i => (i.st === 'm' && i.t.late && i.t.late[i.d]) ? { ...i, st: 'l' } : i), n: x.n })).filter(x => x.items.length) : days;
       const PRs = { h: 0, m: 1, l: 2 };
       let cnt = 0, body = '', more = false;
       for (const x of shown) {
         if (cnt >= plHLimit) { more = true; break; }
         const o = new Date(x.d + 'T00:00'), lab = x.d === td ? 'Today' : x.d === plAdd(td, -1) ? 'Yesterday' : o.toLocaleDateString('en-US', { weekday: 'long' });
-        const tot = plFor(x.d).length, cls = x.n === tot ? 'g' : (x.d < td && x.n === 0) ? 'r' : '';
+        const tot = inc ? x.items.length : plFor(x.d).length, nn = inc ? x.items.filter(i => i.st === 'l').length : x.n, cls = nn === tot ? 'g' : (x.d < td && nn === 0) ? 'r' : '';
         const its = x.items.slice().sort((a, b) => ((a.t.time || '99:99').localeCompare(b.t.time || '99:99')) || ((PRs[a.t.pri] || 0) - (PRs[b.t.pri] || 0)));
-        body += `<div class="plh-day"><div class="plh-dh"><b>${lab}<em>${o.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: x.d.slice(0, 4) !== td.slice(0, 4) ? 'numeric' : undefined })}</em></b><span class="${cls}">${x.n}/${tot} done</span></div><div class="plh-pg"><i style="width:${tot ? Math.round(x.n / tot * 100) : 0}%"></i></div>`;
+        body += `<div class="plh-day"><div class="plh-dh"><b>${lab}<em>${o.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: x.d.slice(0, 4) !== td.slice(0, 4) ? 'numeric' : undefined })}</em></b><span class="${cls}">${nn}/${tot} ${inc ? 'recovered' : 'done'}</span></div><div class="plh-pg"><i style="width:${tot ? Math.round(nn / tot * 100) : 0}%"></i></div>`;
         body += its.map(i => {
           const t = i.t, c = PL_SUBS.find(z => z[0] === t.sub) || PL_SUBS[PL_SUBS.length - 1], rl = plRepLabel(t, i.d);
           const ttl = plEsc(t.title).split('\n').filter(z => z.trim()).map(z => { const m = z.match(/^\s*(\d+)[.)]\s*(.*)$/); return m ? `<div><span class="nb">${m[1]}</span>${m[2]}</div>` : `<div>${z}</div>`; }).join('');
-          const ic = i.st === 'd' ? '✓' : i.st === 'm' ? '✕' : '•';
-          return `<div class="plh-it ${i.st}"><div class="plh-ic ${i.st}">${ic}</div><div class="plh-tt"><div class="t">${ttl}</div><div class="plh-m">${t.sub && t.sub !== 'oth' ? `<span class="sb" style="background:${c[3]};--sbc:${c[3]}">${c[1]} ${c[2]}</span>` : ''}${t.time ? `<span class="tm">⏰ ${plFmtT(t.time)}</span>` : ''}${rl ? `<span>${rl}</span>` : ''}</div></div></div>`;
+          const ic = (i.st === 'd' || i.st === 'l') ? '✓' : i.st === 'm' ? '✕' : '•';
+          return `<div class="plh-it ${i.st}"><div class="plh-ic ${i.st === 'l' ? 'l' : i.st}">${ic}</div><div class="plh-tt"><div class="t">${ttl}</div><div class="plh-m">${t.sub && t.sub !== 'oth' ? `<span class="sb" style="background:${c[3]};--sbc:${c[3]}">${c[1]} ${c[2]}</span>` : ''}${t.time ? `<span class="tm">⏰ ${plFmtT(t.time)}</span>` : ''}${rl ? `<span>${rl}</span>` : ''}</div>${inc && i.st === 'm' ? `<button class="plh-bt" onclick="plLate('${t.id}','${i.d}')">✓ Mark as complete</button>` : ''}${inc && i.st === 'l' ? `<div class="plh-lt"><span>✅ Completed late · ${new Date(t.late[i.d] > 1 ? t.late[i.d] : Date.now()).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span><button onclick="plLate('${t.id}','${i.d}')">Undo</button></div>` : ''}</div></div>`;
         }).join('') + '</div>';
         cnt++;
       }
@@ -2542,10 +2560,10 @@
           <div class="plh-top"><div><h2>Study History</h2><small>${tl}</small></div></div>
           <div class="plh-hero">
             <div class="plh-hr"><div class="plh-ring"><svg viewBox="0 0 100 100"><circle class="a" cx="50" cy="50" r="${R}"/><circle class="b" cx="50" cy="50" r="${R}" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - rate / 100)).toFixed(1)}"/></svg><b>${rate}%</b></div>
-              <div><div class="plh-hl">Completion rate</div><div class="plh-hb">${dn} / ${sch} <span>goals</span></div><div class="plh-hs">${days.length} active day${days.length === 1 ? '' : 's'} · ${avg} done per day</div></div></div>
-            <div class="plh-wk">${bars}</div>
+              <div><div class="plh-hl">${inc ? 'Recovery rate' : 'Completion rate'}</div><div class="plh-hb">${inc ? iLate + ' / ' + iMiss : dn + ' / ' + sch} <span>${inc ? 'recovered' : 'goals'}</span></div><div class="plh-hs">${inc ? (iMiss - iLate) + ' still incomplete · ' + iPend + ' pending today' : days.length + ' active day' + (days.length === 1 ? '' : 's') + ' · ' + avg + ' done per day'}</div></div></div>
+            ${inc ? '' : `<div class="plh-wk">${bars}</div>`}
           </div>
-          <div class="plh-kp"><div class="plh-k o"><b>🔥 ${cur}</b><small>Streak</small></div><div class="plh-k y"><b>🏆 ${best}</b><small>Best</small></div><div class="plh-k r"><b>${ms}</b><small>Missed</small></div><div class="plh-k a"><b>${pd}</b><small>Pending</small></div></div>
+          ${inc ? `<div class="plh-kp"><div class="plh-k a"><b>${iMiss + iPend}</b><small>Incomplete</small></div><div class="plh-k g"><b>${iLate}</b><small>Done late</small></div><div class="plh-k r"><b>${iMiss - iLate}</b><small>Still missed</small></div><div class="plh-k y"><b>${iPend}</b><small>Today</small></div></div>` : `<div class="plh-kp"><div class="plh-k o"><b>🔥 ${cur}</b><small>Streak</small></div><div class="plh-k y"><b>🏆 ${best}</b><small>Best</small></div><div class="plh-k r"><b>${ms}</b><small>Missed</small></div><div class="plh-k a"><b>${pd}</b><small>Pending</small></div></div>`}
           <div class="plh-tabs">${tabs.map(f => `<button class="${plHTab === f[0] ? 'on' : ''}" onclick="plHistTab('${f[0]}')">${f[1]}</button>`).join('')}</div>
           ${body}
         </div></div>`;
@@ -2645,8 +2663,9 @@
         if (dv === plDi && same) t.date = o.date;
         t.from = plAt;
         if (o.done) { const dn = {}; Object.keys(o.done).forEach(k => { if (k >= plAt) dn[k] = 1; }); if (Object.keys(dn).length) t.done = dn; }
+        if (o.late) { const ln = {}; Object.keys(o.late).forEach(k => { if (k >= plAt) ln[k] = o.late[k]; }); if (Object.keys(ln).length) t.late = ln; }
         o.end = plAdd(plAt, -1); plTasks[o.id].end = o.end; plCache(); if (plUid) plRef(o.id).child('end').set(o.end).catch(() => {});
-      } else { if (o.done) t.done = o.done; if (o.from) t.from = o.from; if (o.end) t.end = o.end; }
+      } else { if (o.done) t.done = o.done; if (o.late) t.late = o.late; if (o.from) t.from = o.from; if (o.end) t.end = o.end; }
       plTasks[id] = t; plWrite(t);
       if (t.rep === 'once') plDay = t.date;
       plClose(); plRender(); plToast(split ? 'Updated from this day onward ✓' : plEd ? 'Goal updated ✓' : 'Goal added 🎯');
@@ -2659,7 +2678,7 @@
       else { delete plTasks[plEd]; plCache(); if (plUid) plRef(plEd).remove().catch(() => {}); }
       plClose(); plRender(); plToast(part ? 'Removed from this day onward' : 'Goal deleted');
     }
-    Object.assign(window, { plHistOpen, plHistClose, plHistTab, plHistMore, plDaySel, plToday, plFilterSet, plTog, plQuick, plCarry, plOpen, plClose, plSave, plDelete, plChips, plOnHome, plAdd, plIso, plFor, plAuto, plPrev, plPreset, plParseSeq, plCustomList,
+    Object.assign(window, { plLate, plHistOpen, plHistClose, plHistTab, plHistMore, plDaySel, plToday, plFilterSet, plTog, plQuick, plCarry, plOpen, plClose, plSave, plDelete, plChips, plOnHome, plAdd, plIso, plFor, plAuto, plPrev, plPreset, plParseSeq, plCustomList,
       plSetSub: s => { plSub = s; }, });
     Object.defineProperties(window, { plSub: { get: () => plSub, set: v => { plSub = v; } }, plPri: { get: () => plPri, set: v => { plPri = v; } }, plRep: { get: () => plRep, set: v => { plRep = v; } }, plEv: { get: () => plEv, set: v => { plEv = v; } } });
 
