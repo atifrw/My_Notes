@@ -2260,9 +2260,19 @@
       const parts = t.split(/[^0-9]+/).filter(Boolean).map(Number);
       if (!parts.length) return { err: 'Type at least one number' };
       if (parts.length > 60) return { err: 'Maximum 60 steps' };
-      if (parts.some(n => n < 1)) return { err: 'Each gap must be 1 day or more' };
-      if (parts.some(n => n > 3650)) return { err: 'Each gap can be at most 3650 days' };
-      return { seq: parts, loop };
+      if (parts[0] === 0) parts.shift();
+      if (!parts.length) return { err: 'Type at least one day number' };
+      let prev = 0; const gaps = [];
+      for (const n of parts) {
+        if (n <= prev) return { err: 'Day numbers must keep increasing' };
+        if (n - prev > 3650) return { err: 'Gap between days can be at most 3650' };
+        gaps.push(n - prev); prev = n;
+      }
+      return { seq: gaps, loop };
+    }
+    function plSeqTxt2(seq, loop) {
+      let c = 0; const o = (seq || []).map(g => (c += g));
+      return o.join('.') + (loop ? '..' : '');
     }
     function plOnDay(t, d) {
       if (d < t.date || (t.from && d < t.from) || (t.end && d > t.end)) return false;
@@ -2287,7 +2297,7 @@
       if (t.rep === 'daily') return '🔁 Daily';
       if (t.rep === 'weekly') return '🔁 Weekly';
       if (t.rep === 'every') return '📆 Every ' + (t.ev || 1) + ' days';
-      if (t.rep === 'custom') { const k = plDayK(t, d), p = (t.seq || []).join('.') + (t.loop ? '..' : ''); return '🔁 ' + p + (k ? ' · Day ' + k : ' · Start'); }
+      if (t.rep === 'custom') { const k = plDayK(t, d), p = plSeqTxt2(t.seq, t.loop); return '🔁 ' + p + (k ? ' · Day ' + k : ' · Start'); }
       if (t.rep === 'spaced') { const k = plDayK(t, d); return k === 0 ? '📖 New topic' : '🧠 Revision · Day ' + k; }
       return '';
     }
@@ -2403,7 +2413,7 @@
     function plChips() {
       const ex = document.getElementById('plEx');
       if (plRep === 'custom') {
-        ex.innerHTML = `<div class="pl-cu"><div class="pl-cu-h"><b>Pattern</b><small>Gaps in days, separated by dots. Two dots at the end = repeat the last gap forever.</small></div>
+        ex.innerHTML = `<div class="pl-cu"><div class="pl-cu-h"><b>Pattern</b><small>Day numbers counted from the start date (0 = start), separated by dots. Two dots at the end = keep repeating the last gap.</small></div>
           <textarea id="plSq" class="pl-in pl-sq" rows="1" inputmode="decimal" enterkeyhint="done" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Enter pattern" oninput="plPrev()" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}">${plEsc(plSeqTxt)}</textarea>
           <div class="pl-tl" id="plTl"></div></div>`;
       } else if (plRep === 'spaced') ex.innerHTML = '<div class="pl-note">🧠 After the study date, this topic comes back for revision on day 1, 3, 7, 15, 30 and then every 30 days.</div>';
@@ -2418,7 +2428,7 @@
       plSub = t ? t.sub || 'oth' : 'oth'; plPri = t ? t.pri || 'm' : 'm'; plRep = t ? t.rep || 'once' : 'once'; plEv = t && t.ev ? t.ev : 5;
       plSeqTxt = '';
       if (t && t.rep === 'every') { plRep = 'custom'; plSeqTxt = (t.ev || 1) + '..'; }
-      if (t && t.rep === 'custom') plSeqTxt = (t.seq || []).join('.') + (t.loop ? '..' : '');
+      if (t && t.rep === 'custom') plSeqTxt = plSeqTxt2(t.seq, t.loop);
       plAt = plDay;
       const part = !!(t && t.rep !== 'once' && plDay > plEffS(t)), fd = new Date(plDay + 'T00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
       document.getElementById('plH').textContent = t ? 'Edit goal' : 'New goal';
