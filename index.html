@@ -504,7 +504,10 @@
     .plh-m span { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: rgba(99,102,241,.1); color: var(--primary-color); }
     .plh-m span.sb { color: #1f2937; } .plh-m span.tm { background: rgba(245,158,11,.16); color: #b45309; }
     .plh-dh b { flex: none; } .plh-dh span { flex: none; }
-    .plh-lx { flex: 1; min-width: 0; text-align: center; text-decoration: none; font-size: 11px; font-weight: 600; color: #047857; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .plh-lx { flex: none; margin: 0 auto; text-decoration: none; font-size: 12px; font-weight: 600; color: #047857; white-space: nowrap; padding: 7px 14px; border-radius: 12px; background: rgba(16,185,129,.12); box-shadow: inset 0 0 0 1px rgba(16,185,129,.22); }
+    .plh-ls { display: none; align-items: center; margin-top: 8px; padding: 5px 10px; border-radius: 10px; font-size: 11.5px; font-weight: 600; color: #047857; background: rgba(16,185,129,.12); }
+    [data-theme="dark"] .plh-ls { color: #6ee7b7; }
+    @media (max-width: 599px) { .plh-lx { display: none; } .plh-ls { display: inline-flex; } }
     [data-theme="dark"] .plh-lx { color: #6ee7b7; }
     .plh-bt.un { color: #6b7280; background: rgba(99,102,241,.1); box-shadow: none; }
     [data-theme="dark"] .plh-bt.un { color: #cbd5e1; background: rgba(255,255,255,.1); }
@@ -2561,7 +2564,7 @@
           const t = i.t, c = PL_SUBS.find(z => z[0] === t.sub) || PL_SUBS[PL_SUBS.length - 1], rl = plRepLabel(t, i.d);
           const ttl = plEsc(t.title).split('\n').filter(z => z.trim()).map(z => { const m = z.match(/^\s*(\d+)[.)]\s*(.*)$/); return m ? `<div><span class="nb">${m[1]}</span>${m[2]}</div>` : `<div>${z}</div>`; }).join('');
           const ic = (i.st === 'd' || i.st === 'l') ? '✓' : i.st === 'm' ? '✕' : '•';
-          return `<div class="plh-it ${i.st}"><div class="plh-ic ${i.st === 'l' ? 'l' : i.st}">${ic}</div><div class="plh-tt"><div class="t">${ttl}</div><div class="plh-m">${t.sub && t.sub !== 'oth' ? `<span class="sb" style="background:${c[3]};--sbc:${c[3]}">${c[1]} ${c[2]}</span>` : ''}${t.time ? `<span class="tm">⏰ ${plFmtT(t.time)}</span>` : ''}${rl ? `<span>${rl}</span>` : ''}</div></div>${inc && i.st === 'm' ? `<button class="plh-bt" onclick="plLate('${t.id}','${i.d}')">✓ Complete</button>` : ''}${inc && i.st === 'l' ? `<button class="plh-bt un" onclick="plLate('${t.id}','${i.d}')">↺ Undo</button>` : ''}</div>`;
+          return `<div class="plh-it ${i.st}"><div class="plh-ic ${i.st === 'l' ? 'l' : i.st}">${ic}</div><div class="plh-tt"><div class="t">${ttl}</div><div class="plh-m">${t.sub && t.sub !== 'oth' ? `<span class="sb" style="background:${c[3]};--sbc:${c[3]}">${c[1]} ${c[2]}</span>` : ''}${t.time ? `<span class="tm">⏰ ${plFmtT(t.time)}</span>` : ''}${rl ? `<span>${rl}</span>` : ''}</div>${inc && i.st === 'l' ? `<div class="plh-ls">✅ Completed late · ${new Date(+t.late[i.d] > 1 ? +t.late[i.d] : Date.now()).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</div>` : ''}</div>${inc && i.st === 'm' ? `<button class="plh-bt" onclick="plLate('${t.id}','${i.d}')">✓ Complete</button>` : ''}${inc && i.st === 'l' ? `<button class="plh-bt un" onclick="plLate('${t.id}','${i.d}')">↺ Undo</button>` : ''}</div>`;
         }).join('') + '</div>';
         cnt++;
       }
