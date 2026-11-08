@@ -450,55 +450,62 @@
     #plannerArea .pl-hbtn:active { transform: scale(.94); }
     .pl-hbtn svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
     [data-theme="dark"] #plannerArea .pl-hbtn { background: rgba(129,140,248,.2); color: #c7d2fe; box-shadow: none; }
-    #plHist { position: fixed; inset: 0; z-index: 8500; display: none; flex-direction: column; background: var(--bg-color); color: var(--text-color); font-family: 'Rubik',sans-serif; }
-    #plHist.on { display: flex; animation: plhIn .28s cubic-bezier(.2,.8,.2,1); }
+    #plHist { position: fixed; inset: 0; z-index: 8500; display: none; background: var(--bg-color); color: var(--text-color); font-family: 'Rubik',sans-serif; }
+    #plHist.on { display: block; animation: plhIn .28s cubic-bezier(.2,.8,.2,1); }
     @keyframes plhIn { from { transform: translateX(32px); opacity: 0; } to { transform: none; opacity: 1; } }
-    .plh-top { flex: none; display: flex; align-items: center; gap: 12px; padding: calc(12px + env(safe-area-inset-top,0px)) 16px 12px; }
-    .plh-back { width: 42px; height: 42px; border: 0; border-radius: 14px; background: var(--card-bg); color: var(--text-color); box-shadow: 0 0 0 1px rgba(99,102,241,.14), 0 8px 18px -10px rgba(99,102,241,.5); display: grid; place-items: center; cursor: pointer; }
+    .plh-body { position: absolute; inset: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .plh-in { max-width: 640px; margin: 0 auto; padding: calc(14px + env(safe-area-inset-top,0px)) 16px calc(40px + env(safe-area-inset-bottom,0px)); }
+    .plh-top { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .plh-back { flex: none; width: 44px; height: 44px; border: 0; border-radius: 15px; background: var(--card-bg); color: var(--text-color); box-shadow: 0 0 0 1px rgba(99,102,241,.14), 0 8px 18px -10px rgba(99,102,241,.5); display: grid; place-items: center; cursor: pointer; }
     .plh-back svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2.4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-    .plh-top h2 { margin: 0; font-size: 21px; font-weight: 700; letter-spacing: -.3px; }
-    .plh-top small { display: block; font-size: 12px; color: #8b8f9a; font-weight: 500; margin-top: 1px; }
-    .plh-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 16px calc(28px + env(safe-area-inset-bottom,0px)); }
-    .plh-in { max-width: 680px; margin: 0 auto; }
-    .plh-hero { position: relative; overflow: hidden; border-radius: 26px; padding: 20px 18px 18px; color: #fff; background: linear-gradient(135deg, #6366f1 0%, #7c3aed 55%, #a21caf 100%); box-shadow: 0 22px 40px -22px rgba(109,40,217,.8); }
-    .plh-hero::after { content: ""; position: absolute; right: -50px; top: -60px; width: 190px; height: 190px; border-radius: 50%; background: rgba(255,255,255,.12); }
-    .plh-hr { position: relative; z-index: 1; display: flex; align-items: center; gap: 16px; }
-    .plh-ring { position: relative; flex: none; width: 92px; height: 92px; }
+    .plh-top h2 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -.3px; line-height: 1.15; }
+    .plh-top small { display: block; font-size: 12.5px; color: #8b8f9a; font-weight: 500; margin-top: 2px; }
+    .plh-hero { position: relative; overflow: hidden; border-radius: 28px; padding: 20px 18px 18px; color: #fff; background: linear-gradient(135deg, #6366f1 0%, #7c3aed 55%, #a21caf 100%); box-shadow: 0 24px 44px -24px rgba(109,40,217,.85); }
+    .plh-hero::after { content: ""; position: absolute; right: -60px; top: -70px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,.1); }
+    .plh-hr { position: relative; z-index: 1; display: flex; align-items: center; gap: 18px; }
+    .plh-ring { position: relative; flex: none; width: 88px; height: 88px; }
     .plh-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-    .plh-ring circle { fill: none; stroke-width: 9; stroke-linecap: round; }
-    .plh-ring .a { stroke: rgba(255,255,255,.22); } .plh-ring .b { stroke: #fff; transition: stroke-dashoffset .6s; }
-    .plh-ring b { position: absolute; inset: 0; display: grid; place-items: center; font-size: 22px; font-weight: 700; }
-    .plh-hl { font-size: 11px; font-weight: 600; letter-spacing: 1.3px; text-transform: uppercase; opacity: .85; }
-    .plh-hb { font-size: 30px; font-weight: 700; line-height: 1.15; margin-top: 3px; } .plh-hb span { font-size: 14px; font-weight: 500; opacity: .85; }
-    .plh-hs { font-size: 12.5px; opacity: .85; margin-top: 3px; }
-    .plh-grid { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 18px; }
-    .plh-st { background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.18); border-radius: 16px; padding: 10px 2px; text-align: center; }
-    .plh-st b { display: block; font-size: 17px; font-weight: 700; } .plh-st small { font-size: 10.5px; opacity: .85; }
-    .plh-bars { position: relative; z-index: 1; display: flex; align-items: flex-end; gap: 7px; height: 64px; margin-top: 16px; }
-    .plh-bar { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; height: 100%; justify-content: flex-end; }
-    .plh-bar i { display: block; width: 100%; max-width: 26px; min-height: 4px; border-radius: 8px; background: rgba(255,255,255,.28); } .plh-bar i.f { background: #fff; }
-    .plh-bar small { font-size: 10px; opacity: .8; }
-    .plh-tabs { position: sticky; top: 0; z-index: 5; display: flex; gap: 4px; margin: 16px 0 6px; padding: 4px; border-radius: 999px; background: rgba(99,102,241,.1); backdrop-filter: blur(10px); }
-    .plh-tabs button { flex: 1; border: 0; background: transparent; padding: 9px 4px; border-radius: 999px; font: 600 12.5px 'Rubik',sans-serif; color: #7c8194; cursor: pointer; transition: all .2s; white-space: nowrap; }
+    .plh-ring circle { fill: none; stroke-width: 10; stroke-linecap: round; }
+    .plh-ring .a { stroke: rgba(255,255,255,.2); } .plh-ring .b { stroke: #fff; }
+    .plh-ring b { position: absolute; inset: 0; display: grid; place-items: center; font-size: 21px; font-weight: 700; }
+    .plh-hl { font-size: 11px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; opacity: .8; }
+    .plh-hb { font-size: 32px; font-weight: 700; line-height: 1.1; margin-top: 4px; } .plh-hb span { font-size: 14px; font-weight: 500; opacity: .8; }
+    .plh-hs { font-size: 12.5px; opacity: .85; margin-top: 4px; }
+    .plh-wk { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.18); }
+    .plh-wd { display: flex; flex-direction: column; align-items: center; gap: 7px; font-size: 10.5px; font-weight: 600; opacity: .95; }
+    .plh-wd small { opacity: .75; font-size: 10.5px; letter-spacing: .4px; }
+    .plh-wd i { width: 100%; max-width: 38px; aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: 13px; font-weight: 700; background: rgba(255,255,255,.14); color: rgba(255,255,255,.8); }
+    .plh-wd i.g { background: #fff; color: #6d28d9; box-shadow: 0 6px 14px -4px rgba(0,0,0,.35); }
+    .plh-wd i.y { background: rgba(255,255,255,.34); color: #fff; } .plh-wd i.r { background: rgba(255,255,255,.14); color: #fecaca; }
+    .plh-wd i.t { box-shadow: 0 0 0 2px #fff; }
+    .plh-kp { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 12px; }
+    .plh-k { border-radius: 20px; padding: 12px 4px 11px; text-align: center; background: var(--card-bg); box-shadow: 0 0 0 1px rgba(99,102,241,.1), 0 12px 24px -18px rgba(99,102,241,.6); }
+    .plh-k b { display: block; font-size: 20px; font-weight: 700; line-height: 1.2; } .plh-k small { display: block; margin-top: 2px; font-size: 11px; color: #8b8f9a; font-weight: 500; }
+    .plh-k.o b { color: #f97316; } .plh-k.y b { color: #eab308; } .plh-k.r b { color: #ef4444; } .plh-k.a b { color: #f59e0b; }
+    .plh-tabs { position: sticky; top: 0; z-index: 5; display: flex; gap: 2px; margin: 18px 0 4px; padding: 4px; border-radius: 999px; background: rgba(99,102,241,.12); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+    .plh-tabs button { flex: 1 1 auto; border: 0; background: transparent; padding: 9px 6px; border-radius: 999px; font: 600 12.5px 'Rubik',sans-serif; color: #7c8194; cursor: pointer; transition: all .2s; white-space: nowrap; }
     .plh-tabs button.on { background: linear-gradient(135deg, #6366f1, #4f46e5); color: #fff; box-shadow: 0 6px 14px -4px rgba(79,70,229,.6); }
-    .plh-dh { display: flex; align-items: center; justify-content: space-between; margin: 20px 4px 8px; }
-    .plh-dh b { font-size: 14.5px; font-weight: 700; } .plh-dh b em { font-style: normal; font-weight: 500; color: #8b8f9a; font-size: 12px; margin-left: 6px; }
-    .plh-dh span { font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: rgba(245,158,11,.16); color: #b45309; }
+    .plh-day { margin-top: 14px; border-radius: 22px; overflow: hidden; background: var(--card-bg); box-shadow: 0 0 0 1px rgba(99,102,241,.1), 0 14px 26px -20px rgba(99,102,241,.6); }
+    .plh-dh { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 16px 12px; }
+    .plh-dh b { font-size: 15px; font-weight: 700; } .plh-dh b em { font-style: normal; font-weight: 500; color: #8b8f9a; font-size: 12px; margin-left: 7px; }
+    .plh-dh span { font-size: 11.5px; font-weight: 700; padding: 4px 11px; border-radius: 999px; background: rgba(245,158,11,.16); color: #b45309; white-space: nowrap; }
     .plh-dh span.g { background: rgba(16,185,129,.16); color: #047857; } .plh-dh span.r { background: rgba(239,68,68,.14); color: #b91c1c; }
-    .plh-it { display: flex; align-items: flex-start; gap: 12px; padding: 13px 14px; margin-top: 8px; border-radius: 18px; background: var(--card-bg); box-shadow: 0 0 0 1px rgba(99,102,241,.1), 0 10px 22px -16px rgba(99,102,241,.5); }
-    .plh-ic { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 800; margin-top: 1px; }
+    .plh-pg { height: 3px; margin: 0 16px; border-radius: 3px; background: rgba(99,102,241,.1); overflow: hidden; } .plh-pg i { display: block; height: 100%; border-radius: 3px; background: linear-gradient(90deg, #34d399, #10b981); }
+    .plh-it { display: flex; align-items: flex-start; gap: 12px; padding: 13px 16px; }
+    .plh-it + .plh-it { border-top: 1px solid rgba(99,102,241,.08); }
+    .plh-ic { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 800; margin-top: 1px; }
     .plh-ic.d { background: linear-gradient(135deg, #34d399, #059669); color: #fff; box-shadow: 0 4px 10px -2px rgba(16,185,129,.55); }
     .plh-ic.m { background: rgba(239,68,68,.14); color: #dc2626; } .plh-ic.p { background: rgba(245,158,11,.18); color: #d97706; }
     .plh-tt { flex: 1; min-width: 0; }
-    .plh-tt .t { font-size: 14.5px; font-weight: 600; line-height: 1.4; display: flex; flex-direction: column; gap: 4px; word-break: break-word; }
+    .plh-tt .t { font-size: 14.5px; font-weight: 600; line-height: 1.4; word-break: break-word; } .plh-tt .t div + div { margin-top: 3px; }
     .plh-it.d .t { color: #8b8f9a; }
     .plh-tt .t .nb { display: inline-block; min-width: 18px; padding: 0 5px; margin-right: 7px; border-radius: 6px; background: rgba(99,102,241,.14); color: var(--primary-color); font-size: 11px; font-weight: 700; text-align: center; }
-    .plh-m { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .plh-m { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
     .plh-m span { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: rgba(99,102,241,.1); color: var(--primary-color); }
     .plh-m span.sb { color: #1f2937; } .plh-m span.tm { background: rgba(245,158,11,.16); color: #b45309; }
-    .plh-empty { text-align: center; padding: 50px 10px; color: #8b8f9a; font-size: 14px; line-height: 1.6; } .plh-empty i { display: block; font-style: normal; font-size: 42px; margin-bottom: 8px; }
-    .plh-more { display: block; width: 100%; margin-top: 18px; padding: 13px; border: 0; border-radius: 16px; font: 600 13px 'Rubik',sans-serif; color: var(--primary-color); background: rgba(99,102,241,.1); cursor: pointer; }
-    [data-theme="dark"] .plh-back, [data-theme="dark"] .plh-it { background: #1c2636; }
+    .plh-empty { text-align: center; padding: 56px 10px; color: #8b8f9a; font-size: 14px; line-height: 1.6; } .plh-empty i { display: block; font-style: normal; font-size: 42px; margin-bottom: 8px; }
+    .plh-more { display: block; width: 100%; margin-top: 16px; padding: 14px; border: 0; border-radius: 18px; font: 600 13px 'Rubik',sans-serif; color: var(--primary-color); background: rgba(99,102,241,.1); cursor: pointer; }
+    [data-theme="dark"] .plh-back, [data-theme="dark"] .plh-k, [data-theme="dark"] .plh-day { background: #1c2636; }
     [data-theme="dark"] .plh-tabs, [data-theme="dark"] .plh-m span, [data-theme="dark"] .plh-more { background: rgba(129,140,248,.16); color: #c7d2fe; }
     [data-theme="dark"] .plh-m span.sb { background: var(--sbc) !important; color: #111827; } [data-theme="dark"] .plh-m span.tm { background: rgba(251,191,36,.18); color: #fcd34d; }
     [data-theme="dark"] .plh-dh span.g { color: #6ee7b7; } [data-theme="dark"] .plh-dh span.r { color: #fca5a5; }
@@ -2508,7 +2515,7 @@
       const cur = plStreak(); if (cur > best) best = cur;
       const rate = sch ? Math.round(dn / sch * 100) : 0, avg = days.length ? (dn / days.length).toFixed(1) : '0';
       const R = 40, C = 2 * Math.PI * R;
-      const bars = Array.from({ length: 7 }, (_, i) => { const d = plAdd(td, i - 6), q = plStat(d), x = new Date(d + 'T00:00'); return `<div class="plh-bar"><i class="${q.t && q.n === q.t ? 'f' : ''}" style="height:${q.t ? Math.max(8, q.p) : 4}%"></i><small>${x.toLocaleDateString('en-US', { weekday: 'narrow' })}</small></div>`; }).join('');
+      const bars = Array.from({ length: 7 }, (_, i) => { const d = plAdd(td, i - 6), q = plStat(d), x = new Date(d + 'T00:00'); const c = !q.t ? '' : q.n === q.t ? 'g' : q.n ? 'y' : d < td ? 'r' : ''; return `<div class="plh-wd"><small>${x.toLocaleDateString('en-US', { weekday: 'short' }).slice(0, 3).toUpperCase()}</small><i class="${c} ${d === td ? 't' : ''}">${c === 'g' ? '✓' : c === 'r' ? '✕' : x.getDate()}</i></div>`; }).join('');
       const tabs = [['all', 'All Time'], ['30', '30 Days'], ['7', '7 Days'], ['inc', 'Incomplete']];
       const tl = { all: 'All time', 30: 'Last 30 days', 7: 'Last 7 days', inc: 'Incomplete goals' }[plHTab];
       // list
@@ -2520,25 +2527,25 @@
         const o = new Date(x.d + 'T00:00'), lab = x.d === td ? 'Today' : x.d === plAdd(td, -1) ? 'Yesterday' : o.toLocaleDateString('en-US', { weekday: 'long' });
         const tot = plFor(x.d).length, cls = x.n === tot ? 'g' : (x.d < td && x.n === 0) ? 'r' : '';
         const its = x.items.slice().sort((a, b) => ((a.t.time || '99:99').localeCompare(b.t.time || '99:99')) || ((PRs[a.t.pri] || 0) - (PRs[b.t.pri] || 0)));
-        body += `<div class="plh-dh"><b>${lab}<em>${o.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: x.d.slice(0, 4) !== td.slice(0, 4) ? 'numeric' : undefined })}</em></b><span class="${cls}">${x.n}/${tot} done</span></div>`;
+        body += `<div class="plh-day"><div class="plh-dh"><b>${lab}<em>${o.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: x.d.slice(0, 4) !== td.slice(0, 4) ? 'numeric' : undefined })}</em></b><span class="${cls}">${x.n}/${tot} done</span></div><div class="plh-pg"><i style="width:${tot ? Math.round(x.n / tot * 100) : 0}%"></i></div>`;
         body += its.map(i => {
           const t = i.t, c = PL_SUBS.find(z => z[0] === t.sub) || PL_SUBS[PL_SUBS.length - 1], rl = plRepLabel(t, i.d);
           const ttl = plEsc(t.title).split('\n').filter(z => z.trim()).map(z => { const m = z.match(/^\s*(\d+)[.)]\s*(.*)$/); return m ? `<div><span class="nb">${m[1]}</span>${m[2]}</div>` : `<div>${z}</div>`; }).join('');
           const ic = i.st === 'd' ? '✓' : i.st === 'm' ? '✕' : '•';
           return `<div class="plh-it ${i.st}"><div class="plh-ic ${i.st}">${ic}</div><div class="plh-tt"><div class="t">${ttl}</div><div class="plh-m">${t.sub && t.sub !== 'oth' ? `<span class="sb" style="background:${c[3]};--sbc:${c[3]}">${c[1]} ${c[2]}</span>` : ''}${t.time ? `<span class="tm">⏰ ${plFmtT(t.time)}</span>` : ''}${rl ? `<span>${rl}</span>` : ''}</div></div></div>`;
-        }).join('');
+        }).join('') + '</div>';
         cnt++;
       }
       if (!body) body = `<div class="plh-empty"><i>${plHTab === 'inc' ? '🎉' : '🌱'}</i>${plHTab === 'inc' ? 'No incomplete goals. Great job!' : 'No history yet.<br>Your goals will appear here.'}</div>`;
       if (more) body += `<button class="plh-more" onclick="plHistMore()">Show older days</button>`;
-      el.innerHTML = `<div class="plh-top"><button class="plh-back" onclick="plHistClose()" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><div><h2>Study History</h2><small>${tl}</small></div></div>
-        <div class="plh-body"><div class="plh-in">
+      el.innerHTML = `<div class="plh-body"><div class="plh-in">
+          <div class="plh-top"><button class="plh-back" onclick="plHistClose()" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><div><h2>Study History</h2><small>${tl}</small></div></div>
           <div class="plh-hero">
             <div class="plh-hr"><div class="plh-ring"><svg viewBox="0 0 100 100"><circle class="a" cx="50" cy="50" r="${R}"/><circle class="b" cx="50" cy="50" r="${R}" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - rate / 100)).toFixed(1)}"/></svg><b>${rate}%</b></div>
               <div><div class="plh-hl">Completion rate</div><div class="plh-hb">${dn} / ${sch} <span>goals</span></div><div class="plh-hs">${days.length} active day${days.length === 1 ? '' : 's'} · ${avg} done per day</div></div></div>
-            <div class="plh-grid"><div class="plh-st"><b>🔥 ${cur}</b><small>Streak</small></div><div class="plh-st"><b>🏆 ${best}</b><small>Best</small></div><div class="plh-st"><b>${ms}</b><small>Missed</small></div><div class="plh-st"><b>${pd}</b><small>Pending</small></div></div>
-            <div class="plh-bars">${bars}</div>
+            <div class="plh-wk">${bars}</div>
           </div>
+          <div class="plh-kp"><div class="plh-k o"><b>🔥 ${cur}</b><small>Streak</small></div><div class="plh-k y"><b>🏆 ${best}</b><small>Best</small></div><div class="plh-k r"><b>${ms}</b><small>Missed</small></div><div class="plh-k a"><b>${pd}</b><small>Pending</small></div></div>
           <div class="plh-tabs">${tabs.map(f => `<button class="${plHTab === f[0] ? 'on' : ''}" onclick="plHistTab('${f[0]}')">${f[1]}</button>`).join('')}</div>
           ${body}
         </div></div>`;
