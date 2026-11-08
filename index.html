@@ -390,9 +390,9 @@
     .pl-task.dn .pl-ck { background: linear-gradient(135deg, #34d399, #10b981); border-color: transparent; box-shadow: 0 4px 10px rgba(16,185,129,.35); }
     .pl-task.dn .pl-ck svg { opacity: 1; transform: none; }
     .pl-tb { flex: 1; min-width: 0; cursor: pointer; }
-    .pl-t1 { font-size: 15px; font-weight: 500; line-height: 1.3; word-break: break-word; }
+    .pl-t1 { white-space: pre-line; font-size: 15px; font-weight: 500; line-height: 1.3; word-break: break-word; }
     .pl-task.dn .pl-t1 { text-decoration: line-through; color: #8b8f9a; }
-    .pl-t3 { font-size: 12.5px; color: #8b8f9a; margin-top: 2px; line-height: 1.35; }
+    .pl-t3 { white-space: pre-line; font-size: 12.5px; color: #8b8f9a; margin-top: 2px; line-height: 1.35; }
     .pl-t2 { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
     .pl-t2 span { font-size: 11.5px; font-weight: 500; padding: 3px 9px; border-radius: 999px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); }
     .pl-t2 span.sb { color: #1f2937; border-color: transparent; }
@@ -407,7 +407,7 @@
     #plSheet.on { display: flex; animation: plFade .2s; }
     @keyframes plFade { from { opacity: 0; } to { opacity: 1; } }
     @keyframes plUp { from { transform: translateY(40px); } to { transform: none; } }
-    #plSheet .pl-sh { width: 100%; max-width: 560px; margin: 0 auto; background: var(--card-bg); color: var(--text-color); border-radius: 26px 26px 0 0; padding: 8px 18px calc(18px + env(safe-area-inset-bottom,0px)); max-height: 100%; overflow-y: auto; overscroll-behavior: contain; animation: plUp .28s ease; box-shadow: 0 -12px 40px rgba(0,0,0,.28); box-sizing: border-box; }
+    #plSheet .pl-sh { width: 100%; max-width: 680px; margin: 0 auto; background: var(--card-bg); color: var(--text-color); border-radius: 26px 26px 0 0; padding: 8px 18px calc(18px + env(safe-area-inset-bottom,0px)); max-height: 100%; overflow-y: auto; overscroll-behavior: contain; animation: plUp .28s ease; box-shadow: 0 -12px 40px rgba(0,0,0,.28); box-sizing: border-box; }
     #plSheet .pl-gr { width: 42px; height: 5px; border-radius: 3px; background: var(--border-color); margin: 4px auto 10px; }
     #plSheet .pl-sh-h { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
     #plSheet .pl-sh-h b { font-size: 18px; font-weight: 600; }
@@ -437,37 +437,55 @@
     #plSheet .pl-lb { display: flex; align-items: baseline; gap: 8px; margin: 16px 2px 8px; }
     #plSheet .pl-lb em { font-style: normal; font-weight: 500; letter-spacing: 0; text-transform: none; font-size: 11px; opacity: .7; }
     #plSheet .pl-in { border-radius: 16px; border-width: 1.5px; padding: 13px 15px; }
-    #plSheet .pl-one { height: 50px; resize: none; overflow: hidden; line-height: 22px; font-weight: 500; font-size: 16px; }
+    #plSheet .pl-one { min-height: 52px; resize: none; overflow-y: auto; line-height: 22px; font-weight: 500; font-size: 16px; white-space: pre-wrap; }
+    #plSheet .pl-nt { min-height: 78px; line-height: 21px; overflow-y: auto; }
     #plSheet textarea.pl-in { resize: none; font-family: 'Rubik',sans-serif; }
     #plSheet .pl-in:focus { border-color: var(--primary-color); box-shadow: 0 0 0 4px rgba(99,102,241,.14); }
     #plSheet .pl-rp { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; padding: 4px; background: var(--btn-bg); border: 1px solid var(--border-color); border-radius: 16px; }
     #plSheet .pl-rp button { border: 0; background: transparent; color: #8b8f9a; padding: 11px 2px; border-radius: 12px; font: 500 13px 'Rubik',sans-serif; cursor: pointer; white-space: nowrap; min-width: 0; transition: all .18s; }
     #plSheet .pl-rp button.on { background: var(--card-bg); color: var(--primary-color); font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,.14), inset 0 0 0 1.5px var(--primary-color); }
-    #plSheet .pl-date { height: 50px; }
+    #plSheet .pl-fld { display: block; }
+    #plSheet .pl-card { margin-top: 18px; padding: 4px 14px 14px; border-radius: 22px; background: linear-gradient(180deg, rgba(99,102,241,.06), rgba(99,102,241,.02)); border: 1px solid var(--border-color); }
+    #plSheet .pl-card > .pl-lb { margin-top: 12px; }
+    #plSheet .pl-card .pl-rp { background: var(--card-bg); }
+    #plSheet .pl-dr { display: flex; align-items: center; gap: 12px; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border-color); }
+    #plSheet .pl-dic { flex: none; width: 40px; height: 40px; border-radius: 13px; display: flex; align-items: center; justify-content: center; font-size: 19px; background: var(--card-bg); border: 1px solid var(--border-color); box-shadow: 0 3px 8px rgba(0,0,0,.06); }
+    #plSheet .pl-dt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+    #plSheet .pl-dt b { font-size: 14px; font-weight: 600; }
+    #plSheet .pl-dt small { font-size: 12px; color: #8b8f9a; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #plSheet .pl-in.pl-date { flex: none; width: auto; height: 44px; padding: 0 12px; border-radius: 14px; font-size: 14.5px; }
+    #plSheet .pl-cu { margin-top: 12px; }
+    #plSheet .pl-cu-h { display: flex; flex-direction: column; gap: 2px; margin: 0 2px 8px; }
+    #plSheet .pl-cu-h b { font-size: 13px; font-weight: 600; }
+    #plSheet .pl-cu-h small { font-size: 12px; line-height: 1.4; color: #8b8f9a; }
+    #plSheet .pl-sq { min-height: 52px !important; height: 52px; line-height: 24px; text-align: center; font-size: 20px !important; font-weight: 600; letter-spacing: .14em; overflow: hidden; white-space: nowrap; background: var(--card-bg); }
+    #plSheet .pl-sq::placeholder { font-size: 13px; font-weight: 400; letter-spacing: .02em; }
+    #plSheet .pl-pre { display: grid; gap: 6px; margin-top: 10px; }
+    #plSheet .pl-pre button { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 8px 10px; border-radius: 14px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); font-family: 'Rubik',sans-serif; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    #plSheet .pl-pre button code { flex: none; min-width: 78px; text-align: center; padding: 5px 8px; border-radius: 10px; font: 600 13.5px ui-monospace, Menlo, monospace; letter-spacing: .06em; background: #eef2ff; color: #4338ca; }
+    [data-theme="dark"] #plSheet .pl-pre button code { background: #1e1b4b; color: #c7d2fe; }
+    #plSheet .pl-pre button span { font-size: 12.5px; color: #8b8f9a; line-height: 1.3; }
+    #plSheet .pl-pre button.on { border-color: var(--primary-color); box-shadow: inset 0 0 0 1px var(--primary-color); }
+    #plSheet .pl-pre button.on code { background: var(--primary-color); color: #fff; }
+    #plSheet .pl-tl { margin-top: 12px; }
+    #plSheet .pl-tlh { margin: 0 2px 7px; font-size: 10.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #8b8f9a; }
+    #plSheet .pl-tlr { display: flex; flex-wrap: wrap; gap: 6px; }
+    #plSheet .pl-tlr span { display: flex; flex-direction: column; align-items: center; min-width: 54px; padding: 6px 9px; border-radius: 12px; background: var(--card-bg); border: 1px solid var(--border-color); line-height: 1.2; }
+    #plSheet .pl-tlr span b { font-size: 12px; font-weight: 600; }
+    #plSheet .pl-tlr span small { font-size: 11px; color: #8b8f9a; }
+    #plSheet .pl-tlr span.s { background: linear-gradient(135deg, #6366f1, #7c3aed); border-color: transparent; color: #fff; box-shadow: 0 5px 12px rgba(99,102,241,.3); }
+    #plSheet .pl-tlr span.s small { color: rgba(255,255,255,.8); }
+    #plSheet .pl-tlr span.e { border-style: dashed; background: transparent; }
+    #plSheet .pl-er { margin-top: 10px; padding: 9px 12px; border-radius: 12px; font-size: 12.5px; background: #fef2f2; color: #b91c1c; }
+    [data-theme="dark"] #plSheet .pl-er { background: #3b1219; color: #fca5a5; }
+    #plSheet .pl-tip { margin-top: 8px; font-size: 12px; line-height: 1.4; color: #8b8f9a; }
+    #plSheet .pl-tip b { color: var(--primary-color); }
     #plSheet .pl-acts { margin-top: 22px; }
     #plSheet .pl-acts button { border-radius: 16px; padding: 15px; }
     #plSheet .pl-save { background: linear-gradient(135deg, #6366f1, #7c3aed); box-shadow: 0 10px 22px rgba(99,102,241,.38); letter-spacing: .01em; }
     #plToast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px); background: #1f2937; color: #fff; padding: 10px 18px; border-radius: 999px; font-size: 13px; opacity: 0; pointer-events: none; transition: all .25s; z-index: 9500; max-width: 88vw; text-align: center; }
     #plToast.on { opacity: 1; transform: translateX(-50%); }
-  
-    #plSheet .pl-sh { max-width: 680px; }
-    #plSheet .pl-one { height: auto; min-height: 50px; max-height: 160px; overflow-y: auto; white-space: pre-wrap; }
-    #plSheet .pl-sched { margin-top: 16px; padding: 14px; border-radius: 20px; background: rgba(99,102,241,.05); border: 1px solid var(--border-color); }
-    #plSheet .pl-sched .pl-in { background: var(--card-bg); }
-    #plSheet .pl-sub { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 2px; }
-    #plSheet .pl-sub button { border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); padding: 7px 12px; border-radius: 20px; font: 500 12.5px 'Rubik',sans-serif; cursor: pointer; }
-    #plSheet .pl-sub button.on { background: var(--primary-color); border-color: var(--primary-color); color: #fff; }
-    #plSheet .pl-ad { display: flex; gap: 8px; align-items: center; }
-    #plSheet .pl-ad .pl-in { flex: 1; min-width: 0; height: 46px; }
-    #plSheet .pl-ad button { flex: none; height: 46px; padding: 0 16px; border: 0; border-radius: 14px; background: var(--primary-color); color: #fff; font: 600 14px 'Rubik',sans-serif; cursor: pointer; }
-    #plSheet .pl-tg { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0 0; }
-    #plSheet .pl-tg span { display: inline-flex; align-items: center; gap: 6px; padding: 6px 6px 6px 12px; border-radius: 20px; background: var(--card-bg); border: 1px solid var(--border-color); font-size: 13px; font-weight: 500; }
-    #plSheet .pl-tg i { font-style: normal; width: 20px; height: 20px; border-radius: 50%; background: var(--btn-bg); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; cursor: pointer; }
-    #plSheet .pl-pv { margin-top: 12px; font-size: 12.5px; line-height: 1.5; color: #8b8f9a; }
-    #plSheet .pl-pv b { color: var(--primary-color); font-weight: 600; }
-    #plSheet .pl-hint { margin: 10px 2px 0; font-size: 12.5px; color: #8b8f9a; line-height: 1.45; }
-    .pl-t1 { white-space: pre-wrap; }
-</style>
+  </style>
 </head>
 <body>
 
@@ -696,18 +714,25 @@
   <div id="plSheet" onclick="if(event.target===this)plClose()">
     <div class="pl-sh">
       <div class="pl-gr"></div>
-      <div class="pl-sh-h"><div class="pl-ic">🎯</div><div class="pl-ht"><b id="plH">New goal</b><small id="plHs"></small></div><button class="pl-x" onclick="plClose()" aria-label="Close">✕</button></div>
+      <div class="pl-sh-h"><div class="pl-ic" id="plIc">🎯</div><div class="pl-ht"><b id="plH">New goal</b><small id="plHs"></small></div><button class="pl-x" onclick="plClose()" aria-label="Close">✕</button></div>
       <div class="pl-note" id="plSc" style="display:none"></div>
-      <span class="pl-lb">Goal</span>
-      <textarea id="plT" class="pl-in pl-one" rows="1" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="What do you want to study?" oninput="plGrow(this)"></textarea>
-      <span class="pl-lb">Note <em>(optional)</em></span>
-      <textarea id="plN" class="pl-in" rows="2" autocomplete="off" spellcheck="false" placeholder="Chapter, page, topic..."></textarea>
-      <div class="pl-sched">
-        <span class="pl-lb" style="margin-top:0">Repeat</span>
-        <div class="pl-rp" id="plRp"></div><div id="plEx"></div>
-        <span class="pl-lb" id="plDl">Date</span>
-        <input id="plD" class="pl-in pl-date" type="date" onchange="plPrev()">
-        <div id="plPv" class="pl-pv"></div>
+      <div class="pl-fld">
+        <span class="pl-lb">Goal</span>
+        <textarea id="plT" class="pl-in pl-one" rows="1" enterkeyhint="enter" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="What do you want to study?" oninput="plAuto(this)"></textarea>
+      </div>
+      <div class="pl-fld">
+        <span class="pl-lb">Note <em>(optional)</em></span>
+        <textarea id="plN" class="pl-in pl-nt" rows="2" enterkeyhint="enter" autocomplete="off" spellcheck="false" placeholder="Chapter, page, topic..." oninput="plAuto(this)"></textarea>
+      </div>
+      <div class="pl-card">
+        <span class="pl-lb">Repeat</span>
+        <div class="pl-rp" id="plRp"></div>
+        <div id="plEx"></div>
+        <div class="pl-dr">
+          <div class="pl-dic">📅</div>
+          <div class="pl-dt"><b>Start date</b><small id="plDs"></small></div>
+          <input id="plD" class="pl-in pl-date" type="date" oninput="plPrev()" onchange="plPrev()">
+        </div>
       </div>
       <div class="pl-acts"><button class="pl-del" id="plDel" onclick="plDelete()">Delete</button><button class="pl-save" onclick="plSave()">Save goal</button></div>
     </div>
@@ -2211,15 +2236,42 @@
 
     const plDayK = (t, d) => Math.round((new Date(d + 'T00:00') - new Date(t.date + 'T00:00')) / 864e5);
     const plEffS = t => (t.from && t.from > t.date) ? t.from : t.date;
+    // Custom pattern = list of day-gaps. 1.3.7 -> day 1, 4, 11 then end. 1.3.7.7.. -> 1, 4, 11, 18, 25... (last gap repeats forever)
+    function plCustomOn(t, k) {
+      if (k === 0) return true;
+      const q = t.seq || []; if (!q.length) return false;
+      let c = 0;
+      for (let i = 0; i < q.length; i++) { c += q[i]; if (c === k) return true; if (c > k) return false; }
+      if (t.loop) { const g = q[q.length - 1]; return k > c && (k - c) % g === 0; }
+      return false;
+    }
+    function plCustomList(q, loop, n) {
+      const out = [0]; let c = 0;
+      for (let i = 0; i < q.length && out.length < n; i++) { c += q[i]; out.push(c); }
+      let more = q.length + 1 > n;
+      if (loop) { const g = q[q.length - 1]; while (out.length < n) { c += g; out.push(c); } more = true; }
+      return { list: out, more };
+    }
+    function plParseSeq(txt) {
+      let t = String(txt || '').trim().replace(/\u2026/g, '..');
+      if (!t) return { err: 'Type a pattern, e.g. 5.. or 1.3.7' };
+      if (/[^0-9.,;\s-]/.test(t)) return { err: 'Use only numbers and dots, e.g. 1.3.7.7..' };
+      const loop = /\.\.\s*$/.test(t);
+      const parts = t.split(/[^0-9]+/).filter(Boolean).map(Number);
+      if (!parts.length) return { err: 'Type at least one number, e.g. 5..' };
+      if (parts.length > 20) return { err: 'Maximum 20 steps' };
+      if (parts.some(n => n < 1)) return { err: 'Each gap must be 1 day or more' };
+      if (parts.some(n => n > 365)) return { err: 'Each gap can be at most 365 days' };
+      return { seq: parts, loop };
+    }
     function plOnDay(t, d) {
       if (d < t.date || (t.from && d < t.from) || (t.end && d > t.end)) return false;
       const k = plDayK(t, d);
       if (t.rep === 'daily') return true;
       if (t.rep === 'weekly') return k % 7 === 0;
       if (t.rep === 'every') return k % Math.max(1, t.ev || 1) === 0;
-      if (t.rep === 'after') return k === 0 || (t.iv || []).includes(k);
-      if (t.rep === 'pick') return (t.dl || []).includes(d);
-      if (t.rep === 'spaced') return t.iv ? (k === 0 || t.iv.includes(k)) : (k === 0 || PL_SPACED.includes(k) || (k > 30 && k % 30 === 0));
+      if (t.rep === 'custom') return plCustomOn(t, k);
+      if (t.rep === 'spaced') return k === 0 || PL_SPACED.includes(k) || (k > 30 && k % 30 === 0);
       return t.date === d;
     }
     const plFor = d => Object.values(plTasks).filter(t => plOnDay(t, d));
@@ -2235,8 +2287,7 @@
       if (t.rep === 'daily') return '🔁 Daily';
       if (t.rep === 'weekly') return '🔁 Weekly';
       if (t.rep === 'every') return '📆 Every ' + (t.ev || 1) + ' days';
-      if (t.rep === 'after') { const k = plDayK(t, d); return k === 0 ? '📖 Start' : '⏳ After ' + k + ' days'; }
-      if (t.rep === 'pick') return '📅 Picked dates';
+      if (t.rep === 'custom') { const k = plDayK(t, d), p = (t.seq || []).join('.') + (t.loop ? '..' : ''); return '🔁 ' + p + (k ? ' · Day ' + k : ' · Start'); }
       if (t.rep === 'spaced') { const k = plDayK(t, d); return k === 0 ? '📖 New topic' : '🧠 Revision · Day ' + k; }
       return '';
     }
@@ -2333,62 +2384,48 @@
     }
 
     // ---- add / edit sheet ----
-    let plIv = [1, 3, 7, 15, 30], plDls = [];
-    const plCust = r => ['every', 'after', 'pick', 'spaced'].includes(r);
-    function plGrow(e) { e = e || document.getElementById('plT'); e.style.height = 'auto'; e.style.height = Math.min(e.scrollHeight + 2, 160) + 'px'; }
-    function plSetRep(r) { plRep = r === 'custom' ? (plCust(plRep) ? plRep : 'every') : r; if (plRep === 'spaced' && !plIv.length) plIv = [1, 3, 7, 15, 30]; plChips(); }
-    function plSetIvs(a) { plIv = a.slice(); plChips(); }
-    function plAddIv() { const e = document.getElementById('plIn'); const n = Math.round(+e.value); if (n >= 1 && n <= 365 && !plIv.includes(n)) { plIv.push(n); plIv.sort((x, y) => x - y); } plChips(); }
-    function plDelIv(n) { plIv = plIv.filter(x => x !== n); plChips(); }
-    function plAddDl() { const e = document.getElementById('plPk'); if (e.value && !plDls.includes(e.value)) { plDls.push(e.value); plDls.sort(); } plChips(); }
-    function plDelDl(d) { plDls = plDls.filter(x => x !== d); plChips(); }
-    const plFd = d => new Date(d + 'T00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-    function plTmp() {
-      const dv = document.getElementById('plD').value || plDay;
-      const t = { rep: plRep, date: dv };
-      if (plRep === 'every') t.ev = Math.max(2, Math.min(365, plEv || 5));
-      if (plRep === 'after' || plRep === 'spaced') t.iv = plIv;
-      if (plRep === 'pick') { t.dl = plDls; t.date = plDls[0] || dv; }
-      return t;
-    }
+    let plSeqTxt = '';
+    function plAuto(el) { if (!el) return; el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight + 3, Math.round(window.innerHeight * 0.32)) + 'px'; }
+    function plPreset(v) { const el = document.getElementById('plSq'); if (!el) return; el.value = v; plPrev(); }
     function plPrev() {
-      const e = document.getElementById('plPv'); if (!e) return;
-      if (plRep === 'once') { e.innerHTML = ''; return; }
-      const t = plTmp(), out = []; let d = t.date;
-      for (let i = 0; i < 400 && out.length < 6; i++, d = plAdd(d, 1)) if (plOnDay(t, d)) out.push(plFd(d));
-      e.innerHTML = out.length ? 'Next: <b>' + out.join(' · ') + '</b>' : (plRep === 'pick' ? 'Pick at least one date.' : '');
+      const ds = document.getElementById('plDs'), dv = document.getElementById('plD').value || plDay;
+      if (ds) ds.textContent = new Date(dv + 'T00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' });
+      const el = document.getElementById('plSq'), tl = document.getElementById('plTl'); if (!el || !tl) return;
+      plSeqTxt = el.value;
+      document.querySelectorAll('#plPre button').forEach(b => b.classList.toggle('on', b.dataset.v === el.value.trim()));
+      const p = plParseSeq(plSeqTxt);
+      if (p.err) { tl.innerHTML = `<div class="pl-er">${p.err}</div>`; return; }
+      const r = plCustomList(p.seq, p.loop, 6);
+      const chips = r.list.map((k, i) => { const x = new Date(plAdd(dv, k) + 'T00:00'); return `<span class="${i ? '' : 's'}"><b>${i ? 'Day ' + k : 'Start'}</b><small>${x.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</small></span>`; }).join('');
+      const end = p.loop ? '<span class="e"><b>∞</b><small>repeats</small></span>' : (r.more ? '<span class="e"><b>…</b><small>then ends</small></span>' : '<span class="e"><b>End</b><small>last step</small></span>');
+      tl.innerHTML = `<div class="pl-tlh">Preview</div><div class="pl-tlr">${chips}${end}</div>` + ((p.seq.length === 1 && !p.loop) ? `<div class="pl-tip">💡 Add two dots to repeat forever: <b>${p.seq[0]}..</b> = every ${p.seq[0]} day${p.seq[0] > 1 ? 's' : ''}.</div>` : '');
     }
     function plChips() {
-      const top = [['once', 'Once'], ['daily', 'Daily'], ['weekly', 'Weekly'], ['custom', 'Custom']], cu = plCust(plRep);
-      document.getElementById('plRp').innerHTML = top.map(c => `<button class="${(c[0] === 'custom' ? cu : plRep === c[0]) ? 'on' : ''}" onclick="plSetRep('${c[0]}')">${c[1]}</button>`).join('');
-      let h = '';
-      if (cu) {
-        const sm = [['every', 'Every N days'], ['after', 'After days'], ['pick', 'Pick dates'], ['spaced', 'Revision']];
-        h += '<div class="pl-sub">' + sm.map(c => `<button class="${plRep === c[0] ? 'on' : ''}" onclick="plSetRep2('${c[0]}')">${c[1]}</button>`).join('') + '</div>';
-        if (plRep === 'every') h += `<span class="pl-lb">Repeat every (days)</span><input class="pl-in" type="number" inputmode="numeric" min="2" max="365" value="${plEv}" oninput="plEv=+this.value||2;plPrev()">`;
-        else if (plRep === 'after' || plRep === 'spaced') {
-          h += `<span class="pl-lb">${plRep === 'spaced' ? 'Revision days' : 'Repeat after (days)'}</span><div class="pl-ad"><input id="plIn" class="pl-in" type="number" inputmode="numeric" min="1" max="365" placeholder="e.g. 2" onkeydown="if(event.key==='Enter'){event.preventDefault();plAddIv()}"><button onclick="plAddIv()">Add</button></div>`;
-          h += '<div class="pl-tg">' + plIv.map(n => `<span>Day ${n}<i onclick="plDelIv(${n})">✕</i></span>`).join('') + '</div>';
-          h += `<div class="pl-sub"><button onclick="plSetIvs([2,5])">2 &amp; 5</button><button onclick="plSetIvs([1,3,7])">1·3·7</button><button onclick="plSetIvs([1,3,7,15,30])">1·3·7·15·30</button></div>`;
-          h += '<div class="pl-hint">The goal shows on the start date and again after each day count.</div>';
-        } else if (plRep === 'pick') {
-          h += `<span class="pl-lb">Pick dates</span><div class="pl-ad"><input id="plPk" class="pl-in" type="date" value="${plDls[plDls.length - 1] ? plAdd(plDls[plDls.length - 1], 1) : plDay}"><button onclick="plAddDl()">Add</button></div>`;
-          h += '<div class="pl-tg">' + plDls.map(d => `<span>${plFd(d)}<i onclick="plDelDl('${d}')">✕</i></span>`).join('') + '</div>';
-        }
-      }
-      document.getElementById('plEx').innerHTML = h;
-      document.getElementById('plDl').textContent = plRep === 'pick' ? 'Dates' : plRep === 'once' ? 'Date' : 'Start date';
-      document.getElementById('plD').style.display = document.getElementById('plDl').style.display = plRep === 'pick' ? 'none' : '';
+      const ex = document.getElementById('plEx');
+      if (plRep === 'custom') {
+        const pre = [['5..', 'Every 5 days, forever'], ['1.3.7', 'After 1, 3 and 7 days, then stop'], ['1.3.7.7..', 'After 1, 3, 7 days, then every 7 days']];
+        ex.innerHTML = `<div class="pl-cu"><div class="pl-cu-h"><b>Pattern</b><small>Gaps in days, separated by dots. Two dots at the end = repeat the last gap forever.</small></div>
+          <textarea id="plSq" class="pl-in pl-sq" rows="1" inputmode="decimal" enterkeyhint="done" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="5..   or   1.3.7   or   1.3.7.7.." oninput="plPrev()" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}">${plEsc(plSeqTxt)}</textarea>
+          <div class="pl-pre" id="plPre">${pre.map(c => `<button data-v="${c[0]}" onclick="plPreset('${c[0]}')"><code>${c[0]}</code><span>${c[1]}</span></button>`).join('')}</div>
+          <div class="pl-tl" id="plTl"></div></div>`;
+      } else if (plRep === 'spaced') ex.innerHTML = '<div class="pl-note">🧠 After the study date, this topic comes back for revision on day 1, 3, 7, 15, 30 and then every 30 days.</div>';
+      else ex.innerHTML = '';
+      const opts = [['once', 'Once'], ['weekly', 'Weekly'], ['custom', 'Custom'], ['spaced', 'Revision']];
+      if (plRep === 'daily') opts.splice(1, 0, ['daily', 'Daily']);
+      document.getElementById('plRp').innerHTML = opts.map(c => `<button class="${plRep === c[0] ? 'on' : ''}" onclick="plRep='${c[0]}';plChips()">${c[1]}</button>`).join('');
       plPrev();
     }
-    function plSetRep2(r) { plRep = r; if (r === 'spaced' && !plIv.length) plIv = [1, 3, 7, 15, 30]; if (r === 'after' && (!plIv.length || plIv.join() === '1,3,7,15,30')) plIv = [2, 5]; plChips(); }
     function plOpen(id) {
       plEd = id || null; const t = id ? plTasks[id] : null;
-      plSub = t ? t.sub || 'oth' : 'oth'; plPri = t ? t.pri || 'm' : 'm'; plRep = t ? t.rep || 'once' : 'once'; plEv = t && t.ev ? t.ev : 5; plIv = t && t.iv ? t.iv.slice() : (plRep === 'after' ? [2, 5] : [1, 3, 7, 15, 30]); plDls = t && t.dl ? t.dl.slice() : [];
+      plSub = t ? t.sub || 'oth' : 'oth'; plPri = t ? t.pri || 'm' : 'm'; plRep = t ? t.rep || 'once' : 'once'; plEv = t && t.ev ? t.ev : 5;
+      plSeqTxt = '';
+      if (t && t.rep === 'every') { plRep = 'custom'; plSeqTxt = (t.ev || 1) + '..'; }
+      if (t && t.rep === 'custom') plSeqTxt = (t.seq || []).join('.') + (t.loop ? '..' : '');
       plAt = plDay;
       const part = !!(t && t.rep !== 'once' && plDay > plEffS(t)), fd = new Date(plDay + 'T00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
       document.getElementById('plH').textContent = t ? 'Edit goal' : 'New goal';
-      document.getElementById('plT').value = t ? t.title : (document.getElementById('plQi') || {}).value || ''; setTimeout(plGrow, 0);
+      document.getElementById('plIc').textContent = t ? '✏️' : '🎯';
+      document.getElementById('plT').value = t ? t.title : (document.getElementById('plQi') || {}).value || '';
       document.getElementById('plN').value = t ? t.note || '' : '';
       document.getElementById('plD').value = (t && !part) ? t.date : plDay; plDi = document.getElementById('plD').value;
       document.getElementById('plHs').textContent = new Date(plDay + 'T00:00').toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short' });
@@ -2397,6 +2434,7 @@
       const dl = document.getElementById('plDel'); dl.style.display = t ? 'block' : 'none'; dl.textContent = part ? '🗑️ Delete from ' + fd : '🗑️ Delete';
       plChips();
       document.getElementById('plSheet').classList.add('on'); pushScreen('plsheet');
+      plAuto(document.getElementById('plT')); plAuto(document.getElementById('plN'));
       if (!t) setTimeout(() => document.getElementById('plT').focus(), 150);
     }
     function plHideSheet() { const e = document.getElementById('plSheet'); e.classList.remove('on'); e.style.top = e.style.height = e.style.bottom = ''; if (document.activeElement) document.activeElement.blur(); }
@@ -2408,18 +2446,17 @@
     if (window.visualViewport) { visualViewport.addEventListener('resize', plVV); visualViewport.addEventListener('scroll', plVV); }
     function plClose() { if (navStack[navStack.length - 1] === 'plsheet') history.back(); else plHideSheet(); }
     function plSave() {
-      const title = document.getElementById('plT').value.trim(); if (!title) return plToast('Please write the goal first ✍️');
-      if (plRep === 'pick' && !plDls.length) return plToast('Pick at least one date 📅');
-      if ((plRep === 'after' || plRep === 'spaced') && !plIv.length) return plToast('Add at least one day count');
+      const title = document.getElementById('plT').value.replace(/[ \t]+\n/g, '\n').trim(); if (!title) return plToast('Please write the goal first ✍️');
+      let cu = null; if (plRep === 'custom') { cu = plParseSeq(document.getElementById('plSq') ? document.getElementById('plSq').value : plSeqTxt); if (cu.err) return plToast(cu.err); }
       const o = plEd ? plTasks[plEd] || {} : {}, dv = document.getElementById('plD').value || plDay;
       const split = !!(plEd && o.rep && o.rep !== 'once' && plAt > plEffS(o));
       const id = (plEd && !split) ? plEd : plNewId();
       const t = { id, title, note: document.getElementById('plN').value.trim(), sub: plSub, pri: plPri, rep: plRep, time: o.time || '', date: dv, created: o.created || Date.now() };
       if (plRep === 'every') t.ev = Math.max(2, Math.min(365, plEv || 5));
-      if (plRep === 'after' || plRep === 'spaced') t.iv = plIv.slice();
-      if (plRep === 'pick') { t.dl = plDls.slice(); t.date = t.dl[0]; }
+      if (cu) { t.seq = cu.seq; t.loop = cu.loop; }
       if (split) {
-        if (dv === plDi && plRep === o.rep && plRep !== 'pick') t.date = o.date;
+        const same = plRep === o.rep && (plRep !== 'custom' || (JSON.stringify(t.seq) === JSON.stringify(o.seq) && !!t.loop === !!o.loop));
+        if (dv === plDi && same) t.date = o.date;
         t.from = plAt;
         if (o.done) { const dn = {}; Object.keys(o.done).forEach(k => { if (k >= plAt) dn[k] = 1; }); if (Object.keys(dn).length) t.done = dn; }
         o.end = plAdd(plAt, -1); plTasks[o.id].end = o.end; plCache(); if (plUid) plRef(o.id).child('end').set(o.end).catch(() => {});
@@ -2436,8 +2473,8 @@
       else { delete plTasks[plEd]; plCache(); if (plUid) plRef(plEd).remove().catch(() => {}); }
       plClose(); plRender(); plToast(part ? 'Removed from this day onward' : 'Goal deleted');
     }
-    Object.assign(window, { plDaySel, plToday, plFilterSet, plTog, plQuick, plCarry, plOpen, plClose, plSave, plDelete, plChips, plOnHome, plAdd, plIso, plFor,
-      plSetSub: s => { plSub = s; }, plGrow, plSetRep, plSetRep2, plSetIvs, plAddIv, plDelIv, plAddDl, plDelDl, plPrev, });
+    Object.assign(window, { plDaySel, plToday, plFilterSet, plTog, plQuick, plCarry, plOpen, plClose, plSave, plDelete, plChips, plOnHome, plAdd, plIso, plFor, plAuto, plPrev, plPreset, plParseSeq, plCustomList,
+      plSetSub: s => { plSub = s; }, });
     Object.defineProperties(window, { plSub: { get: () => plSub, set: v => { plSub = v; } }, plPri: { get: () => plPri, set: v => { plPri = v; } }, plRep: { get: () => plRep, set: v => { plRep = v; } }, plEv: { get: () => plEv, set: v => { plEv = v; } } });
 
     }); // end DOMContentLoaded
