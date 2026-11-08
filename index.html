@@ -445,6 +445,63 @@
     [data-theme="dark"] #plannerArea .pl-quick { background: #1c2636; box-shadow: 0 0 0 1px rgba(129,140,248,.25), 0 14px 28px -16px rgba(0,0,0,.8); }
     [data-theme="dark"] #plannerArea .pl-seg { background: rgba(129,140,248,.14); }
     [data-theme="dark"] #plannerArea .pl-ch h3 small { background: rgba(129,140,248,.2); color: #c7d2fe; }
+    /* ===== History button + page ===== */
+    #plannerArea .pl-hbtn { display: inline-flex; align-items: center; gap: 7px; border: 0; cursor: pointer; padding: 9px 15px 9px 12px; border-radius: 999px; font: 600 13px 'Rubik',sans-serif; color: var(--primary-color); background: rgba(99,102,241,.12); box-shadow: inset 0 0 0 1px rgba(99,102,241,.18); transition: transform .15s; -webkit-tap-highlight-color: transparent; }
+    #plannerArea .pl-hbtn:active { transform: scale(.94); }
+    .pl-hbtn svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    [data-theme="dark"] #plannerArea .pl-hbtn { background: rgba(129,140,248,.2); color: #c7d2fe; box-shadow: none; }
+    #plHist { position: fixed; inset: 0; z-index: 8500; display: none; flex-direction: column; background: var(--bg-color); color: var(--text-color); font-family: 'Rubik',sans-serif; }
+    #plHist.on { display: flex; animation: plhIn .28s cubic-bezier(.2,.8,.2,1); }
+    @keyframes plhIn { from { transform: translateX(32px); opacity: 0; } to { transform: none; opacity: 1; } }
+    .plh-top { flex: none; display: flex; align-items: center; gap: 12px; padding: calc(12px + env(safe-area-inset-top,0px)) 16px 12px; }
+    .plh-back { width: 42px; height: 42px; border: 0; border-radius: 14px; background: var(--card-bg); color: var(--text-color); box-shadow: 0 0 0 1px rgba(99,102,241,.14), 0 8px 18px -10px rgba(99,102,241,.5); display: grid; place-items: center; cursor: pointer; }
+    .plh-back svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2.4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .plh-top h2 { margin: 0; font-size: 21px; font-weight: 700; letter-spacing: -.3px; }
+    .plh-top small { display: block; font-size: 12px; color: #8b8f9a; font-weight: 500; margin-top: 1px; }
+    .plh-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 16px calc(28px + env(safe-area-inset-bottom,0px)); }
+    .plh-in { max-width: 680px; margin: 0 auto; }
+    .plh-hero { position: relative; overflow: hidden; border-radius: 26px; padding: 20px 18px 18px; color: #fff; background: linear-gradient(135deg, #6366f1 0%, #7c3aed 55%, #a21caf 100%); box-shadow: 0 22px 40px -22px rgba(109,40,217,.8); }
+    .plh-hero::after { content: ""; position: absolute; right: -50px; top: -60px; width: 190px; height: 190px; border-radius: 50%; background: rgba(255,255,255,.12); }
+    .plh-hr { position: relative; z-index: 1; display: flex; align-items: center; gap: 16px; }
+    .plh-ring { position: relative; flex: none; width: 92px; height: 92px; }
+    .plh-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .plh-ring circle { fill: none; stroke-width: 9; stroke-linecap: round; }
+    .plh-ring .a { stroke: rgba(255,255,255,.22); } .plh-ring .b { stroke: #fff; transition: stroke-dashoffset .6s; }
+    .plh-ring b { position: absolute; inset: 0; display: grid; place-items: center; font-size: 22px; font-weight: 700; }
+    .plh-hl { font-size: 11px; font-weight: 600; letter-spacing: 1.3px; text-transform: uppercase; opacity: .85; }
+    .plh-hb { font-size: 30px; font-weight: 700; line-height: 1.15; margin-top: 3px; } .plh-hb span { font-size: 14px; font-weight: 500; opacity: .85; }
+    .plh-hs { font-size: 12.5px; opacity: .85; margin-top: 3px; }
+    .plh-grid { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 18px; }
+    .plh-st { background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.18); border-radius: 16px; padding: 10px 2px; text-align: center; }
+    .plh-st b { display: block; font-size: 17px; font-weight: 700; } .plh-st small { font-size: 10.5px; opacity: .85; }
+    .plh-bars { position: relative; z-index: 1; display: flex; align-items: flex-end; gap: 7px; height: 64px; margin-top: 16px; }
+    .plh-bar { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; height: 100%; justify-content: flex-end; }
+    .plh-bar i { display: block; width: 100%; max-width: 26px; min-height: 4px; border-radius: 8px; background: rgba(255,255,255,.28); } .plh-bar i.f { background: #fff; }
+    .plh-bar small { font-size: 10px; opacity: .8; }
+    .plh-tabs { position: sticky; top: 0; z-index: 5; display: flex; gap: 4px; margin: 16px 0 6px; padding: 4px; border-radius: 999px; background: rgba(99,102,241,.1); backdrop-filter: blur(10px); }
+    .plh-tabs button { flex: 1; border: 0; background: transparent; padding: 9px 4px; border-radius: 999px; font: 600 12.5px 'Rubik',sans-serif; color: #7c8194; cursor: pointer; transition: all .2s; white-space: nowrap; }
+    .plh-tabs button.on { background: linear-gradient(135deg, #6366f1, #4f46e5); color: #fff; box-shadow: 0 6px 14px -4px rgba(79,70,229,.6); }
+    .plh-dh { display: flex; align-items: center; justify-content: space-between; margin: 20px 4px 8px; }
+    .plh-dh b { font-size: 14.5px; font-weight: 700; } .plh-dh b em { font-style: normal; font-weight: 500; color: #8b8f9a; font-size: 12px; margin-left: 6px; }
+    .plh-dh span { font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: rgba(245,158,11,.16); color: #b45309; }
+    .plh-dh span.g { background: rgba(16,185,129,.16); color: #047857; } .plh-dh span.r { background: rgba(239,68,68,.14); color: #b91c1c; }
+    .plh-it { display: flex; align-items: flex-start; gap: 12px; padding: 13px 14px; margin-top: 8px; border-radius: 18px; background: var(--card-bg); box-shadow: 0 0 0 1px rgba(99,102,241,.1), 0 10px 22px -16px rgba(99,102,241,.5); }
+    .plh-ic { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 800; margin-top: 1px; }
+    .plh-ic.d { background: linear-gradient(135deg, #34d399, #059669); color: #fff; box-shadow: 0 4px 10px -2px rgba(16,185,129,.55); }
+    .plh-ic.m { background: rgba(239,68,68,.14); color: #dc2626; } .plh-ic.p { background: rgba(245,158,11,.18); color: #d97706; }
+    .plh-tt { flex: 1; min-width: 0; }
+    .plh-tt .t { font-size: 14.5px; font-weight: 600; line-height: 1.4; display: flex; flex-direction: column; gap: 4px; word-break: break-word; }
+    .plh-it.d .t { color: #8b8f9a; }
+    .plh-tt .t .nb { display: inline-block; min-width: 18px; padding: 0 5px; margin-right: 7px; border-radius: 6px; background: rgba(99,102,241,.14); color: var(--primary-color); font-size: 11px; font-weight: 700; text-align: center; }
+    .plh-m { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .plh-m span { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: rgba(99,102,241,.1); color: var(--primary-color); }
+    .plh-m span.sb { color: #1f2937; } .plh-m span.tm { background: rgba(245,158,11,.16); color: #b45309; }
+    .plh-empty { text-align: center; padding: 50px 10px; color: #8b8f9a; font-size: 14px; line-height: 1.6; } .plh-empty i { display: block; font-style: normal; font-size: 42px; margin-bottom: 8px; }
+    .plh-more { display: block; width: 100%; margin-top: 18px; padding: 13px; border: 0; border-radius: 16px; font: 600 13px 'Rubik',sans-serif; color: var(--primary-color); background: rgba(99,102,241,.1); cursor: pointer; }
+    [data-theme="dark"] .plh-back, [data-theme="dark"] .plh-it { background: #1c2636; }
+    [data-theme="dark"] .plh-tabs, [data-theme="dark"] .plh-m span, [data-theme="dark"] .plh-more { background: rgba(129,140,248,.16); color: #c7d2fe; }
+    [data-theme="dark"] .plh-m span.sb { background: var(--sbc) !important; color: #111827; } [data-theme="dark"] .plh-m span.tm { background: rgba(251,191,36,.18); color: #fcd34d; }
+    [data-theme="dark"] .plh-dh span.g { color: #6ee7b7; } [data-theme="dark"] .plh-dh span.r { color: #fca5a5; }
     .pl-empty { text-align: center; padding: 26px 10px 18px; color: #8b8f9a; font-size: 14px; line-height: 1.6; }
     .pl-empty i { display: block; font-style: normal; font-size: 38px; margin-bottom: 4px; }
     .pl-carry { width: 100%; margin-top: 10px; padding: 10px; border: 1px dashed var(--border-color); background: transparent; color: var(--primary-color); border-radius: 14px; font: 500 13px 'Rubik',sans-serif; cursor: pointer; }
@@ -759,6 +816,8 @@
     </div>
   </div>
 
+  <div id="plHist"></div>
+
   <div id="plSheet" onclick="if(event.target===this)plClose()">
     <div class="pl-sh">
       <div class="pl-gr"></div>
@@ -892,6 +951,9 @@
           break;
         case "plsheet":
           plHideSheet();
+          break;
+        case "plhist":
+          plHistHide();
           break;
         case "quiz":
           performGoToHomeCleanup();
@@ -2401,7 +2463,7 @@
         </div>
         <div class="pl-card">
           <div class="pl-ch"><h3>Study Plan<small>${dObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</small></h3>
-            <div class="pl-seg">${[['all', 'All'], ['todo', 'Pending'], ['done', 'Done']].map(f => `<button class="${plFilter === f[0] ? 'on' : ''}" onclick="plFilterSet('${f[0]}')">${f[1]}</button>`).join('')}</div></div>
+            <button class="pl-hbtn" onclick="plHistOpen()" aria-label="Study history"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4.5h4.5"/><path d="M12 7.5V12l3 2"/></svg>History</button></div>
           <div class="pl-quick"><textarea id="plQi" rows="1" wrap="off" placeholder="Add a goal for this day…" autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter'){event.preventDefault();plQuick()}"></textarea><button class="alt" onclick="plOpen()" aria-label="More options">⚙️</button><button onclick="plQuick()" aria-label="Add">＋</button></div>
           ${rows || empty}
           ${(plDay === td && od) ? `<button class="pl-carry" onclick="plCarry()">↪ Move ${od} missed goal${od > 1 ? 's' : ''} to today</button>` : ''}
@@ -2414,6 +2476,74 @@
 
     function plDaySel(d) { plDay = d; plRender(); }
     function plToday() { plDay = plIso(new Date()); plCenter = true; plRender(); }
+
+    // ---------- Study history page ----------
+    let plHTab = 'all', plHLimit = 60;
+    function plHistOpen() { plHTab = 'all'; plHLimit = 60; plHistRender(); const e = document.getElementById('plHist'); e.classList.add('on'); pushScreen('plhist'); const b = e.querySelector('.plh-body'); if (b) b.scrollTop = 0; }
+    function plHistHide() { document.getElementById('plHist').classList.remove('on'); }
+    function plHistClose() { if (navStack[navStack.length - 1] === 'plhist') history.back(); else plHistHide(); }
+    function plHistTab(t) { plHTab = t; plHLimit = 60; plHistRender(); }
+    function plHistMore() { plHLimit += 60; plHistRender(true); }
+    function plHistRender(keep) {
+      const el = document.getElementById('plHist'); if (!el) return;
+      const oldB = el.querySelector('.plh-body'), st = oldB ? oldB.scrollTop : 0;
+      const td = plIso(new Date());
+      const first = Object.values(plTasks).map(t => t.date).sort()[0] || td;
+      let from = first < td ? first : td;
+      if (plAdd(td, -800) > from) from = plAdd(td, -800);
+      const lim = plHTab === '7' ? plAdd(td, -6) : plHTab === '30' ? plAdd(td, -29) : from;
+      const start = lim > from ? lim : from;
+      // build day records newest first
+      const days = []; let sch = 0, dn = 0, ms = 0, pd = 0, act = 0;
+      for (let d = td, i = 0; d >= start && i < 900; d = plAdd(d, -1), i++) {
+        const a = plFor(d); if (!a.length) continue;
+        const items = a.map(t => ({ t, d, st: plIsDone(t, d) ? 'd' : d < td ? 'm' : 'p' }));
+        const n = items.filter(x => x.st === 'd').length;
+        sch += a.length; dn += n; ms += items.filter(x => x.st === 'm').length; pd += items.filter(x => x.st === 'p').length; if (n) act++;
+        days.push({ d, items, n });
+      }
+      // streaks (global)
+      let best = 0, run = 0;
+      for (let d = from, i = 0; d <= td && i < 900; d = plAdd(d, 1), i++) { const q = plStat(d); if (q.t && q.n === q.t) { run++; if (run > best) best = run; } else if (d !== td) run = 0; }
+      const cur = plStreak(); if (cur > best) best = cur;
+      const rate = sch ? Math.round(dn / sch * 100) : 0, avg = days.length ? (dn / days.length).toFixed(1) : '0';
+      const R = 40, C = 2 * Math.PI * R;
+      const bars = Array.from({ length: 7 }, (_, i) => { const d = plAdd(td, i - 6), q = plStat(d), x = new Date(d + 'T00:00'); return `<div class="plh-bar"><i class="${q.t && q.n === q.t ? 'f' : ''}" style="height:${q.t ? Math.max(8, q.p) : 4}%"></i><small>${x.toLocaleDateString('en-US', { weekday: 'narrow' })}</small></div>`; }).join('');
+      const tabs = [['all', 'All Time'], ['30', '30 Days'], ['7', '7 Days'], ['inc', 'Incomplete']];
+      const tl = { all: 'All time', 30: 'Last 30 days', 7: 'Last 7 days', inc: 'Incomplete goals' }[plHTab];
+      // list
+      const shown = plHTab === 'inc' ? days.map(x => ({ d: x.d, items: x.items.filter(i => i.st !== 'd'), n: x.n })).filter(x => x.items.length) : days;
+      const PRs = { h: 0, m: 1, l: 2 };
+      let cnt = 0, body = '', more = false;
+      for (const x of shown) {
+        if (cnt >= plHLimit) { more = true; break; }
+        const o = new Date(x.d + 'T00:00'), lab = x.d === td ? 'Today' : x.d === plAdd(td, -1) ? 'Yesterday' : o.toLocaleDateString('en-US', { weekday: 'long' });
+        const tot = plFor(x.d).length, cls = x.n === tot ? 'g' : (x.d < td && x.n === 0) ? 'r' : '';
+        const its = x.items.slice().sort((a, b) => ((a.t.time || '99:99').localeCompare(b.t.time || '99:99')) || ((PRs[a.t.pri] || 0) - (PRs[b.t.pri] || 0)));
+        body += `<div class="plh-dh"><b>${lab}<em>${o.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: x.d.slice(0, 4) !== td.slice(0, 4) ? 'numeric' : undefined })}</em></b><span class="${cls}">${x.n}/${tot} done</span></div>`;
+        body += its.map(i => {
+          const t = i.t, c = PL_SUBS.find(z => z[0] === t.sub) || PL_SUBS[PL_SUBS.length - 1], rl = plRepLabel(t, i.d);
+          const ttl = plEsc(t.title).split('\n').filter(z => z.trim()).map(z => { const m = z.match(/^\s*(\d+)[.)]\s*(.*)$/); return m ? `<div><span class="nb">${m[1]}</span>${m[2]}</div>` : `<div>${z}</div>`; }).join('');
+          const ic = i.st === 'd' ? '✓' : i.st === 'm' ? '✕' : '•';
+          return `<div class="plh-it ${i.st}"><div class="plh-ic ${i.st}">${ic}</div><div class="plh-tt"><div class="t">${ttl}</div><div class="plh-m">${t.sub && t.sub !== 'oth' ? `<span class="sb" style="background:${c[3]};--sbc:${c[3]}">${c[1]} ${c[2]}</span>` : ''}${t.time ? `<span class="tm">⏰ ${plFmtT(t.time)}</span>` : ''}${rl ? `<span>${rl}</span>` : ''}</div></div></div>`;
+        }).join('');
+        cnt++;
+      }
+      if (!body) body = `<div class="plh-empty"><i>${plHTab === 'inc' ? '🎉' : '🌱'}</i>${plHTab === 'inc' ? 'No incomplete goals. Great job!' : 'No history yet.<br>Your goals will appear here.'}</div>`;
+      if (more) body += `<button class="plh-more" onclick="plHistMore()">Show older days</button>`;
+      el.innerHTML = `<div class="plh-top"><button class="plh-back" onclick="plHistClose()" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><div><h2>Study History</h2><small>${tl}</small></div></div>
+        <div class="plh-body"><div class="plh-in">
+          <div class="plh-hero">
+            <div class="plh-hr"><div class="plh-ring"><svg viewBox="0 0 100 100"><circle class="a" cx="50" cy="50" r="${R}"/><circle class="b" cx="50" cy="50" r="${R}" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - rate / 100)).toFixed(1)}"/></svg><b>${rate}%</b></div>
+              <div><div class="plh-hl">Completion rate</div><div class="plh-hb">${dn} / ${sch} <span>goals</span></div><div class="plh-hs">${days.length} active day${days.length === 1 ? '' : 's'} · ${avg} done per day</div></div></div>
+            <div class="plh-grid"><div class="plh-st"><b>🔥 ${cur}</b><small>Streak</small></div><div class="plh-st"><b>🏆 ${best}</b><small>Best</small></div><div class="plh-st"><b>${ms}</b><small>Missed</small></div><div class="plh-st"><b>${pd}</b><small>Pending</small></div></div>
+            <div class="plh-bars">${bars}</div>
+          </div>
+          <div class="plh-tabs">${tabs.map(f => `<button class="${plHTab === f[0] ? 'on' : ''}" onclick="plHistTab('${f[0]}')">${f[1]}</button>`).join('')}</div>
+          ${body}
+        </div></div>`;
+      const nb = el.querySelector('.plh-body'); if (nb) nb.scrollTop = keep ? st : 0;
+    }
     function plFilterSet(f) { plFilter = f; plRender(); }
     function plTog(id) {
       const t = plTasks[id]; if (!t) return; t.done = t.done || {};
@@ -2522,7 +2652,7 @@
       else { delete plTasks[plEd]; plCache(); if (plUid) plRef(plEd).remove().catch(() => {}); }
       plClose(); plRender(); plToast(part ? 'Removed from this day onward' : 'Goal deleted');
     }
-    Object.assign(window, { plDaySel, plToday, plFilterSet, plTog, plQuick, plCarry, plOpen, plClose, plSave, plDelete, plChips, plOnHome, plAdd, plIso, plFor, plAuto, plPrev, plPreset, plParseSeq, plCustomList,
+    Object.assign(window, { plHistOpen, plHistClose, plHistTab, plHistMore, plDaySel, plToday, plFilterSet, plTog, plQuick, plCarry, plOpen, plClose, plSave, plDelete, plChips, plOnHome, plAdd, plIso, plFor, plAuto, plPrev, plPreset, plParseSeq, plCustomList,
       plSetSub: s => { plSub = s; }, });
     Object.defineProperties(window, { plSub: { get: () => plSub, set: v => { plSub = v; } }, plPri: { get: () => plPri, set: v => { plPri = v; } }, plRep: { get: () => plRep, set: v => { plRep = v; } }, plEv: { get: () => plEv, set: v => { plEv = v; } } });
 
