@@ -506,7 +506,7 @@
     .plh-k.g b { color: #10b981; }
     .plh-ic.l { background: linear-gradient(135deg, #34d399, #059669); color: #fff; box-shadow: 0 4px 10px -2px rgba(16,185,129,.55); }
     .plh-it.l .t { color: #8b8f9a; text-decoration: line-through; text-decoration-thickness: 1.5px; }
-    .plh-bt { display: inline-flex; align-items: center; justify-content: center; gap: 6px; margin-top: 11px; padding: 10px 16px; border: 0; border-radius: 14px; cursor: pointer; font: 600 13px 'Rubik',sans-serif; color: #fff; background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 10px 18px -10px rgba(5,150,105,.9); transition: transform .15s; -webkit-tap-highlight-color: transparent; }
+    .plh-bt { flex: none; align-self: center; display: inline-flex; align-items: center; justify-content: center; gap: 5px; margin-left: 4px; padding: 9px 14px; border: 0; border-radius: 14px; cursor: pointer; font: 600 12.5px 'Rubik',sans-serif; color: #fff; background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 10px 18px -10px rgba(5,150,105,.9); transition: transform .15s; -webkit-tap-highlight-color: transparent; }
     .plh-bt:active { transform: scale(.95); }
     .plh-lt { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; padding: 8px 8px 8px 12px; border-radius: 14px; background: rgba(16,185,129,.12); }
     .plh-lt span { font-size: 12px; font-weight: 600; color: #047857; }
@@ -2550,7 +2550,7 @@
           const t = i.t, c = PL_SUBS.find(z => z[0] === t.sub) || PL_SUBS[PL_SUBS.length - 1], rl = plRepLabel(t, i.d);
           const ttl = plEsc(t.title).split('\n').filter(z => z.trim()).map(z => { const m = z.match(/^\s*(\d+)[.)]\s*(.*)$/); return m ? `<div><span class="nb">${m[1]}</span>${m[2]}</div>` : `<div>${z}</div>`; }).join('');
           const ic = (i.st === 'd' || i.st === 'l') ? '✓' : i.st === 'm' ? '✕' : '•';
-          return `<div class="plh-it ${i.st}"><div class="plh-ic ${i.st === 'l' ? 'l' : i.st}">${ic}</div><div class="plh-tt"><div class="t">${ttl}</div><div class="plh-m">${t.sub && t.sub !== 'oth' ? `<span class="sb" style="background:${c[3]};--sbc:${c[3]}">${c[1]} ${c[2]}</span>` : ''}${t.time ? `<span class="tm">⏰ ${plFmtT(t.time)}</span>` : ''}${rl ? `<span>${rl}</span>` : ''}</div>${inc && i.st === 'm' ? `<button class="plh-bt" onclick="plLate('${t.id}','${i.d}')">✓ Mark as complete</button>` : ''}${inc && i.st === 'l' ? `<div class="plh-lt"><span>✅ Completed late · ${new Date(t.late[i.d] > 1 ? t.late[i.d] : Date.now()).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span><button onclick="plLate('${t.id}','${i.d}')">Undo</button></div>` : ''}</div></div>`;
+          return `<div class="plh-it ${i.st}"><div class="plh-ic ${i.st === 'l' ? 'l' : i.st}">${ic}</div><div class="plh-tt"><div class="t">${ttl}</div><div class="plh-m">${t.sub && t.sub !== 'oth' ? `<span class="sb" style="background:${c[3]};--sbc:${c[3]}">${c[1]} ${c[2]}</span>` : ''}${t.time ? `<span class="tm">⏰ ${plFmtT(t.time)}</span>` : ''}${rl ? `<span>${rl}</span>` : ''}</div>${inc && i.st === 'l' ? `<div class="plh-lt"><span>✅ Completed late · ${new Date(t.late[i.d] > 1 ? t.late[i.d] : Date.now()).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span><button onclick="plLate('${t.id}','${i.d}')">Undo</button></div>` : ''}</div>${inc && i.st === 'm' ? `<button class="plh-bt" onclick="plLate('${t.id}','${i.d}')">✓ Complete</button>` : ''}</div>`;
         }).join('') + '</div>';
         cnt++;
       }
@@ -2561,7 +2561,7 @@
           <div class="plh-hero">
             <div class="plh-hr"><div class="plh-ring"><svg viewBox="0 0 100 100"><circle class="a" cx="50" cy="50" r="${R}"/><circle class="b" cx="50" cy="50" r="${R}" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - rate / 100)).toFixed(1)}"/></svg><b>${rate}%</b></div>
               <div><div class="plh-hl">${inc ? 'Recovery rate' : 'Completion rate'}</div><div class="plh-hb">${inc ? iLate + ' / ' + iMiss : dn + ' / ' + sch} <span>${inc ? 'recovered' : 'goals'}</span></div><div class="plh-hs">${inc ? (iMiss - iLate) + ' still incomplete · ' + iPend + ' pending today' : days.length + ' active day' + (days.length === 1 ? '' : 's') + ' · ' + avg + ' done per day'}</div></div></div>
-            ${inc ? '' : `<div class="plh-wk">${bars}</div>`}
+            <div class="plh-wk">${bars}</div>
           </div>
           ${inc ? `<div class="plh-kp"><div class="plh-k a"><b>${iMiss + iPend}</b><small>Incomplete</small></div><div class="plh-k g"><b>${iLate}</b><small>Done late</small></div><div class="plh-k r"><b>${iMiss - iLate}</b><small>Still missed</small></div><div class="plh-k y"><b>${iPend}</b><small>Today</small></div></div>` : `<div class="plh-kp"><div class="plh-k o"><b>🔥 ${cur}</b><small>Streak</small></div><div class="plh-k y"><b>🏆 ${best}</b><small>Best</small></div><div class="plh-k r"><b>${ms}</b><small>Missed</small></div><div class="plh-k a"><b>${pd}</b><small>Pending</small></div></div>`}
           <div class="plh-tabs">${tabs.map(f => `<button class="${plHTab === f[0] ? 'on' : ''}" onclick="plHistTab('${f[0]}')">${f[1]}</button>`).join('')}</div>
