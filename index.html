@@ -454,8 +454,8 @@
     #plHist.on { display: block; animation: plhIn .28s cubic-bezier(.2,.8,.2,1); }
     @keyframes plhIn { from { transform: translateX(32px); opacity: 0; } to { transform: none; opacity: 1; } }
     .plh-body { position: absolute; inset: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-    .plh-in { max-width: 640px; margin: 0 auto; padding: calc(14px + env(safe-area-inset-top,0px)) 16px calc(40px + env(safe-area-inset-bottom,0px)); }
-    .plh-top { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .plh-in { width: 100%; max-width: none; margin: 0; box-sizing: border-box; padding: calc(10px + env(safe-area-inset-top,0px)) 10px calc(32px + env(safe-area-inset-bottom,0px)); }
+    .plh-top { display: flex; align-items: center; gap: 12px; margin: 0 6px 12px; }
     .plh-back { flex: none; width: 44px; height: 44px; border: 0; border-radius: 15px; background: var(--card-bg); color: var(--text-color); box-shadow: 0 0 0 1px rgba(99,102,241,.14), 0 8px 18px -10px rgba(99,102,241,.5); display: grid; place-items: center; cursor: pointer; }
     .plh-back svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2.4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
     .plh-top h2 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -.3px; line-height: 1.15; }
@@ -2539,7 +2539,7 @@
       if (!body) body = `<div class="plh-empty"><i>${plHTab === 'inc' ? '🎉' : '🌱'}</i>${plHTab === 'inc' ? 'No incomplete goals. Great job!' : 'No history yet.<br>Your goals will appear here.'}</div>`;
       if (more) body += `<button class="plh-more" onclick="plHistMore()">Show older days</button>`;
       el.innerHTML = `<div class="plh-body"><div class="plh-in">
-          <div class="plh-top"><button class="plh-back" onclick="plHistClose()" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><div><h2>Study History</h2><small>${tl}</small></div></div>
+          <div class="plh-top"><div><h2>Study History</h2><small>${tl}</small></div></div>
           <div class="plh-hero">
             <div class="plh-hr"><div class="plh-ring"><svg viewBox="0 0 100 100"><circle class="a" cx="50" cy="50" r="${R}"/><circle class="b" cx="50" cy="50" r="${R}" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - rate / 100)).toFixed(1)}"/></svg><b>${rate}%</b></div>
               <div><div class="plh-hl">Completion rate</div><div class="plh-hb">${dn} / ${sch} <span>goals</span></div><div class="plh-hs">${days.length} active day${days.length === 1 ? '' : 's'} · ${avg} done per day</div></div></div>
