@@ -398,27 +398,34 @@
     .pl-t2 span.sb { color: #1f2937; border-color: transparent; }
     [data-theme="dark"] .pl-t2 span.sb { background: var(--sbc) !important; color: #111827; }
 
-    /* ===== Premium task cards ===== */
-    .pl-task { gap: 14px; align-items: center; padding: 16px 16px 16px 20px; margin-top: 12px; border-radius: 20px; background: var(--card-bg); border: 1px solid var(--border-color); box-shadow: 0 1px 2px rgba(20,20,43,.04), 0 8px 22px -10px rgba(79,70,229,.22); transition: transform .15s ease, box-shadow .2s ease, opacity .2s; -webkit-tap-highlight-color: transparent; }
-    .pl-task:active { transform: scale(.985); }
-    .pl-task::before { left: 8px; top: 14px; bottom: 14px; width: 4px; border-radius: 4px; background: linear-gradient(180deg, var(--pc), var(--pc2)); }
-    .pl-task.p-h { --pc: #f87171; --pc2: #dc2626; } .pl-task.p-m { --pc: #818cf8; --pc2: #4f46e5; } .pl-task.p-l { --pc: #34d399; --pc2: #059669; }
-    .pl-task::after { content: "›"; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 22px; line-height: 1; color: #c4c8d4; font-weight: 300; }
-    .pl-ck { width: 28px; height: 28px; margin-top: 0; border: 2px solid transparent; background: linear-gradient(var(--card-bg), var(--card-bg)) padding-box, linear-gradient(135deg, #a5b4fc, #6366f1) border-box; box-shadow: 0 3px 8px rgba(99,102,241,.18); }
-    .pl-task.dn .pl-ck { background: linear-gradient(135deg, #34d399, #059669); box-shadow: 0 5px 12px rgba(16,185,129,.4); }
-    .pl-tb { padding-right: 18px; }
-    .pl-t1 { font-size: 15.5px; font-weight: 600; line-height: 1.45; letter-spacing: .1px; }
-    .pl-t3 { font-size: 12.5px; margin-top: 3px; opacity: .85; }
-    .pl-t2 { gap: 6px; margin-top: 10px; }
-    .pl-t2 span { font-size: 11.5px; font-weight: 600; padding: 4px 10px; border-radius: 10px; border: 0; background: rgba(99,102,241,.1); color: #4f46e5; }
-    .pl-t2 span.tm { background: rgba(245,158,11,.14); color: #b45309; }
-    .pl-t2 span.rp { background: rgba(99,102,241,.1); color: #4f46e5; }
+    /* ===== Task cards v2 ===== */
+    .pl-task { --pr: 99,102,241; --pc: #6366f1; position: relative; display: flex; gap: 14px; align-items: flex-start; padding: 16px 16px 15px 16px; margin-top: 12px; border-radius: 22px; border: 0; overflow: hidden;
+      background: radial-gradient(130% 160% at 0% 0%, rgba(var(--pr), .13), rgba(var(--pr), 0) 58%), var(--card-bg);
+      box-shadow: 0 0 0 1px rgba(var(--pr), .14), 0 1px 2px rgba(15,23,42,.05), 0 14px 28px -16px rgba(var(--pr), .55);
+      transition: transform .18s cubic-bezier(.3,.7,.4,1), box-shadow .2s, opacity .25s; -webkit-tap-highlight-color: transparent; }
+    .pl-task::before { display: none; }
+    .pl-task:active { transform: scale(.975); }
+    .pl-task.p-h { --pr: 239,68,68; --pc: #ef4444; } .pl-task.p-m { --pr: 99,102,241; --pc: #6366f1; } .pl-task.p-l { --pr: 16,185,129; --pc: #10b981; }
+    .pl-ck { flex: none; position: relative; width: 30px; height: 30px; margin-top: 1px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; display: grid; place-items: center;
+      background: rgba(var(--pr), .12); box-shadow: inset 0 0 0 2.5px var(--pc); transition: background .25s, box-shadow .25s, transform .2s; }
+    .pl-ck:active { transform: scale(.88); }
+    .pl-ck svg { width: 16px; height: 16px; stroke: #fff; stroke-width: 3.2; fill: none; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transform: scale(.3) rotate(-20deg); transition: all .25s cubic-bezier(.3,1.6,.5,1); }
+    .pl-task.dn .pl-ck { background: linear-gradient(135deg, #34d399, #059669); box-shadow: 0 6px 16px -2px rgba(16,185,129,.6); }
+    .pl-task.dn .pl-ck svg { opacity: 1; transform: none; }
+    .pl-tb { flex: 1; min-width: 0; cursor: pointer; }
+    .pl-t1 { font-size: 16px; font-weight: 600; line-height: 1.35; letter-spacing: -.1px; white-space: normal; display: flex; flex-direction: column; gap: 7px; }
+    .pl-t1 .ln { display: flex; align-items: flex-start; gap: 9px; }
+    .pl-t1 .nb { flex: none; min-width: 22px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 8px; background: rgba(var(--pr), .16); color: var(--pc); font-size: 12px; font-weight: 700; display: grid; place-items: center; margin-top: 0; }
+    .pl-t3 { font-size: 13px; line-height: 1.4; margin-top: 4px; color: #8b8f9a; white-space: pre-line; }
+    .pl-t2 { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+    .pl-t2 span { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; padding: 5px 11px; border-radius: 999px; border: 0; background: rgba(var(--pr), .12); color: var(--pc); }
+    .pl-t2 span.tm { background: rgba(245,158,11,.16); color: #b45309; }
     .pl-t2 span.sb { color: #1f2937; }
-    .pl-task.dn { opacity: .62; background: linear-gradient(135deg, rgba(16,185,129,.07), var(--card-bg)); box-shadow: none; }
-    [data-theme="dark"] .pl-task { background: linear-gradient(145deg, #243042, #1b2533); border-color: rgba(255,255,255,.07); box-shadow: 0 10px 24px -12px rgba(0,0,0,.6); }
-    [data-theme="dark"] .pl-ck { background: linear-gradient(#243042, #243042) padding-box, linear-gradient(135deg, #a5b4fc, #6366f1) border-box; }
-    [data-theme="dark"] .pl-t2 span { background: rgba(129,140,248,.18); color: #c7d2fe; }
-    [data-theme="dark"] .pl-t2 span.tm { background: rgba(251,191,36,.16); color: #fcd34d; }
+    .pl-task.dn { opacity: .6; box-shadow: 0 0 0 1px rgba(16,185,129,.2); background: linear-gradient(135deg, rgba(16,185,129,.1), var(--card-bg)); }
+    .pl-task.dn .pl-t1 { text-decoration: line-through; text-decoration-thickness: 1.5px; color: #8b8f9a; }
+    [data-theme="dark"] .pl-task { background: radial-gradient(130% 160% at 0% 0%, rgba(var(--pr), .22), rgba(var(--pr), 0) 60%), #1c2636; box-shadow: 0 0 0 1px rgba(var(--pr), .25), 0 16px 30px -18px rgba(0,0,0,.8); }
+    [data-theme="dark"] .pl-t2 span { background: rgba(var(--pr), .2); color: #e0e7ff; }
+    [data-theme="dark"] .pl-t2 span.tm { background: rgba(251,191,36,.18); color: #fcd34d; }
     [data-theme="dark"] .pl-t2 span.sb { background: var(--sbc) !important; color: #111827; }
     .pl-empty { text-align: center; padding: 26px 10px 18px; color: #8b8f9a; font-size: 14px; line-height: 1.6; }
     .pl-empty i { display: block; font-style: normal; font-size: 38px; margin-bottom: 4px; }
@@ -2361,7 +2368,7 @@
       const CHK = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
       const rows = list.map(t => {
         const c = PL_SUBS.find(x => x[0] === t.sub) || PL_SUBS[PL_SUBS.length - 1], dn = plIsDone(t, plDay), rl = plRepLabel(t, plDay);
-        return `<div class="pl-task p-${t.pri || 'm'} ${dn ? 'dn' : ''}"><button class="pl-ck" onclick="plTog('${t.id}')" aria-label="Mark done">${CHK}</button><div class="pl-tb" onclick="plOpen('${t.id}')"><div class="pl-t1">${plEsc(t.title)}</div>${t.note ? `<div class="pl-t3">${plEsc(t.note)}</div>` : ''}${(t.sub && t.sub !== 'oth') || t.time || rl ? `<div class="pl-t2">${t.sub && t.sub !== 'oth' ? `<span class="sb" style="background:${c[3]};--sbc:${c[3]}">${c[1]} ${c[2]}</span>` : ''}${t.time ? `<span class="tm">⏰ ${plFmtT(t.time)}</span>` : ''}${rl ? `<span class="rp">${rl}</span>` : ''}</div>` : ''}</div></div>`;
+        return `<div class="pl-task p-${t.pri || 'm'} ${dn ? 'dn' : ''}"><button class="pl-ck" onclick="plTog('${t.id}')" aria-label="Mark done">${CHK}</button><div class="pl-tb" onclick="plOpen('${t.id}')"><div class="pl-t1">${plEsc(t.title).split('\n').filter(x => x.trim()).map(x => { const m = x.match(/^\s*(\d+)[.)]\s*(.*)$/); return m ? `<div class="ln"><span class="nb">${m[1]}</span><span>${m[2]}</span></div>` : `<div class="ln"><span>${x}</span></div>`; }).join('')}</div>${t.note ? `<div class="pl-t3">${plEsc(t.note)}</div>` : ''}${(t.sub && t.sub !== 'oth') || t.time || rl ? `<div class="pl-t2">${t.sub && t.sub !== 'oth' ? `<span class="sb" style="background:${c[3]};--sbc:${c[3]}">${c[1]} ${c[2]}</span>` : ''}${t.time ? `<span class="tm">⏰ ${plFmtT(t.time)}</span>` : ''}${rl ? `<span class="rp">${rl}</span>` : ''}</div>` : ''}</div></div>`;
       }).join('');
       const empty = `<div class="pl-empty"><i>${plFilter === 'done' ? '🎯' : '🌱'}</i>${plFilter === 'all' ? 'No goals for this day yet.<br>Add one above to get started.' : plFilter === 'todo' ? 'Nothing pending 🎉' : 'No completed goals yet.'}</div>`;
       const R = 34, C = 2 * Math.PI * R;
