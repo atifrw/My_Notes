@@ -2406,7 +2406,7 @@
     function plChips() {
       const ex = document.getElementById('plEx');
       if (plRep === 'custom') {
-        ex.innerHTML = `<div class="pl-cu"><div class="pl-cu-h"><b>Pattern</b><small>Number of days between each repeat, separated by dots (0 = next day). Two dots at the end = keep repeating the last gap.</small></div>
+        ex.innerHTML = `<div class="pl-cu"><div class="pl-cu-h"><b>Pattern <span style="font-weight:400;color:#8b8f9a">(days between repeats · end with .. to repeat forever)</span></b></div>
           <textarea id="plSq" class="pl-in pl-sq" rows="1" inputmode="decimal" enterkeyhint="done" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Enter pattern" oninput="plPrev()" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}">${plEsc(plSeqTxt)}</textarea>
           <div class="pl-tl" id="plTl"></div></div>`;
       } else if (plRep === 'spaced') ex.innerHTML = '<div class="pl-note">🧠 After the study date, this topic comes back for revision on day 1, 3, 7, 15, 30 and then every 30 days.</div>';
@@ -2430,8 +2430,8 @@
       document.getElementById('plN').value = t ? t.note || '' : '';
       document.getElementById('plD').value = (t && !part) ? t.date : plDay; plDi = document.getElementById('plD').value;
       document.getElementById('plHs').textContent = new Date(plDay + 'T00:00').toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short' });
-      const sc = document.getElementById('plSc'); sc.style.display = part ? 'block' : 'none';
-      sc.textContent = part ? 'ℹ️ Changes and delete apply only to ' + fd + ' and the days after it. Earlier days stay as they are.' : '';
+      const sc = document.getElementById('plSc'); sc.style.display = 'none';
+      sc.textContent = '';
       const dl = document.getElementById('plDel'); dl.style.display = t ? 'block' : 'none'; dl.textContent = part ? '🗑️ Delete from ' + fd : '🗑️ Delete';
       plChips();
       document.getElementById('plSheet').classList.add('on'); pushScreen('plsheet');
