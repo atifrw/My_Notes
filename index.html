@@ -503,6 +503,16 @@
     .plh-m { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
     .plh-m span { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: rgba(99,102,241,.1); color: var(--primary-color); }
     .plh-m span.sb { color: #1f2937; } .plh-m span.tm { background: rgba(245,158,11,.16); color: #b45309; }
+    .plh-dh b { flex: none; } .plh-dh span { flex: none; }
+    .plh-lx { flex: 1; min-width: 0; text-align: center; text-decoration: none; font-size: 11px; font-weight: 600; color: #047857; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    [data-theme="dark"] .plh-lx { color: #6ee7b7; }
+    .plh-bt.un { color: #6b7280; background: rgba(99,102,241,.1); box-shadow: none; }
+    [data-theme="dark"] .plh-bt.un { color: #cbd5e1; background: rgba(255,255,255,.1); }
+    .plh-hero.inc { padding: 22px 20px; }
+    .plh-hero.inc .plh-hr { gap: 22px; }
+    .plh-hero.inc .plh-ring { width: 124px; height: 124px; }
+    .plh-hero.inc .plh-ring b { font-size: 30px; }
+    .plh-hero.inc .plh-hb { font-size: 36px; }
     .plh-k.g b { color: #10b981; }
     .plh-ic.l { background: linear-gradient(135deg, #34d399, #059669); color: #fff; box-shadow: 0 4px 10px -2px rgba(16,185,129,.55); }
     .plh-it.l .t { color: #8b8f9a; text-decoration: line-through; text-decoration-thickness: 1.5px; }
@@ -2545,12 +2555,13 @@
         const o = new Date(x.d + 'T00:00'), lab = x.d === td ? 'Today' : x.d === plAdd(td, -1) ? 'Yesterday' : o.toLocaleDateString('en-US', { weekday: 'long' });
         const tot = inc ? x.items.length : plFor(x.d).length, nn = inc ? x.items.filter(i => i.st === 'l').length : x.n, cls = nn === tot ? 'g' : (x.d < td && nn === 0) ? 'r' : '';
         const its = x.items.slice().sort((a, b) => ((a.t.time || '99:99').localeCompare(b.t.time || '99:99')) || ((PRs[a.t.pri] || 0) - (PRs[b.t.pri] || 0)));
-        body += `<div class="plh-day"><div class="plh-dh"><b>${lab}<em>${o.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: x.d.slice(0, 4) !== td.slice(0, 4) ? 'numeric' : undefined })}</em></b><span class="${cls}">${nn}/${tot} ${inc ? 'recovered' : 'done'}</span></div><div class="plh-pg"><i style="width:${tot ? Math.round(nn / tot * 100) : 0}%"></i></div>`;
+        const lts = inc ? x.items.filter(i => i.st === 'l').map(i => +i.t.late[i.d] || 0) : [], lt = lts.length ? Math.max(...lts) : 0;
+        body += `<div class="plh-day"><div class="plh-dh"><b>${lab}<em>${o.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: x.d.slice(0, 4) !== td.slice(0, 4) ? 'numeric' : undefined })}</em></b>${lt ? `<u class="plh-lx">✅ Completed late · ${new Date(lt > 1 ? lt : Date.now()).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</u>` : ''}<span class="${cls}">${nn}/${tot} ${inc ? 'recovered' : 'done'}</span></div><div class="plh-pg"><i style="width:${tot ? Math.round(nn / tot * 100) : 0}%"></i></div>`;
         body += its.map(i => {
           const t = i.t, c = PL_SUBS.find(z => z[0] === t.sub) || PL_SUBS[PL_SUBS.length - 1], rl = plRepLabel(t, i.d);
           const ttl = plEsc(t.title).split('\n').filter(z => z.trim()).map(z => { const m = z.match(/^\s*(\d+)[.)]\s*(.*)$/); return m ? `<div><span class="nb">${m[1]}</span>${m[2]}</div>` : `<div>${z}</div>`; }).join('');
           const ic = (i.st === 'd' || i.st === 'l') ? '✓' : i.st === 'm' ? '✕' : '•';
-          return `<div class="plh-it ${i.st}"><div class="plh-ic ${i.st === 'l' ? 'l' : i.st}">${ic}</div><div class="plh-tt"><div class="t">${ttl}</div><div class="plh-m">${t.sub && t.sub !== 'oth' ? `<span class="sb" style="background:${c[3]};--sbc:${c[3]}">${c[1]} ${c[2]}</span>` : ''}${t.time ? `<span class="tm">⏰ ${plFmtT(t.time)}</span>` : ''}${rl ? `<span>${rl}</span>` : ''}</div>${inc && i.st === 'l' ? `<div class="plh-lt"><span>✅ Completed late · ${new Date(t.late[i.d] > 1 ? t.late[i.d] : Date.now()).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span><button onclick="plLate('${t.id}','${i.d}')">Undo</button></div>` : ''}</div>${inc && i.st === 'm' ? `<button class="plh-bt" onclick="plLate('${t.id}','${i.d}')">✓ Complete</button>` : ''}</div>`;
+          return `<div class="plh-it ${i.st}"><div class="plh-ic ${i.st === 'l' ? 'l' : i.st}">${ic}</div><div class="plh-tt"><div class="t">${ttl}</div><div class="plh-m">${t.sub && t.sub !== 'oth' ? `<span class="sb" style="background:${c[3]};--sbc:${c[3]}">${c[1]} ${c[2]}</span>` : ''}${t.time ? `<span class="tm">⏰ ${plFmtT(t.time)}</span>` : ''}${rl ? `<span>${rl}</span>` : ''}</div></div>${inc && i.st === 'm' ? `<button class="plh-bt" onclick="plLate('${t.id}','${i.d}')">✓ Complete</button>` : ''}${inc && i.st === 'l' ? `<button class="plh-bt un" onclick="plLate('${t.id}','${i.d}')">↺ Undo</button>` : ''}</div>`;
         }).join('') + '</div>';
         cnt++;
       }
@@ -2558,10 +2569,10 @@
       if (more) body += `<button class="plh-more" onclick="plHistMore()">Show older days</button>`;
       el.innerHTML = `<div class="plh-body"><div class="plh-in">
           <div class="plh-top"><div><h2>Study History</h2><small>${tl}</small></div></div>
-          <div class="plh-hero">
+          <div class="plh-hero${inc ? ' inc' : ''}">
             <div class="plh-hr"><div class="plh-ring"><svg viewBox="0 0 100 100"><circle class="a" cx="50" cy="50" r="${R}"/><circle class="b" cx="50" cy="50" r="${R}" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - rate / 100)).toFixed(1)}"/></svg><b>${rate}%</b></div>
               <div><div class="plh-hl">${inc ? 'Recovery rate' : 'Completion rate'}</div><div class="plh-hb">${inc ? iLate + ' / ' + iMiss : dn + ' / ' + sch} <span>${inc ? 'recovered' : 'goals'}</span></div><div class="plh-hs">${inc ? (iMiss - iLate) + ' still incomplete · ' + iPend + ' pending today' : days.length + ' active day' + (days.length === 1 ? '' : 's') + ' · ' + avg + ' done per day'}</div></div></div>
-            <div class="plh-wk">${bars}</div>
+            ${inc ? '' : `<div class="plh-wk">${bars}</div>`}
           </div>
           ${inc ? `<div class="plh-kp"><div class="plh-k a"><b>${iMiss + iPend}</b><small>Incomplete</small></div><div class="plh-k g"><b>${iLate}</b><small>Done late</small></div><div class="plh-k r"><b>${iMiss - iLate}</b><small>Still missed</small></div><div class="plh-k y"><b>${iPend}</b><small>Today</small></div></div>` : `<div class="plh-kp"><div class="plh-k o"><b>🔥 ${cur}</b><small>Streak</small></div><div class="plh-k y"><b>🏆 ${best}</b><small>Best</small></div><div class="plh-k r"><b>${ms}</b><small>Missed</small></div><div class="plh-k a"><b>${pd}</b><small>Pending</small></div></div>`}
           <div class="plh-tabs">${tabs.map(f => `<button class="${plHTab === f[0] ? 'on' : ''}" onclick="plHistTab('${f[0]}')">${f[1]}</button>`).join('')}</div>
