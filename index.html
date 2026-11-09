@@ -658,6 +658,18 @@
     .plh-mr .e { width: auto; height: auto; background: none; box-shadow: none; font-size: 22px; }
     .plh-mr b { margin: 0; font-size: 20px; }
     .plh-mr em { margin: 0; padding: 2px 7px; font-size: 10.5px; }
+    /* ===== Premium stat tiles (History) ===== */
+    #plHist .plh-kp { gap: 9px; margin-top: 12px; }
+    #plHist .plh-k { --kc: 99,102,241; position: relative; display: flex; flex-direction: column; align-items: center; padding: 13px 4px 11px; border-radius: 22px; overflow: hidden;
+      background: linear-gradient(165deg, rgba(var(--kc), .17) 0%, rgba(var(--kc), .04) 100%), var(--card-bg);
+      box-shadow: 0 0 0 1px rgba(var(--kc), .22), 0 14px 24px -16px rgba(var(--kc), .8), inset 0 1px 0 rgba(255,255,255,.6); }
+    #plHist .plh-k::after { content: ""; position: absolute; right: -16px; top: -18px; width: 54px; height: 54px; border-radius: 50%; background: rgba(var(--kc), .12); }
+    #plHist .plh-k.o { --kc: 249,115,22; } #plHist .plh-k.y { --kc: 217,162,6; } #plHist .plh-k.r { --kc: 239,68,68; } #plHist .plh-k.a { --kc: 99,102,241; } #plHist .plh-k.g { --kc: 16,185,129; }
+    #plHist .plh-k .ic { position: relative; z-index: 1; width: 36px; height: 36px; display: grid; place-items: center; border-radius: 13px; font-size: 19px; line-height: 1; background: rgba(255,255,255,.9); box-shadow: 0 6px 12px -6px rgba(var(--kc), .9), inset 0 0 0 1px rgba(var(--kc), .2); }
+    #plHist .plh-k b { position: relative; z-index: 1; margin-top: 9px; font-size: 24px; font-weight: 700; line-height: 1; color: rgb(var(--kc)); }
+    #plHist .plh-k small { position: relative; z-index: 1; margin-top: 5px; font-size: 11.5px; font-weight: 600; color: #4b5266; white-space: nowrap; }
+    [data-theme="dark"] #plHist .plh-k { background: linear-gradient(165deg, rgba(var(--kc), .25), rgba(var(--kc), .06)), #1c2636; box-shadow: 0 0 0 1px rgba(var(--kc), .3), 0 14px 24px -16px rgba(0,0,0,.8); }
+    [data-theme="dark"] #plHist .plh-k .ic { background: rgba(255,255,255,.14); } [data-theme="dark"] #plHist .plh-k small { color: #cbd5e1; }
     .pl-empty { text-align: center; padding: 26px 10px 18px; color: #8b8f9a; font-size: 14px; line-height: 1.6; }
     .pl-empty i { display: block; font-style: normal; font-size: 38px; margin-bottom: 4px; }
     .pl-carry { width: 100%; margin-top: 10px; padding: 10px; border: 1px dashed var(--border-color); background: transparent; color: var(--primary-color); border-radius: 14px; font: 500 13px 'Rubik',sans-serif; cursor: pointer; }
@@ -2713,7 +2725,7 @@
               <div><div class="plh-hl">${inc ? 'Recovery rate' : 'Completion rate'}</div><div class="plh-hb">${inc ? iLate + ' / ' + iMiss : dn + ' / ' + sch} <span>${inc ? 'recovered' : 'goals'}</span></div><div class="plh-hs">${inc ? (iMiss - iLate) + ' still incomplete · ' + iPend + ' pending today' : dayN + ' active day' + (dayN === 1 ? '' : 's') + ' · ' + avg + ' done per day'}</div></div></div>
             ${inc ? '' : `<div class="plh-wk">${bars}</div>`}
           </div>
-          ${inc ? `<div class="plh-kp"><div class="plh-k a"><b>${iMiss + iPend}</b><small>Incomplete</small></div><div class="plh-k g"><b>${iLate}</b><small>Done late</small></div><div class="plh-k r"><b>${iMiss - iLate}</b><small>Still missed</small></div><div class="plh-k y"><b>${iPend}</b><small>Today</small></div></div>` : `<div class="plh-kp"><div class="plh-k o"><b>🔥 ${cur}</b><small>Streak</small></div><div class="plh-k y"><b>🏆 ${best}</b><small>Best</small></div><div class="plh-k r"><b>${ms}</b><small>Missed</small></div><div class="plh-k a"><b>${pd}</b><small>Pending</small></div></div>`}
+          ${inc ? `<div class="plh-kp"><div class="plh-k a"><span class="ic">📝</span><b>${iMiss + iPend}</b><small>Incomplete</small></div><div class="plh-k g"><span class="ic">✅</span><b>${iLate}</b><small>Done late</small></div><div class="plh-k r"><span class="ic">⚠️</span><b>${iMiss - iLate}</b><small>Still missed</small></div><div class="plh-k y"><span class="ic">📅</span><b>${iPend}</b><small>Today</small></div></div>` : `<div class="plh-kp"><div class="plh-k o"><span class="ic">🔥</span><b>${cur}</b><small>Streak</small></div><div class="plh-k y"><span class="ic">🏆</span><b>${best}</b><small>Best</small></div><div class="plh-k r"><span class="ic">⚠️</span><b>${ms}</b><small>Missed</small></div><div class="plh-k a"><span class="ic">⏳</span><b>${pd}</b><small>Pending</small></div></div>`}
           ${inc ? '' : `<div class="plh-mc"><div class="plh-mh"><div><b>Day mood</b><small>${mt ? mt + ' day' + (mt === 1 ? '' : 's') + ' rated' : 'Rate your days from Home'}</small></div>${mt ? `<div class="plh-mv ${top[0]}">Top mood ${top[1]}</div>` : ''}</div>
             <div class="plh-mb">${mt ? [['g', mc.g], ['a', mc.a], ['b', mc.b]].filter(z => z[1]).map(z => `<i class="${z[0]}" style="flex:${z[1]}"></i>`).join('') : ''}</div>
             <div class="plh-mr">${[['g', '😊', 'Good'], ['a', '😐', 'Average'], ['b', '😓', 'Bad']].map(m => `<div class="t ${m[0]} ${mt && top[0] === m[0] ? 'top' : ''}"><span class="e">${m[1]}</span><b>${mc[m[0]]}</b><em>${mt ? Math.round(mc[m[0]] / mt * 100) : 0}%</em></div>`).join('')}</div></div>`}
