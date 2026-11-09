@@ -2495,7 +2495,6 @@
             <button class="pl-hbtn" onclick="plHistOpen()" aria-label="Study history"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4.5h4.5"/><path d="M12 7.5V12l3 2"/></svg>History</button></div>
           <div class="pl-quick"><textarea id="plQi" rows="1" wrap="off" placeholder="Add a goal for this day…" autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter'){event.preventDefault();plQuick()}"></textarea><button class="alt" onclick="plOpen()" aria-label="More options">⚙️</button><button onclick="plQuick()" aria-label="Add">＋</button></div>
           ${rows || empty}
-          ${(plDay === td && od) ? `<button class="pl-carry" onclick="plCarry()">↪ Move ${od} missed goal${od > 1 ? 's' : ''} to today</button>` : ''}
         </div>
         <div class="pl-sec-title">Practice</div>`;
       const ns = host.querySelector('.pl-ds');
