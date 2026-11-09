@@ -709,6 +709,15 @@
     .pl-d.stk.on small::after { color: rgba(255,255,255,.9); } .pl-d.stk:not(.on) small::after { color: #6366f1; }
     [data-theme="dark"] .pl-dc { background: radial-gradient(90% 160% at 100% 0%, rgba(168,85,247,.16), transparent 60%), #1c2636; box-shadow: 0 0 0 1px rgba(129,140,248,.2), 0 16px 30px -22px rgba(0,0,0,.8); }
     [data-theme="dark"] .pl-d { background: #243042; box-shadow: 0 0 0 1px rgba(129,140,248,.16); } [data-theme="dark"] .pl-d.td { box-shadow: 0 0 0 2px #818cf8; } [data-theme="dark"] .pl-d.on { background: linear-gradient(160deg, #6366f1, #7c3aed); }
+    /* ===== Fix: no snap; today as card corner ===== */
+    .pl-ds { scroll-snap-type: none; } .pl-d { scroll-snap-align: none; }
+    .pl-d.stk { margin: -9px 0 -10px; height: 87px; z-index: 5; color: #fff; background: linear-gradient(160deg, #6366f1 0%, #7c3aed 100%); }
+    .pl-d.stl, .pl-d.str, .pl-d.on.stl, .pl-d.on.str { border-radius: 0; transform: none; }
+    .pl-d.stl, .pl-d.on.stl { box-shadow: 10px 0 18px -8px rgba(79,70,229,.6); }
+    .pl-d.str, .pl-d.on.str { box-shadow: -10px 0 18px -8px rgba(79,70,229,.6); }
+    .pl-d.stk b { color: #fff; } .pl-d.stk small::after, .pl-d.stk:not(.on) small::after { color: rgba(255,255,255,.88); }
+    .pl-d.stk i, .pl-d.stk i.g, .pl-d.stk i.y, .pl-d.stk i.r { background: rgba(255,255,255,.35); box-shadow: none; } .pl-d.stk i.g { background: #6ee7b7; } .pl-d.stk i.y { background: #fcd34d; } .pl-d.stk i.r { background: #fca5a5; }
+    [data-theme="dark"] .pl-d.stk { background: linear-gradient(160deg, #6366f1, #7c3aed); }
     .pl-empty { text-align: center; padding: 26px 10px 18px; color: #8b8f9a; font-size: 14px; line-height: 1.6; }
     .pl-empty i { display: block; font-style: normal; font-size: 38px; margin-bottom: 4px; }
     .pl-carry { width: 100%; margin-top: 10px; padding: 10px; border: 1px dashed var(--border-color); background: transparent; color: var(--primary-color); border-radius: 14px; font: 500 13px 'Rubik',sans-serif; cursor: pointer; }
@@ -2679,7 +2688,8 @@
         </div>
         <div class="pl-sec-title">Practice</div>`;
       const ns = host.querySelector('.pl-ds');
-      if (plCenter) { const el = ns.querySelector('.on'); if (el) ns.scrollLeft = plNat(ns, el) - ns.clientWidth / 2 + PL_W / 2; plCenter = false; } else ns.scrollLeft = sl;
+      const ctr = () => { const el = ns.querySelector('.on'); if (el && ns.clientWidth > 0) { ns.scrollLeft = plNat(ns, el) - ns.clientWidth / 2 + PL_W / 2; return true; } return false; };
+      if (plCenter) { if (ctr()) { plCenter = false; requestAnimationFrame(() => { if (ctr()) plStripSync(); }); } } else ns.scrollLeft = sl;
       ns.addEventListener('scroll', plStripQ, { passive: true }); plStripSync();
       const nq = host.querySelector('#plQi'); if (qv) nq.value = qv; if (qf) nq.focus();
     }
