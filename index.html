@@ -568,6 +568,35 @@
     .plc-sel { margin-top: 14px; }
     [data-theme="dark"] .plc-card { background: #1c2636; } [data-theme="dark"] .plc-c { background: rgba(129,140,248,.1); } [data-theme="dark"] .plc-c.g { background: rgba(16,185,129,.25); } [data-theme="dark"] .plc-c.y { background: rgba(245,158,11,.25); } [data-theme="dark"] .plc-c.r { background: rgba(239,68,68,.25); } [data-theme="dark"] .plc-c.on { background: linear-gradient(135deg, #6366f1, #7c3aed); }
     [data-theme="dark"] .plc-nav button, [data-theme="dark"] .plc-mood button { background: rgba(129,140,248,.16); color: #e0e7ff; } [data-theme="dark"] .plc-mood button.on { background: linear-gradient(135deg, #6366f1, #7c3aed); color: #fff; }
+    /* ===== Glass calendar ===== */
+    #plCal { background: radial-gradient(60% 40% at 15% 0%, rgba(251,146,60,.28), transparent 70%), radial-gradient(70% 45% at 100% 20%, rgba(244,114,182,.28), transparent 70%), radial-gradient(80% 50% at 0% 80%, rgba(99,102,241,.3), transparent 70%), linear-gradient(170deg, #fdf2f8 0%, #ede9fe 45%, #dbeafe 100%); }
+    #plCal .plh-top h2 { background: linear-gradient(135deg, #4f46e5, #a21caf); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    #plCal .plc-card, #plCal .plh-k, #plCal .plh-day { background: rgba(255,255,255,.5); -webkit-backdrop-filter: blur(18px) saturate(1.5); backdrop-filter: blur(18px) saturate(1.5); border: 1px solid rgba(255,255,255,.75); box-shadow: 0 20px 40px -24px rgba(79,70,229,.55), inset 0 1px 0 rgba(255,255,255,.8); }
+    #plCal .plc-card { border-radius: 28px; padding: 16px 12px 14px; }
+    #plCal .plc-nav button { background: rgba(255,255,255,.75); box-shadow: 0 6px 14px -8px rgba(79,70,229,.6); border-radius: 50%; color: #4f46e5; }
+    #plCal .plc-wd small:first-child { color: #e11d48; }
+    #plCal .plc-grid, #plCal .plc-wd { gap: 7px 6px; }
+    #plCal .plc-c { aspect-ratio: auto; height: 66px; gap: 7px; justify-content: center; border-radius: 16px; background: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.85); box-shadow: 0 8px 16px -12px rgba(79,70,229,.55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); transform: none; color: var(--text-color); }
+    #plCal .plc-c.e { background: transparent; border: 0; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+    #plCal .plc-c b { font-size: 15px; font-weight: 700; line-height: 1; padding: 3px 8px; border-radius: 999px; }
+    #plCal .plc-c.sun b { color: #e11d48; }
+    #plCal .plc-c.td b { background: linear-gradient(135deg, #6366f1, #a855f7); color: #fff; box-shadow: 0 6px 12px -4px rgba(124,58,237,.7); }
+    #plCal .plc-c.on { background: rgba(255,255,255,.8); color: var(--text-color); box-shadow: 0 0 0 2px #6366f1, 0 12px 22px -10px rgba(99,102,241,.8); }
+    #plCal .plc-c:active { transform: scale(.94); }
+    .plc-p { display: flex; width: calc(100% - 14px); height: 21px; border-radius: 999px; background: rgba(255,255,255,.85); box-shadow: inset 0 0 0 1px rgba(99,102,241,.16); overflow: hidden; }
+    .plc-p u { flex: 1; display: grid; place-items: center; text-decoration: none; font-size: 12.5px; line-height: 1; }
+    .plc-p u + u { box-shadow: inset 1px 0 0 rgba(99,102,241,.16); }
+    .plc-p i.o { width: 9px; height: 9px; border-radius: 50%; border: 1.5px dashed rgba(99,102,241,.35); box-sizing: border-box; }
+    .plc-p i.dt { width: 9px; height: 9px; border-radius: 50%; background: transparent; box-shadow: inset 0 0 0 1.5px rgba(99,102,241,.2); }
+    .plc-p i.dt.g { background: #10b981; box-shadow: 0 0 0 3px rgba(16,185,129,.2); } .plc-p i.dt.y { background: #f59e0b; box-shadow: 0 0 0 3px rgba(245,158,11,.22); } .plc-p i.dt.r { background: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,.2); }
+    #plCal .plc-lg { flex-wrap: wrap; row-gap: 6px; }
+    #plCal .plh-it { background: transparent; } #plCal .plh-it + .plh-it { border-top-color: rgba(99,102,241,.12); }
+    #plCal .plh-pg { display: none; }
+    #plCal .plc-go { box-shadow: 0 14px 24px -12px rgba(79,70,229,.9); }
+    [data-theme="dark"] #plCal { background: radial-gradient(60% 40% at 15% 0%, rgba(251,146,60,.18), transparent 70%), radial-gradient(70% 45% at 100% 20%, rgba(244,114,182,.16), transparent 70%), linear-gradient(170deg, #1a1033 0%, #141a33 55%, #0f1d3a 100%); }
+    [data-theme="dark"] #plCal .plc-card, [data-theme="dark"] #plCal .plh-k, [data-theme="dark"] #plCal .plh-day { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.14); box-shadow: 0 20px 40px -24px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.08); }
+    [data-theme="dark"] #plCal .plc-c { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.12); } [data-theme="dark"] #plCal .plc-c.on { background: rgba(255,255,255,.16); }
+    [data-theme="dark"] #plCal .plc-nav button { background: rgba(255,255,255,.12); color: #e0e7ff; } [data-theme="dark"] .plc-p { background: rgba(255,255,255,.12); }
     .pl-empty { text-align: center; padding: 26px 10px 18px; color: #8b8f9a; font-size: 14px; line-height: 1.6; }
     .pl-empty i { display: block; font-style: normal; font-size: 38px; margin-bottom: 4px; }
     .pl-carry { width: 100%; margin-top: 10px; padding: 10px; border: 1px dashed var(--border-color); background: transparent; color: var(--primary-color); border-radius: 14px; font: 500 13px 'Rubik',sans-serif; cursor: pointer; }
@@ -2659,7 +2688,7 @@
         const cls = !q.t ? '' : q.n === q.t ? 'g' : (iso < td && q.n === 0) ? 'r' : 'y';
         tA += q.t; tD += q.n; if (mood) cnt[mood]++;
         const em = mood ? PL_MOODS.find(m => m[0] === mood)[1] : '';
-        cells += `<button class="plc-c ${cls} ${iso === td ? 'td' : ''} ${iso === plCalSel ? 'on' : ''}" onclick="plCalPick('${iso}')"><b>${d}</b><span>${em}</span></button>`;
+        cells += `<button class="plc-c ${new Date(y, mo, d).getDay() === 0 ? 'sun' : ''} ${iso === td ? 'td' : ''} ${iso === plCalSel ? 'on' : ''}" onclick="plCalPick('${iso}')"><b>${d}</b><div class="plc-p"><u>${em || '<i class="o"></i>'}</u><u><i class="dt ${cls}"></i></u></div></button>`;
       }
       const pct = tA ? Math.round(tD / tA * 100) : 0;
       const sd = plCalSel, so = new Date(sd + 'T00:00'), q = plStat(sd), fut = sd > td, mv = plMoods[sd];
@@ -2677,12 +2706,11 @@
           <div class="plc-nav"><button onclick="plCalNav(-1)" aria-label="Previous month">‹</button><b>${m0.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</b><button onclick="plCalNav(1)" aria-label="Next month">›</button></div>
           <div class="plc-wd">${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(w => `<small>${w}</small>`).join('')}</div>
           <div class="plc-grid">${cells}</div>
-          <div class="plc-lg"><span><i class="g"></i>All done</span><span><i class="y"></i>Partial</span><span><i class="r"></i>Missed</span></div>
+          <div class="plc-lg"><span><i class="g"></i>All done</span><span><i class="y"></i>Partial</span><span><i class="r"></i>Missed</span><span>😊 Mood</span></div>
         </div>
         <div class="plh-kp"><div class="plh-k g"><b>${pct}%</b><small>Goals done</small></div><div class="plh-k"><b>😊 ${cnt.g}</b><small>Good</small></div><div class="plh-k"><b>😐 ${cnt.a}</b><small>Average</small></div><div class="plh-k"><b>😓 ${cnt.b}</b><small>Bad</small></div></div>
         <div class="plh-day plc-sel">
           <div class="plh-dh"><b>${lab}<em>${so.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</em></b><span class="${pc}">${q.n}/${q.t} done</span></div>
-          <div class="plc-mood">${PL_MOODS.map(m => `<button class="${mv === m[0] ? 'on' : ''}" ${fut ? 'disabled' : ''} onclick="plMoodSet('${sd}','${m[0]}')"><span>${m[1]}</span><small>${m[2]}</small></button>`).join('')}</div>
           ${rows}
           <button class="plc-go" onclick="plCalGo()">Open in Study Plan  →</button>
         </div>
