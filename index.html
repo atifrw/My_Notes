@@ -531,6 +531,43 @@
     [data-theme="dark"] .plh-tabs, [data-theme="dark"] .plh-m span, [data-theme="dark"] .plh-more { background: rgba(129,140,248,.16); color: #c7d2fe; }
     [data-theme="dark"] .plh-m span.sb { background: var(--sbc) !important; color: #111827; } [data-theme="dark"] .plh-m span.tm { background: rgba(251,191,36,.18); color: #fcd34d; }
     [data-theme="dark"] .plh-dh span.g { color: #6ee7b7; } [data-theme="dark"] .plh-dh span.r { color: #fca5a5; }
+    /* ===== Mood rater + calendar ===== */
+    .pl-ml { position: relative; margin-top: 16px; font-size: 11px; font-weight: 600; letter-spacing: 1.3px; text-transform: uppercase; opacity: .85; }
+    .pl-mood { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+    .pl-mood button { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px 7px; border: 1px solid rgba(255,255,255,.18); border-radius: 16px; background: rgba(255,255,255,.14); color: #fff; font-family: 'Rubik',sans-serif; cursor: pointer; backdrop-filter: blur(4px); transition: transform .18s cubic-bezier(.3,1.5,.5,1), background .2s; -webkit-tap-highlight-color: transparent; }
+    .pl-mood button span { font-size: 26px; line-height: 1.15; } .pl-mood button small { font-size: 11px; font-weight: 600; opacity: .9; }
+    .pl-mood button:active { transform: scale(.92); }
+    .pl-mood button.on { background: #fff; color: #5b21b6; border-color: #fff; box-shadow: 0 10px 20px -8px rgba(0,0,0,.45); transform: translateY(-2px); }
+    .pl-mood button:disabled { opacity: .45; cursor: default; }
+    #plannerArea .pl-hg { display: flex; gap: 8px; align-items: center; }
+    #plannerArea .pl-cbtn { padding: 9px 11px; }
+    #plCal { position: fixed; inset: 0; z-index: 8500; display: none; background: var(--bg-color); color: var(--text-color); font-family: 'Rubik',sans-serif; }
+    #plCal.on { display: block; animation: plhIn .28s cubic-bezier(.2,.8,.2,1); }
+    .plc-card { border-radius: 26px; padding: 14px 12px 12px; background: var(--card-bg); box-shadow: 0 0 0 1px rgba(99,102,241,.12), 0 18px 34px -22px rgba(99,102,241,.7); }
+    .plc-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .plc-nav b { font-size: 17px; font-weight: 700; letter-spacing: -.2px; }
+    .plc-nav button { width: 40px; height: 40px; border: 0; border-radius: 14px; background: rgba(99,102,241,.12); color: var(--primary-color); font-size: 22px; line-height: 1; cursor: pointer; }
+    .plc-wd, .plc-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+    .plc-wd small { text-align: center; font-size: 10.5px; font-weight: 600; letter-spacing: .6px; text-transform: uppercase; color: #8b8f9a; padding-bottom: 6px; }
+    .plc-c { aspect-ratio: 1 / 1.12; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 0; border: 0; border-radius: 15px; background: rgba(99,102,241,.06); color: var(--text-color); font-family: 'Rubik',sans-serif; cursor: pointer; transition: transform .15s; -webkit-tap-highlight-color: transparent; }
+    .plc-c.e { background: transparent; pointer-events: none; }
+    .plc-c b { font-size: 14px; font-weight: 600; } .plc-c span { font-size: 17px; height: 20px; line-height: 20px; }
+    .plc-c.g { background: rgba(16,185,129,.18); } .plc-c.y { background: rgba(245,158,11,.2); } .plc-c.r { background: rgba(239,68,68,.15); }
+    .plc-c.td { box-shadow: inset 0 0 0 2px #6366f1; }
+    .plc-c.on { background: linear-gradient(135deg, #6366f1, #7c3aed); color: #fff; box-shadow: 0 10px 18px -8px rgba(99,102,241,.8); transform: translateY(-1px); }
+    .plc-c:active { transform: scale(.93); }
+    .plc-lg { display: flex; justify-content: center; gap: 16px; margin-top: 12px; font-size: 11.5px; font-weight: 500; color: #8b8f9a; }
+    .plc-lg span { display: inline-flex; align-items: center; gap: 6px; } .plc-lg i { width: 10px; height: 10px; border-radius: 50%; background: #10b981; } .plc-lg i.y { background: #f59e0b; } .plc-lg i.r { background: #ef4444; }
+    .plc-mood { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 4px 16px 14px; }
+    .plc-mood button { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 4px 9px; border: 0; border-radius: 16px; background: rgba(99,102,241,.08); color: var(--text-color); font-family: 'Rubik',sans-serif; cursor: pointer; transition: all .2s; -webkit-tap-highlight-color: transparent; }
+    .plc-mood button span { font-size: 28px; line-height: 1.15; } .plc-mood button small { font-size: 11.5px; font-weight: 600; opacity: .75; }
+    .plc-mood button:active { transform: scale(.94); }
+    .plc-mood button.on { background: linear-gradient(135deg, #6366f1, #7c3aed); color: #fff; box-shadow: 0 10px 18px -8px rgba(99,102,241,.8); } .plc-mood button.on small { opacity: 1; }
+    .plc-mood button:disabled { opacity: .4; cursor: default; }
+    .plc-go { display: block; width: calc(100% - 32px); margin: 8px 16px 16px; padding: 13px; border: 0; border-radius: 16px; font: 600 13.5px 'Rubik',sans-serif; color: #fff; background: linear-gradient(135deg, #6366f1, #4f46e5); box-shadow: 0 12px 22px -12px rgba(79,70,229,.9); cursor: pointer; }
+    .plc-sel { margin-top: 14px; }
+    [data-theme="dark"] .plc-card { background: #1c2636; } [data-theme="dark"] .plc-c { background: rgba(129,140,248,.1); } [data-theme="dark"] .plc-c.g { background: rgba(16,185,129,.25); } [data-theme="dark"] .plc-c.y { background: rgba(245,158,11,.25); } [data-theme="dark"] .plc-c.r { background: rgba(239,68,68,.25); } [data-theme="dark"] .plc-c.on { background: linear-gradient(135deg, #6366f1, #7c3aed); }
+    [data-theme="dark"] .plc-nav button, [data-theme="dark"] .plc-mood button { background: rgba(129,140,248,.16); color: #e0e7ff; } [data-theme="dark"] .plc-mood button.on { background: linear-gradient(135deg, #6366f1, #7c3aed); color: #fff; }
     .pl-empty { text-align: center; padding: 26px 10px 18px; color: #8b8f9a; font-size: 14px; line-height: 1.6; }
     .pl-empty i { display: block; font-style: normal; font-size: 38px; margin-bottom: 4px; }
     .pl-carry { width: 100%; margin-top: 10px; padding: 10px; border: 1px dashed var(--border-color); background: transparent; color: var(--primary-color); border-radius: 14px; font: 500 13px 'Rubik',sans-serif; cursor: pointer; }
@@ -846,6 +883,7 @@
   </div>
 
   <div id="plHist"></div>
+  <div id="plCal"></div>
 
   <div id="plSheet" onclick="if(event.target===this)plClose()">
     <div class="pl-sh">
@@ -983,6 +1021,9 @@
           break;
         case "plhist":
           plHistHide();
+          break;
+        case "plcal":
+          plCalHide();
           break;
         case "quiz":
           performGoToHomeCleanup();
@@ -2360,6 +2401,8 @@
     const PL_SUBS = [['hist','📜','History','#fde68a'],['geo','🌍','Geography','#bbf7d0'],['pol','🏛️','Polity','#bfdbfe'],['eco','💰','Economy','#fbcfe8'],['sci','🔬','Science','#ddd6fe'],['math','➗','Maths','#fed7aa'],['oth','✨','Other','#e5e7eb']];
     const PL_SPACED = [1,3,7,15,30];
     let plTasks = {}, plDay = plIso(new Date()), plFilter = 'all', plUid = null, plReady = false;
+    let plMoods = {}, plCalM = '', plCalSel = '';
+    const PL_MOODS = [['b', '😓', 'Bad'], ['a', '😐', 'Average'], ['g', '😊', 'Good']];
     let plEd = null, plAt = null, plDi = '', plSub = 'hist', plPri = 'm', plRep = 'once', plEv = 5, plCenter = true;
 
     function plIso(d) { const x = new Date(d); return x.getFullYear() + '-' + String(x.getMonth()+1).padStart(2,'0') + '-' + String(x.getDate()).padStart(2,'0'); }
@@ -2441,7 +2484,9 @@
         plReady = true; plUid = uid; plDay = plIso(new Date()); plCenter = true;
         try { plTasks = JSON.parse(localStorage.getItem(plKey()) || '{}') || {}; } catch (e) { plTasks = {}; }
         Object.keys(plTasks).forEach(k => plTasks[k].id = k);
+        try { plMoods = JSON.parse(localStorage.getItem(plMoodKey()) || '{}') || {}; } catch (e) { plMoods = {}; }
         if (uid) {
+          database.ref('quizhub_planner/' + uid + '/moods').once('value').then(s => { const v = s.val(); if (v) { plMoods = v; try { localStorage.setItem(plMoodKey(), JSON.stringify(plMoods)); } catch (e) {} plRender(); if (document.getElementById('plCal').classList.contains('on')) plCalRender(true); } }).catch(() => {});
           database.ref('quizhub_planner/' + uid + '/tasks').once('value').then(s => {
             const v = s.val();
             if (v) { plTasks = v; Object.keys(plTasks).forEach(k => plTasks[k].id = k); plCache(); }
@@ -2467,9 +2512,7 @@
       }).join('');
       const label = plDay === td ? 'Today' : plDay === plAdd(td, 1) ? 'Tomorrow' : plDay === plAdd(td, -1) ? 'Yesterday' : dObj.toLocaleDateString('en-US', { weekday: 'long' });
       const msg = !S.t ? 'Add your first goal and start the day 🌱' : S.p === 100 ? '🎉 Perfect! All goals completed' : S.p >= 50 ? 'Great going, just a little more 💪' : S.n ? 'Good start, keep it up ✨' : "Let's begin, one goal at a time ✨";
-      const week = Array.from({ length: 7 }, (_, i) => plStat(plAdd(td, i - 6)).n).reduce((a, b) => a + b, 0);
-      let total = 0; const all = Object.values(plTasks).map(t => t.date).sort();
-      if (all.length) for (let d = all[0], i = 0; d <= td && i < 800; d = plAdd(d, 1), i++) total += plStat(d).n;
+      const mv = plMoods[plDay], fut = plDay > td;
       const PR = { h: 0, m: 1, l: 2 };
       let list = plFor(plDay).filter(t => plFilter === 'all' || (plFilter === 'todo' ? !plIsDone(t, plDay) : plIsDone(t, plDay)));
       list.sort((a, b) => (plIsDone(a, plDay) - plIsDone(b, plDay)) || ((a.time || '99:99').localeCompare(b.time || '99:99')) || ((PR[a.pri] || 0) - (PR[b.pri] || 0)) || ((a.created || 0) - (b.created || 0)));
@@ -2488,11 +2531,12 @@
             <div class="pl-ring"><svg viewBox="0 0 80 80"><circle class="r0" cx="40" cy="40" r="${R}"/><circle class="r1" cx="40" cy="40" r="${R}" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - S.p / 100)).toFixed(1)}"/></svg><b>${S.p}%</b></div>
             <div><div class="pl-hl">${label}'s goals</div><div class="pl-hb">${S.n} / ${S.t} <span>done</span></div><div class="pl-hm">${msg}</div></div>
           </div>
-          <div class="pl-stats"><div class="pl-st"><b>🔥 ${plStreak()}</b><small>Day streak</small></div><div class="pl-st"><b>${week}</b><small>This week</small></div><div class="pl-st"><b>${total}</b><small>Total done</small></div></div>
+          <div class="pl-ml">Rate your day</div>
+          <div class="pl-mood">${PL_MOODS.map(m => `<button class="${mv === m[0] ? 'on' : ''}" ${fut ? 'disabled' : ''} onclick="plMoodSet('${plDay}','${m[0]}')"><span>${m[1]}</span><small>${m[2]}</small></button>`).join('')}</div>
         </div>
         <div class="pl-card">
           <div class="pl-ch"><h3>Study Plan<small>${dObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</small></h3>
-            <button class="pl-hbtn" onclick="plHistOpen()" aria-label="Study history"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4.5h4.5"/><path d="M12 7.5V12l3 2"/></svg>History</button></div>
+            <div class="pl-hg"><button class="pl-hbtn pl-cbtn" onclick="plCalOpen()" aria-label="Calendar"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg></button><button class="pl-hbtn" onclick="plHistOpen()" aria-label="Study history"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4.5h4.5"/><path d="M12 7.5V12l3 2"/></svg>History</button></div></div>
           <div class="pl-quick"><textarea id="plQi" rows="1" wrap="off" placeholder="Add a goal for this day…" autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter'){event.preventDefault();plQuick()}"></textarea><button class="alt" onclick="plOpen()" aria-label="More options">⚙️</button><button onclick="plQuick()" aria-label="Add">＋</button></div>
           ${rows || empty}
         </div>
@@ -2580,6 +2624,69 @@
           <div class="plh-tabs">${tabs.map(f => `<button class="${plHTab === f[0] ? 'on' : ''}" onclick="plHistTab('${f[0]}')">${f[1]}</button>`).join('')}</div>
           ${body}
         </div></div>`;
+      const nb = el.querySelector('.plh-body'); if (nb) nb.scrollTop = keep ? st : 0;
+    }
+
+    // ---------- Mood + calendar ----------
+    function plMoodKey() { return 'quizhub_planner_moods_' + (plUid || 'guest'); }
+    function plMoodSet(d, v) {
+      if (d > plIso(new Date())) { plToast('Aane wale din ko rate nahi kar sakte'); return; }
+      const ref = plUid ? database.ref('quizhub_planner/' + plUid + '/moods/' + d) : null;
+      if (plMoods[d] === v) { delete plMoods[d]; if (ref) ref.remove().catch(() => {}); }
+      else { plMoods[d] = v; if (ref) ref.set(v).catch(() => {}); }
+      try { localStorage.setItem(plMoodKey(), JSON.stringify(plMoods)); } catch (e) {}
+      plRender(); if (document.getElementById('plCal').classList.contains('on')) plCalRender(true);
+    }
+    function plCalOpen() { const x = new Date(plDay + 'T00:00'); x.setDate(1); plCalM = plIso(x); plCalSel = plDay; plCalRender(); document.getElementById('plCal').classList.add('on'); pushScreen('plcal'); }
+    function plCalHide() { document.getElementById('plCal').classList.remove('on'); }
+    function plCalClose() { if (navStack[navStack.length - 1] === 'plcal') history.back(); else plCalHide(); }
+    function plCalNav(n) {
+      const x = new Date(plCalM + 'T00:00'); x.setMonth(x.getMonth() + n, 1); plCalM = plIso(x);
+      const t = new Date(), sameM = (y, m) => y === t.getFullYear() && m === t.getMonth();
+      if (sameM(x.getFullYear(), x.getMonth())) plCalSel = plIso(t); else plCalSel = plCalM;
+      plCalRender();
+    }
+    function plCalPick(d) { plCalSel = d; plCalRender(true); const p = document.querySelector('#plCal .plc-sel'); if (p && p.scrollIntoView) p.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+    function plCalGo() { plDay = plCalSel; plCenter = true; plCalClose(); plRender(); }
+    function plCalRender(keep) {
+      const el = document.getElementById('plCal'); if (!el) return;
+      const ob = el.querySelector('.plh-body'), st = ob ? ob.scrollTop : 0;
+      const td = plIso(new Date()), m0 = new Date(plCalM + 'T00:00'), y = m0.getFullYear(), mo = m0.getMonth();
+      const dim = new Date(y, mo + 1, 0).getDate(), lead = m0.getDay();
+      let cells = '<div class="plc-c e"></div>'.repeat(lead), tD = 0, tA = 0; const cnt = { b: 0, a: 0, g: 0 };
+      for (let d = 1; d <= dim; d++) {
+        const iso = plIso(new Date(y, mo, d)), q = plStat(iso), mood = plMoods[iso];
+        const cls = !q.t ? '' : q.n === q.t ? 'g' : (iso < td && q.n === 0) ? 'r' : 'y';
+        tA += q.t; tD += q.n; if (mood) cnt[mood]++;
+        const em = mood ? PL_MOODS.find(m => m[0] === mood)[1] : '';
+        cells += `<button class="plc-c ${cls} ${iso === td ? 'td' : ''} ${iso === plCalSel ? 'on' : ''}" onclick="plCalPick('${iso}')"><b>${d}</b><span>${em}</span></button>`;
+      }
+      const pct = tA ? Math.round(tD / tA * 100) : 0;
+      const sd = plCalSel, so = new Date(sd + 'T00:00'), q = plStat(sd), fut = sd > td, mv = plMoods[sd];
+      const lab = sd === td ? 'Today' : sd === plAdd(td, 1) ? 'Tomorrow' : sd === plAdd(td, -1) ? 'Yesterday' : so.toLocaleDateString('en-US', { weekday: 'long' });
+      const items = plFor(sd).slice().sort((a, b) => (a.time || '99:99').localeCompare(b.time || '99:99'));
+      const rows = items.map(t => {
+        const dn = plIsDone(t, sd), stt = dn ? 'd' : sd < td ? 'm' : 'p', c = PL_SUBS.find(z => z[0] === t.sub) || PL_SUBS[PL_SUBS.length - 1], rl = plRepLabel(t, sd);
+        const ttl = plEsc(t.title).split('\n').filter(z => z.trim()).map(z => { const m = z.match(/^\s*(\d+)[.)]\s*(.*)$/); return m ? `<div><span class="nb">${m[1]}</span>${m[2]}</div>` : `<div>${z}</div>`; }).join('');
+        return `<div class="plh-it ${stt}"><div class="plh-ic ${stt}">${dn ? '✓' : stt === 'm' ? '✕' : '•'}</div><div class="plh-tt"><div class="t">${ttl}</div><div class="plh-m">${t.sub && t.sub !== 'oth' ? `<span class="sb" style="background:${c[3]};--sbc:${c[3]}">${c[1]} ${c[2]}</span>` : ''}${t.time ? `<span class="tm">⏰ ${plFmtT(t.time)}</span>` : ''}${rl ? `<span>${rl}</span>` : ''}</div></div></div>`;
+      }).join('') || '<div class="plh-empty" style="padding:22px 10px"><i style="font-size:32px">🌱</i>No goals on this day</div>';
+      const pc = !q.t ? '' : q.n === q.t ? 'g' : (sd < td && q.n === 0) ? 'r' : '';
+      el.innerHTML = `<div class="plh-body"><div class="plh-in">
+        <div class="plh-top"><div><h2>Study Calendar</h2><small>Goals &amp; mood of every day</small></div></div>
+        <div class="plc-card">
+          <div class="plc-nav"><button onclick="plCalNav(-1)" aria-label="Previous month">‹</button><b>${m0.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</b><button onclick="plCalNav(1)" aria-label="Next month">›</button></div>
+          <div class="plc-wd">${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(w => `<small>${w}</small>`).join('')}</div>
+          <div class="plc-grid">${cells}</div>
+          <div class="plc-lg"><span><i class="g"></i>All done</span><span><i class="y"></i>Partial</span><span><i class="r"></i>Missed</span></div>
+        </div>
+        <div class="plh-kp"><div class="plh-k g"><b>${pct}%</b><small>Goals done</small></div><div class="plh-k"><b>😊 ${cnt.g}</b><small>Good</small></div><div class="plh-k"><b>😐 ${cnt.a}</b><small>Average</small></div><div class="plh-k"><b>😓 ${cnt.b}</b><small>Bad</small></div></div>
+        <div class="plh-day plc-sel">
+          <div class="plh-dh"><b>${lab}<em>${so.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</em></b><span class="${pc}">${q.n}/${q.t} done</span></div>
+          <div class="plc-mood">${PL_MOODS.map(m => `<button class="${mv === m[0] ? 'on' : ''}" ${fut ? 'disabled' : ''} onclick="plMoodSet('${sd}','${m[0]}')"><span>${m[1]}</span><small>${m[2]}</small></button>`).join('')}</div>
+          ${rows}
+          <button class="plc-go" onclick="plCalGo()">Open in Study Plan  →</button>
+        </div>
+      </div></div>`;
       const nb = el.querySelector('.plh-body'); if (nb) nb.scrollTop = keep ? st : 0;
     }
     function plFilterSet(f) { plFilter = f; plRender(); }
@@ -2691,7 +2798,7 @@
       else { delete plTasks[plEd]; plCache(); if (plUid) plRef(plEd).remove().catch(() => {}); }
       plClose(); plRender(); plToast(part ? 'Removed from this day onward' : 'Goal deleted');
     }
-    Object.assign(window, { plLate, plHistOpen, plHistClose, plHistTab, plHistMore, plDaySel, plToday, plFilterSet, plTog, plQuick, plCarry, plOpen, plClose, plSave, plDelete, plChips, plOnHome, plAdd, plIso, plFor, plAuto, plPrev, plPreset, plParseSeq, plCustomList,
+    Object.assign(window, { plMoodSet, plCalOpen, plCalClose, plCalNav, plCalPick, plCalGo, plLate, plHistOpen, plHistClose, plHistTab, plHistMore, plDaySel, plToday, plFilterSet, plTog, plQuick, plCarry, plOpen, plClose, plSave, plDelete, plChips, plOnHome, plAdd, plIso, plFor, plAuto, plPrev, plPreset, plParseSeq, plCustomList,
       plSetSub: s => { plSub = s; }, });
     Object.defineProperties(window, { plSub: { get: () => plSub, set: v => { plSub = v; } }, plPri: { get: () => plPri, set: v => { plPri = v; } }, plRep: { get: () => plRep, set: v => { plRep = v; } }, plEv: { get: () => plEv, set: v => { plEv = v; } } });
 
