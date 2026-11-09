@@ -542,7 +542,7 @@
     #plannerArea .pl-hg { display: flex; gap: 8px; align-items: center; }
     #plannerArea .pl-cbtn { padding: 9px 11px; }
     #plCal { position: fixed; inset: 0; z-index: 8500; display: none; background: var(--bg-color); color: var(--text-color); font-family: 'Rubik',sans-serif; }
-    #plCal.on { display: block; animation: plcFade .18s ease-out; }
+    #plCal.on { display: block; animation: plhIn .28s cubic-bezier(.2,.8,.2,1); }
     @keyframes plcFade { from { opacity: 0; } to { opacity: 1; } }
     .plc-card { border-radius: 26px; padding: 14px 12px 12px; background: var(--card-bg); box-shadow: 0 0 0 1px rgba(99,102,241,.12), 0 18px 34px -22px rgba(99,102,241,.7); }
     .plc-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
@@ -605,6 +605,7 @@
     #plCal .plc-grid.an { animation: plcN .26s ease-out; } #plCal .plc-grid.ap { animation: plcP .26s ease-out; }
     @keyframes plcN { from { opacity: 0; transform: translateX(26px); } to { opacity: 1; transform: none; } }
     @keyframes plcP { from { opacity: 0; transform: translateX(-26px); } to { opacity: 1; transform: none; } }
+    @media (min-width: 600px) {
     #plCal .plh-top h2 { font-size: 24px; } #plCal .plh-top small { font-size: 13.5px; }
     #plCal .plc-nav b { font-size: 20px; }
     #plCal .plc-nav button { width: 44px; height: 44px; font-size: 24px; }
@@ -621,6 +622,7 @@
     #plCal .plh-dh b { font-size: 18px; } #plCal .plh-dh b em { font-size: 13.5px; } #plCal .plh-dh span { font-size: 12.5px; }
     #plCal .plh-tt .t { font-size: 16px; } #plCal .plh-m span { font-size: 12px; padding: 4px 10px; }
     #plCal .plc-go { font-size: 15px; padding: 15px; }
+    }
     [data-theme="dark"] #plCal .plc-card, [data-theme="dark"] #plCal .plh-k, [data-theme="dark"] #plCal .plh-day { background: rgba(30,36,60,.85); }
     [data-theme="dark"] #plCal .plc-c { background: rgba(255,255,255,.1); box-shadow: none; } [data-theme="dark"] #plCal .plc-c.on { background: rgba(255,255,255,.2); }
     [data-theme="dark"] #plCal .plc-wd small, [data-theme="dark"] #plCal .plc-lg, [data-theme="dark"] #plCal .plh-k small { color: #aab1c5; } [data-theme="dark"] #plCal .plc-wd small:first-child { color: #fb7185; }
