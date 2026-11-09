@@ -677,33 +677,24 @@
     #plHist .plh-k .ic { width: 26px; height: 26px; border-radius: 9px; font-size: 14px; }
     #plHist .plh-k b { margin: 0; font-size: 20px; }
     #plHist .plh-k small { flex-basis: 100%; margin: 0; text-align: center; font-size: 11px; }
-    /* ===== Date card (premium) ===== */
-    .pl-dc { margin-bottom: 12px; padding: 12px 8px 4px; border-radius: 26px; background: radial-gradient(90% 140% at 100% 0%, rgba(168,85,247,.1), transparent 60%), linear-gradient(160deg, #ffffff, #f2f3ff); box-shadow: 0 0 0 1px rgba(99,102,241,.12), 0 18px 32px -22px rgba(99,102,241,.7); }
-    .pl-dh { display: flex; align-items: center; justify-content: space-between; padding: 0 8px 4px; }
-    .pl-dh b { font-size: 15px; font-weight: 700; letter-spacing: -.2px; }
-    .pl-dh span { font-size: 11px; font-weight: 700; padding: 4px 11px; border-radius: 999px; background: rgba(99,102,241,.12); color: var(--primary-color); }
-    .pl-dw { position: relative; }
-    .pl-ds { position: relative; gap: 6px; padding: 6px 2px 12px; overscroll-behavior-x: contain; }
-    .pl-d { flex: 0 0 56px; height: 66px; justify-content: center; gap: 3px; padding: 0; border: 0; border-radius: 19px; background: transparent; box-shadow: none; transform: none; }
-    .pl-d small { font-size: 10px; font-weight: 700; letter-spacing: .08em; color: #9aa0b4; }
-    .pl-d b { font-size: 19px; font-weight: 700; letter-spacing: -.3px; }
+    /* ===== Date cards (premium, sticky today) ===== */
+    .pl-ds { position: relative; gap: 6px; padding: 6px 4px 14px; overscroll-behavior-x: contain; }
+    .pl-d { flex: 0 0 56px; height: 68px; justify-content: center; gap: 3px; padding: 0; border: 0; border-radius: 20px;
+      background: linear-gradient(180deg, #ffffff, #f2f3ff); box-shadow: 0 0 0 1px rgba(99,102,241,.13), 0 8px 16px -12px rgba(99,102,241,.7); transform: none; }
+    .pl-d small { font-size: 10.5px; font-weight: 700; letter-spacing: .09em; color: #9aa0b4; text-transform: uppercase; }
+    .pl-d.m1 small { color: var(--primary-color); }
+    .pl-d b { font-size: 20px; font-weight: 700; letter-spacing: -.3px; }
     .pl-d.sn b { color: #e11d48; }
-    .pl-d i { width: 6px; height: 6px; margin-top: 1px; background: transparent; }
-    .pl-d i.g { background: #10b981; } .pl-d i.y { background: #f59e0b; } .pl-d i.r { background: #ef4444; }
-    .pl-d.td { background: rgba(99,102,241,.08); box-shadow: inset 0 0 0 1.5px rgba(99,102,241,.55); } .pl-d.td small { color: #6366f1; }
-    .pl-d.on { background: linear-gradient(160deg, #6366f1 0%, #7c3aed 100%); color: #fff; box-shadow: 0 12px 22px -10px rgba(99,102,241,.9); transform: none; }
-    .pl-d.on small { color: rgba(255,255,255,.8); } .pl-d.on b { color: #fff; }
-    .pl-d.on i.g { background: #6ee7b7; } .pl-d.on i.y { background: #fcd34d; } .pl-d.on i.r { background: #fca5a5; }
-    .pl-d.on i.g, .pl-d.on i.y, .pl-d.on i.r { box-shadow: none; }
-    .pl-mo { flex: none; align-self: center; width: 1px; height: 34px; padding: 0; margin: 0 2px; border-radius: 1px; background: rgba(99,102,241,.22); }
-    .pl-mo.st { display: none; }
-    .pl-tdb { position: absolute; top: 21px; z-index: 4; display: none; align-items: center; gap: 5px; height: 36px; padding: 0 13px; border: 0; border-radius: 999px; font: 700 12px 'Rubik',sans-serif; color: #fff; background: linear-gradient(135deg, #6366f1, #7c3aed); box-shadow: 0 10px 20px -6px rgba(79,70,229,.85), 0 0 0 3px rgba(255,255,255,.8); cursor: pointer; animation: pltd .22s ease-out; -webkit-tap-highlight-color: transparent; }
-    .pl-tdb.show { display: inline-flex; } .pl-tdb.l { left: 0; } .pl-tdb.r { right: 0; }
-    .pl-tdb i { font-style: normal; min-width: 20px; height: 20px; padding: 0 4px; border-radius: 10px; background: rgba(255,255,255,.26); display: grid; place-items: center; font-size: 11.5px; } .pl-tdb span { font-size: 15px; line-height: 1; opacity: .9; }
-    @keyframes pltd { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: none; } }
-    [data-theme="dark"] .pl-dc { background: radial-gradient(90% 140% at 100% 0%, rgba(168,85,247,.16), transparent 60%), #1c2636; box-shadow: 0 0 0 1px rgba(129,140,248,.2), 0 18px 32px -22px rgba(0,0,0,.8); }
-    [data-theme="dark"] .pl-dh span { background: rgba(129,140,248,.2); color: #c7d2fe; } [data-theme="dark"] .pl-d.td { background: rgba(129,140,248,.14); box-shadow: inset 0 0 0 1.5px #818cf8; }
-    [data-theme="dark"] .pl-tdb { box-shadow: 0 10px 20px -6px rgba(0,0,0,.7), 0 0 0 3px rgba(28,38,54,.9); }
+    .pl-d i { width: 6px; height: 6px; margin-top: 1px; background: rgba(99,102,241,.14); }
+    .pl-d i.g { background: #10b981; box-shadow: 0 0 0 3px rgba(16,185,129,.2); } .pl-d i.y { background: #f59e0b; box-shadow: 0 0 0 3px rgba(245,158,11,.22); } .pl-d i.r { background: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,.2); }
+    .pl-d.td { position: sticky; left: 4px; right: 4px; z-index: 3; box-shadow: 0 0 0 2px #6366f1, 0 12px 20px -10px rgba(99,102,241,.9); } .pl-d.td small { color: #6366f1; }
+    .pl-d.on { background: linear-gradient(160deg, #6366f1 0%, #7c3aed 100%); color: #fff; transform: translateY(-2px); box-shadow: 0 14px 24px -10px rgba(99,102,241,.9); }
+    .pl-d.on.td { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #6366f1, 0 14px 24px -10px rgba(99,102,241,.9); }
+    .pl-d.on small, .pl-d.on.m1 small { color: rgba(255,255,255,.82); } .pl-d.on b { color: #fff; }
+    .pl-d.on i { background: rgba(255,255,255,.3); box-shadow: none; } .pl-d.on i.g { background: #6ee7b7; } .pl-d.on i.y { background: #fcd34d; } .pl-d.on i.r { background: #fca5a5; }
+    [data-theme="dark"] .pl-d { background: linear-gradient(180deg, #243042, #1b2533); box-shadow: 0 0 0 1px rgba(129,140,248,.18); }
+    [data-theme="dark"] .pl-d.td { box-shadow: 0 0 0 2px #818cf8, 0 12px 20px -10px rgba(0,0,0,.8); } [data-theme="dark"] .pl-d.on { background: linear-gradient(160deg, #6366f1, #7c3aed); }
+    [data-theme="dark"] .pl-d.on.td { box-shadow: 0 0 0 2px #1c2636, 0 0 0 4px #818cf8; }
     .pl-empty { text-align: center; padding: 26px 10px 18px; color: #8b8f9a; font-size: 14px; line-height: 1.6; }
     .pl-empty i { display: block; font-style: normal; font-size: 38px; margin-bottom: 4px; }
     .pl-carry { width: 100%; margin-top: 10px; padding: 10px; border: 1px dashed var(--border-color); background: transparent; color: var(--primary-color); border-radius: 14px; font: 500 13px 'Rubik',sans-serif; cursor: pointer; }
@@ -2641,7 +2632,7 @@
       const u = auth.currentUser;
       const nm = (!isGuest && u) ? ((u.displayName || (u.email || '').split('@')[0] || '').split(' ')[0]) : 'Student';
       const hr = new Date().getHours(), gr = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening';
-      const strip = plStripHtml(td, -plBack, plFwd, true);
+      const strip = plStripHtml(td, -plBack, plFwd);
       const label = plDay === td ? 'Today' : plDay === plAdd(td, 1) ? 'Tomorrow' : plDay === plAdd(td, -1) ? 'Yesterday' : dObj.toLocaleDateString('en-US', { weekday: 'long' });
       const msg = !S.t ? 'Add your first goal and start the day 🌱' : S.p === 100 ? '🎉 Perfect! All goals completed' : S.p >= 50 ? 'Great going, just a little more 💪' : S.n ? 'Good start, keep it up ✨' : "Let's begin, one goal at a time ✨";
       const mv = plMoods[plDay], fut = plDay > td;
@@ -2657,7 +2648,7 @@
       const empty = `<div class="pl-empty"><i>${plFilter === 'done' ? '🎯' : '🌱'}</i>${plFilter === 'all' ? 'No goals for this day yet.<br>Add one above to get started.' : plFilter === 'todo' ? 'Nothing pending 🎉' : 'No completed goals yet.'}</div>`;
       const R = 34, C = 2 * Math.PI * R;
       host.innerHTML = `
-        <div class="pl-dc"><div class="pl-dh"><b id="plMon">${dObj.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</b><span>${label}</span></div><div class="pl-dw"><div class="pl-ds" id="plStrip">${strip}</div><button class="pl-tdb" onclick="plToday()" aria-label="Go to today"></button></div></div>
+        <div class="pl-ds" id="plStrip">${strip}</div>
         <div class="pl-hero">
           <div class="pl-hero-row">
             <div class="pl-ring"><svg viewBox="0 0 80 80"><circle class="r0" cx="40" cy="40" r="${R}"/><circle class="r1" cx="40" cy="40" r="${R}" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - S.p / 100)).toFixed(1)}"/></svg><b>${S.p}%</b></div>
@@ -2674,7 +2665,7 @@
         </div>
         <div class="pl-sec-title">Practice</div>`;
       const ns = host.querySelector('.pl-ds');
-      if (plCenter) { const el = ns.querySelector('.on'); if (el) ns.scrollLeft = el.offsetLeft - ns.clientWidth / 2 + el.offsetWidth / 2; plCenter = false; } else ns.scrollLeft = sl;
+      if (plCenter) { const el = ns.querySelector('.on'); if (el) ns.scrollLeft = plNat(ns, el) - ns.clientWidth / 2 + PL_W / 2; plCenter = false; } else ns.scrollLeft = sl;
       ns.addEventListener('scroll', plStripQ, { passive: true }); plStripSync();
       const nq = host.querySelector('#plQi'); if (qv) nq.value = qv; if (qf) nq.focus();
     }
@@ -2684,42 +2675,27 @@
     function plChipHtml(d, td) {
       const x = new Date(d + 'T00:00'), q = plStat(d);
       const cls = !q.t ? '' : q.n === q.t ? 'g' : (d < td && q.n === 0) ? 'r' : 'y';
-      return `<button class="pl-d ${d === plDay ? 'on' : ''} ${d === td ? 'td' : ''} ${x.getDay() === 0 ? 'sn' : ''}" data-d="${d}" onclick="plDaySel('${d}')"><small>${x.toLocaleDateString('en-US', { weekday: 'short' })}</small><b>${x.getDate()}</b><i class="${cls}"></i></button>`;
+      return `<button class="pl-d ${d === plDay ? 'on' : ''} ${d === td ? 'td' : ''} ${x.getDay() === 0 ? 'sn' : ''} ${x.getDate() === 1 ? 'm1' : ''}" data-d="${d}" onclick="plDaySel('${d}')"><small>${x.toLocaleDateString('en-US', { [x.getDate() === 1 ? 'month' : 'weekday']: 'short' })}</small><b>${x.getDate()}</b><i class="${cls}"></i></button>`;
     }
-    function plStripHtml(td, a, b, mark) {
-      let h = '';
-      for (let i = a; i <= b; i++) {
-        const d = plAdd(td, i), x = new Date(d + 'T00:00');
-        if ((mark && i === a) || x.getDate() === 1) h += `<span class="pl-mo${mark && i === a ? ' st' : ''}"></span>`;
-        h += plChipHtml(d, td);
-      }
-      return h;
-    }
+    const PL_W = 56, PL_G = 6, PL_PAD = 4;
+    function plNat(ns, el) { return PL_PAD + Array.prototype.indexOf.call(ns.children, el) * (PL_W + PL_G); }
+    function plStripHtml(td, a, b) { let h = ''; for (let i = a; i <= b; i++) h += plChipHtml(plAdd(td, i), td); return h; }
     function plStripQ() { if (plStripRaf) return; plStripRaf = requestAnimationFrame(() => { plStripRaf = 0; plStripSync(); }); }
     function plStripSync() {
       const ns = document.querySelector('#plannerArea .pl-ds'); if (!ns) return;
       const td = plIso(new Date());
       if (ns.scrollLeft < 220 && plBack < 730) {
-        const w0 = ns.scrollWidth, f = ns.querySelector('.pl-mo.st'); if (f) f.remove();
-        const h = plStripHtml(td, -(plBack + 30), -(plBack + 1), true); plBack += 30;
+        const w0 = ns.scrollWidth, h = plStripHtml(td, -(plBack + 30), -(plBack + 1)); plBack += 30;
         ns.insertAdjacentHTML('afterbegin', h); ns.scrollLeft += ns.scrollWidth - w0;
       }
       if (ns.scrollWidth - ns.scrollLeft - ns.clientWidth < 220 && plFwd < 730) {
-        ns.insertAdjacentHTML('beforeend', plStripHtml(td, plFwd + 1, plFwd + 30, false)); plFwd += 30;
+        ns.insertAdjacentHTML('beforeend', plStripHtml(td, plFwd + 1, plFwd + 30)); plFwd += 30;
       }
-      const b = document.querySelector('#plannerArea .pl-tdb'), t = ns.querySelector('.pl-d.td');
-      if (b && t) {
-        const x = t.offsetLeft - ns.scrollLeft, vis = x > -t.offsetWidth * 0.4 && x < ns.clientWidth - t.offsetWidth * 0.6;
-        const dn = new Date().getDate();
-        if (vis) b.className = 'pl-tdb'; else { const l = x <= 0; b.className = 'pl-tdb show ' + (l ? 'l' : 'r'); b.innerHTML = l ? `<span>‹</span> Today <i>${dn}</i>` : `Today <i>${dn}</i> <span>›</span>`; }
-      }
-      const mid = ns.scrollLeft + ns.clientWidth / 2, ml = document.getElementById('plMon');
-      if (ml) { const cs = ns.querySelectorAll('.pl-d'); let c = cs[0]; for (let i = 0; i < cs.length; i++) { if (cs[i].offsetLeft + cs[i].offsetWidth > mid) { c = cs[i]; break; } } if (c && c.dataset.d) { const tx = new Date(c.dataset.d + 'T00:00').toLocaleDateString('en-US', { month: 'long', year: 'numeric' }); if (ml.textContent !== tx) ml.textContent = tx; } }
     }
 
     function plToday() {
       const td = plIso(new Date()), ns = document.querySelector('#plannerArea .pl-ds'), t = ns && ns.querySelector('.pl-d.td');
-      if (plDay === td && t) { ns.scrollTo({ left: t.offsetLeft - ns.clientWidth / 2 + t.offsetWidth / 2, behavior: 'smooth' }); return; }
+      if (plDay === td && t) { ns.scrollTo({ left: plNat(ns, t) - ns.clientWidth / 2 + PL_W / 2, behavior: 'smooth' }); return; }
       plDay = td; plCenter = true; plBack = 21; plFwd = 35; plRender();
     }
 
