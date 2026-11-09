@@ -720,6 +720,10 @@
     [data-theme="dark"] .pl-d.stk { background: linear-gradient(160deg, #6366f1, #7c3aed); }
     /* flush to card edge (sticky offset ignores scroller padding) */
     .pl-d.td { left: -10px; right: -10px; }
+    /* tighter spacing around date cards */
+    .pl-ds { gap: 4px; padding: 5px 6px 6px; }
+    .pl-d.td { left: -6px; right: -6px; }
+    .pl-d.stk { margin: -5px 0 -6px; height: 79px; }
     .pl-empty { text-align: center; padding: 26px 10px 18px; color: #8b8f9a; font-size: 14px; line-height: 1.6; }
     .pl-empty i { display: block; font-style: normal; font-size: 38px; margin-bottom: 4px; }
     .pl-carry { width: 100%; margin-top: 10px; padding: 10px; border: 1px dashed var(--border-color); background: transparent; color: var(--primary-color); border-radius: 14px; font: 500 13px 'Rubik',sans-serif; cursor: pointer; }
@@ -2706,7 +2710,7 @@
       const cls = !q.t ? '' : q.n === q.t ? 'g' : (d < td && q.n === 0) ? 'r' : 'y';
       return `<button class="pl-d ${d === plDay ? 'on' : ''} ${d === td ? 'td' : ''} ${x.getDay() === 0 ? 'sn' : ''} ${x.getDate() === 1 ? 'm1' : ''}" data-d="${d}" onclick="${d === td ? 'plToday()' : `plDaySel('${d}')`}"><small>${x.toLocaleDateString('en-US', { [x.getDate() === 1 ? 'month' : 'weekday']: 'short' })}</small><b>${x.getDate()}</b><i class="${cls}"></i></button>`;
     }
-    const PL_W = 56, PL_G = 6, PL_PAD = 10;
+    const PL_W = 56, PL_G = 4, PL_PAD = 6;
     function plNat(ns, el) { return PL_PAD + Array.prototype.indexOf.call(ns.children, el) * (PL_W + PL_G); }
     function plStripHtml(td, a, b) { let h = ''; for (let i = a; i <= b; i++) h += plChipHtml(plAdd(td, i), td); return h; }
     function plStripQ() { if (plStripRaf) return; plStripRaf = requestAnimationFrame(() => { plStripRaf = 0; plStripSync(); }); }
