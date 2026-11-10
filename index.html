@@ -1394,11 +1394,11 @@
     // MODE SELECT / SWITCH
     // ============================================================
     function showModeSelectScreen() {
-      plOnHome();
       document.getElementById("modeSelectArea").style.display = "block";
       document.getElementById("setupArea").style.display = "none";
       document.getElementById("quizArea").style.display = "none";
       document.getElementById("pCont").style.display = "none";
+      plOnHome(); // after the area is visible, so the day strip can be measured and centred before the first paint
       document.getElementById("headerTitle").innerHTML = '<span class="hb-ic">📚</span><span class="hb-tx">Study Hub</span>';
       document.getElementById("headerTitle").style.display = "inline";
     }
@@ -2733,7 +2733,7 @@
       const ns = host.querySelector('.pl-ds');
       const ctr = () => { const el = ns.querySelector('.on'); if (el && ns.clientWidth > 0) { ns.scrollLeft = plNat(ns, el) - ns.clientWidth / 2 + PL_W / 2; return true; } return false; };
       if (plCenter) {
-        if (ctr()) { plCenter = false; requestAnimationFrame(() => { if (ctr()) plStripSync(); }); }
+        if (ctr()) { plCenter = false; plStripSync(); requestAnimationFrame(() => { if (ctr()) plStripSync(); }); }
         else if (window.ResizeObserver) { const ro = new ResizeObserver(() => { if (ns.clientWidth > 0) { ro.disconnect(); if (plCenter && ns.isConnected && ctr()) { plCenter = false; plStripSync(); } } }); ro.observe(ns); }
       } else ns.scrollLeft = sl;
       ns.addEventListener('scroll', plStripQ, { passive: true }); plStripSync();
