@@ -192,11 +192,16 @@
     /* --- PREMIUM TOP BAR --- */
     .header-btns { padding: 9px 10px 9px 9px; border-radius: 22px; border: 1px solid rgba(99,102,241,.16); background: linear-gradient(135deg, #ffffff 0%, #f1f0ff 100%); box-shadow: 0 12px 26px -18px rgba(99,102,241,.8), inset 0 1px 0 rgba(255,255,255,.95); }
     #headerTitle { display: inline-flex !important; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -.2px; }
-    #headerTitle .hb-ic { width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center; font-size: 19px; line-height: 1; background: linear-gradient(135deg, #6366f1, #8b5cf6 60%, #c084fc); box-shadow: 0 10px 18px -8px rgba(99,102,241,.85), inset 0 1px 0 rgba(255,255,255,.45); }
-    #headerTitle .hb-tx { font-size: 18px; font-weight: 800; background: linear-gradient(90deg, #4338ca, #7c3aed); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+    #headerTitle { --h1: #6366f1; --h2: #c084fc; --t1: #4338ca; --t2: #7c3aed; --d1: #a5b4fc; --d2: #d8b4fe; --hs: 99,102,241; }
+    #headerTitle[data-m="mcq"] { --h1: #3b82f6; --h2: #6366f1; --t1: #1d4ed8; --t2: #4f46e5; --d1: #93c5fd; --d2: #a5b4fc; --hs: 59,130,246; }
+    #headerTitle[data-m="subjective"] { --h1: #f97316; --h2: #ef4444; --t1: #c2410c; --t2: #dc2626; --d1: #fdba74; --d2: #fca5a5; --hs: 249,115,22; }
+    #headerTitle[data-m="vijeta"] { --h1: #f59e0b; --h2: #eab308; --t1: #b45309; --t2: #ca8a04; --d1: #fcd34d; --d2: #fde047; --hs: 234,179,8; }
+    #headerTitle[data-m="notes"] { --h1: #22c55e; --h2: #14b8a6; --t1: #15803d; --t2: #0f766e; --d1: #86efac; --d2: #5eead4; --hs: 34,197,94; }
+    #headerTitle .hb-ic { width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center; font-size: 19px; line-height: 1; background: linear-gradient(135deg, var(--h1), var(--h2)); box-shadow: 0 10px 18px -8px rgba(var(--hs), .85), inset 0 1px 0 rgba(255,255,255,.45); }
+    #headerTitle .hb-tx { font-size: 18px; font-weight: 800; background: linear-gradient(90deg, var(--t1), var(--t2)); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
     .user-profile img { width: 38px; height: 38px; border: 0; padding: 2px; background: linear-gradient(135deg, #6366f1, #c084fc); box-shadow: 0 8px 16px -8px rgba(99,102,241,.9); box-sizing: border-box; object-fit: cover; }
     [data-theme="dark"] .header-btns { background: linear-gradient(135deg, #1d2536 0%, #202046 100%); border-color: rgba(129,140,248,.25); box-shadow: 0 12px 26px -18px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.05); }
-    [data-theme="dark"] #headerTitle .hb-tx { background: linear-gradient(90deg, #a5b4fc, #d8b4fe); -webkit-background-clip: text; background-clip: text; }
+    [data-theme="dark"] #headerTitle .hb-tx { background: linear-gradient(90deg, var(--d1), var(--d2)); -webkit-background-clip: text; background-clip: text; }
 
     /* --- PREMIUM PRACTICE SCREEN (setup) --- */
     #setupArea .select-panels { gap: 12px; margin-bottom: 14px; }
@@ -1200,10 +1205,10 @@
     ];
 
     const MODE_CONFIG = {
-      mcq: { storagePrefix: "hub_mcq_", firebasePath: "quizhub_mcq", title: "🔥 Smart Quiz Pro", folder: "mcq", dataFiles: MCQ_BASE_FILES },
-      subjective: { storagePrefix: "hub_subj_", firebasePath: "quizhub_subjective", title: "🔥 Smart Subjective Pro", folder: "subjective", dataFile: "sub.json" },
-      vijeta: { storagePrefix: "hub_vijeta_", firebasePath: "quizhub_vijeta", title: "🏆 Vijeta Quiz", folder: "vijeta", dataFiles: MCQ_BASE_FILES.map(f => "Vijeta_" + f) },
-      notes: { storagePrefix: "hub_notes_", firebasePath: "quizhub_notes", title: "📒 Notes Quiz", folder: "notes", dataFiles: MCQ_BASE_FILES.map(f => "Notes_" + f) }
+      mcq: { storagePrefix: "hub_mcq_", firebasePath: "quizhub_mcq", title: "MCQ Hub", icon: "📝", folder: "mcq", dataFiles: MCQ_BASE_FILES },
+      subjective: { storagePrefix: "hub_subj_", firebasePath: "quizhub_subjective", title: "Subjective Hub", icon: "✍️", folder: "subjective", dataFile: "sub.json" },
+      vijeta: { storagePrefix: "hub_vijeta_", firebasePath: "quizhub_vijeta", title: "Vijeta Hub", icon: "🏆", folder: "vijeta", dataFiles: MCQ_BASE_FILES.map(f => "Vijeta_" + f) },
+      notes: { storagePrefix: "hub_notes_", firebasePath: "quizhub_notes", title: "Notes Hub", icon: "📒", folder: "notes", dataFiles: MCQ_BASE_FILES.map(f => "Notes_" + f) }
     };
 
     // Modes that use the MCQ-style question screen (color feedback + manual Next button)
@@ -1453,6 +1458,7 @@
       document.getElementById("pCont").style.display = "none";
       setTimeout(prefetchModes, 300);
       plOnHome(); // after the area is visible, so the day strip can be measured and centred before the first paint
+      document.getElementById("headerTitle").removeAttribute("data-m");
       document.getElementById("headerTitle").innerHTML = '<span class="hb-ic">📚</span><span class="hb-tx">Study Hub</span>';
       document.getElementById("headerTitle").style.display = "inline";
     }
@@ -1461,12 +1467,18 @@
       closeTopScreen();
     }
 
+    function setHeaderTitle(mode) {
+      const ht = document.getElementById("headerTitle"), c = MODE_CONFIG[mode];
+      ht.dataset.m = mode;
+      ht.innerHTML = '<span class="hb-ic">' + c.icon + '</span><span class="hb-tx">' + c.title + '</span>';
+    }
+
     function selectMode(mode) {
       currentMode = mode;
       const cfg = MODE_CONFIG[mode];
       STORAGE_PREFIX = cfg.storagePrefix;
       FIREBASE_PATH = cfg.firebasePath;
-      document.getElementById("headerTitle").innerText = cfg.title;
+      setHeaderTitle(mode);
 
       document.getElementById("modeSelectArea").style.display = "none";
       document.getElementById("setupArea").style.display = "block";
@@ -2528,7 +2540,7 @@
       document.getElementById("heartActionBtn").style.display = "none";
       document.getElementById("speakBtn").style.display = "none";
       document.getElementById("timerDisplay").style.display = "none";
-      { const ht = document.getElementById("headerTitle"); if (MODE_CONFIG[currentMode]) ht.innerText = MODE_CONFIG[currentMode].title; else ht.innerHTML = '<span class="hb-ic">📚</span><span class="hb-tx">Study Hub</span>'; }
+      { const ht = document.getElementById("headerTitle"); if (MODE_CONFIG[currentMode]) setHeaderTitle(currentMode); else ht.innerHTML = '<span class="hb-ic">📚</span><span class="hb-tx">Study Hub</span>'; }
       document.getElementById("headerTitle").style.display = "inline";
 
       document.getElementById("trackerArea").style.display = "none";
