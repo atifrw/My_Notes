@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>📖 Study Hub - Premium Edition</title>
+  <link rel="preload" as="image" href="image/anime.png">
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
 
   <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -247,6 +248,8 @@
     [data-theme="dark"] #setupArea .grid-card .card-sub { color: #9aa4b2; }
     @media (max-width: 500px) { #setupArea .button-grid { grid-template-columns: 1fr; } }
 
+    #setupArea .subject-item.sk { pointer-events: none; border-color: transparent; box-shadow: none; background: linear-gradient(100deg, rgba(99,102,241,.07) 30%, rgba(99,102,241,.16) 50%, rgba(99,102,241,.07) 70%); background-size: 220% 100%; animation: skShim 1.1s linear infinite; }
+    @keyframes skShim { from { background-position: 120% 0; } to { background-position: -120% 0; } }
     /* --- PREMIUM PRACTICE CARDS --- */
     .mode-select-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
     .mode-select-grid .mode-card { --ac: 99,102,241; --ad: 67,56,202; position: relative; overflow: hidden; isolation: isolate; display: flex; flex-direction: column; align-items: flex-start; text-align: left; min-height: 146px; padding: 16px 14px 15px; border-radius: 24px; border: 1px solid rgba(var(--ac), .22); background: linear-gradient(155deg, #ffffff 0%, rgba(var(--ac), .12) 100%); box-shadow: 0 14px 26px -18px rgba(var(--ac), .85), inset 0 1px 0 rgba(255,255,255,.9); transition: transform .22s ease, box-shadow .22s ease; -webkit-tap-highlight-color: transparent; }
@@ -1448,6 +1451,7 @@
       document.getElementById("setupArea").style.display = "none";
       document.getElementById("quizArea").style.display = "none";
       document.getElementById("pCont").style.display = "none";
+      setTimeout(prefetchModes, 300);
       plOnHome(); // after the area is visible, so the day strip can be measured and centred before the first paint
       document.getElementById("headerTitle").innerHTML = '<span class="hb-ic">📚</span><span class="hb-tx">Study Hub</span>';
       document.getElementById("headerTitle").style.display = "inline";
@@ -1472,6 +1476,11 @@
       quizData = {}; allQuestionsFlat = [];
       savedList = []; revisionDates = {}; weakList = []; collections = {}; questionResults = {};
       selectedSubject = "all";
+
+      fetchModeTexts(mode).catch(() => {}); // start downloading questions right now, in parallel with the user's saved data
+      const sl = document.getElementById("subjectList");
+      if (sl) sl.innerHTML = '<div class="subject-item sk"></div><div class="subject-item sk"></div><div class="subject-item sk"></div><div class="subject-item sk"></div>';
+      renderChapterList(); // shows the illustration immediately
 
       loadModeUserData();
     }
@@ -1529,29 +1538,41 @@
     function initApp() {
       checkSavedBtn(); updateWeakBtn(); checkResumeStatus(); updateCollectionBtn();
 
-      const cfg = MODE_CONFIG[currentMode];
+      const mode = currentMode, cfg = MODE_CONFIG[mode];
+      fetchModeTexts(mode).then(texts => {
+        if (currentMode !== mode) return; // user already switched to another mode
+        quizData = {};
+        texts.forEach(t => {
+          if (cfg.dataFiles) { try { Object.assign(quizData, JSON.parse(t)); } catch (e) { console.warn(cfg.folder + " file parse nahi hua:", e); } }
+          else quizData = JSON.parse(t);
+        });
+        finishDataLoad();
+      }).catch(e => {
+        console.error(cfg.folder + " data load nahi hua:", e);
+        alert(cfg.folder + "/" + (cfg.dataFile || "") + " file nahi mili. Please check file/folder name.");
+      });
+    }
 
-      if (cfg.dataFiles) {
-        Promise.all(
-          cfg.dataFiles.map(f =>
-            fetch(cfg.folder + "/" + f, { cache: "no-cache" })
-              .then(r => r.json())
-              .catch(e => { console.warn(cfg.folder + "/" + f + " load nahi hua:", e); return {}; })
-          )
-        ).then(results => {
-          quizData = {};
-          results.forEach(fileData => Object.assign(quizData, fileData));
-          finishDataLoad();
-        });
-      } else {
-        fetch(cfg.folder + "/" + cfg.dataFile + "?v=" + Math.random(), { cache: "no-cache" }).then(r => r.json()).then(j => {
-          quizData = j;
-          finishDataLoad();
-        }).catch(e => {
-          console.error(cfg.folder + "/" + cfg.dataFile + " load nahi hua:", e);
-          alert(cfg.folder + "/" + cfg.dataFile + " file nahi mili. Please check file/folder name.");
-        });
-      }
+    // Question files are downloaded once per visit and kept in memory (parsed fresh on every open),
+    // and pre-fetched in the background from the home screen so a mode opens instantly.
+    const modeTextCache = {};
+    function fetchModeTexts(mode) {
+      if (modeTextCache[mode]) return modeTextCache[mode];
+      const cfg = MODE_CONFIG[mode];
+      const get = f => fetch(cfg.folder + "/" + f, { cache: "no-cache" }).then(r => { if (!r.ok) throw new Error(r.status); return r.text(); });
+      const p = cfg.dataFiles
+        ? Promise.all(cfg.dataFiles.map(f => get(f).catch(e => { console.warn(cfg.folder + "/" + f + " load nahi hua:", e); return "{}"; })))
+        : get(cfg.dataFile).then(t => [t]);
+      modeTextCache[mode] = p;
+      p.catch(() => { delete modeTextCache[mode]; });
+      return p;
+    }
+    let prefetchStarted = false;
+    function prefetchModes() {
+      if (prefetchStarted) return; prefetchStarted = true;
+      try { const im = new Image(); im.src = "image/anime.png"; } catch (e) {}
+      const order = ["mcq", "subjective", "vijeta", "notes"];
+      order.forEach((m, i) => setTimeout(() => { fetchModeTexts(m).catch(() => {}); }, 400 + i * 1200));
     }
 
     function finishDataLoad() {
@@ -1723,7 +1744,7 @@
       if(selectedSubject === "all" || !quizData[selectedSubject]) {
         list.innerHTML = `
           <div class="chapter-empty-state">
-            <img src="image/anime.png" alt="Select a subject" style="margin-bottom:4px;">
+            <img src="image/anime.png" alt="Select a subject" decoding="async" style="margin-bottom:4px;">
             <div class="ces-title">अपना अध्याय चुनें</div>
             <div class="ces-sub">सीखने की जादुई दुनिया में प्रवेश करें</div>
           </div>`;
@@ -2408,7 +2429,7 @@
       if(collSelectedSub === "all" || !collections[collSelectedSub]) {
         list.innerHTML = `
           <div class="chapter-empty-state">
-            <img src="image/anime.png" alt="Select a subject" style="margin-bottom:4px;">
+            <img src="image/anime.png" alt="Select a subject" decoding="async" style="margin-bottom:4px;">
             <div class="ces-title">अपना अध्याय चुनें</div>
             <div class="ces-sub">सीखने की जादुई दुनिया में प्रवेश करें</div>
           </div>`;
