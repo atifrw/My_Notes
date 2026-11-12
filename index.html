@@ -272,6 +272,38 @@
     :where(.pl-task:active) .pl-ck { transform: none; }
     @media (hover: none) { :where(.mode-card, .grid-card):hover { transform: none; } }
 
+    /* --- PREMIUM PROFILE MENU --- */
+    .profile-dropdown { top: 52px; min-width: 288px; max-width: calc(100vw - 24px); border-radius: 22px; padding: 6px; border: 1px solid rgba(99,102,241,.18); background: var(--card-bg); box-shadow: 0 28px 60px -22px rgba(30,27,75,.55), 0 10px 24px -14px rgba(99,102,241,.45); text-align: left; }
+    .profile-dropdown .pm-head { display: flex; align-items: center; gap: 12px; padding: 14px 12px 12px; margin: 0 0 6px; border-radius: 16px; background: linear-gradient(135deg, rgba(99,102,241,.16), rgba(168,85,247,.14)); }
+    .profile-dropdown .pm-av { width: 46px; height: 46px; flex-shrink: 0; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(135deg, #6366f1, #c084fc); padding: 2px; box-shadow: 0 10px 18px -8px rgba(99,102,241,.85); }
+    .profile-dropdown .pm-av img { width: 100%; height: 100%; border-radius: 50%; border: 0; padding: 0; background: #fff; object-fit: cover; box-shadow: none; }
+    .profile-dropdown .pm-emoji { font-size: 24px; line-height: 1; }
+    .profile-dropdown .pm-who { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+    .profile-dropdown .pm-who b { font-size: 15.5px; font-weight: 700; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .profile-dropdown .pm-who small { font-size: 11.5px; color: #8b8fa3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .profile-dropdown .pm-sec { display: flex; flex-direction: column; gap: 2px; padding: 4px 0; }
+    .profile-dropdown .pm-sec + .pm-sec { border-top: 1px solid var(--border-color); }
+    .profile-dropdown .pm-row { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 10px; border: 0; border-radius: 14px; background: transparent; color: var(--text-color); font: inherit; font-size: 14px; font-weight: 600; text-align: left; cursor: pointer; margin: 0; box-sizing: border-box; }
+    .profile-dropdown button.pm-row:hover { background: rgba(99,102,241,.08); }
+    .profile-dropdown .pm-ic { width: 32px; height: 32px; flex-shrink: 0; border-radius: 10px; display: grid; place-items: center; font-size: 16px; line-height: 1; background: linear-gradient(145deg, rgba(99,102,241,.14), rgba(168,85,247,.16)); }
+    .profile-dropdown .pm-tx { flex: 1; min-width: 0; }
+    .profile-dropdown .pm-sw { width: 42px; height: 24px; border-radius: 14px; background: rgba(120,124,150,.35); position: relative; flex-shrink: 0; transition: background .22s ease; }
+    .profile-dropdown .pm-sw i { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.3); transition: transform .22s cubic-bezier(.2,.8,.3,1); }
+    [data-theme="dark"] .profile-dropdown .pm-sw { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+    [data-theme="dark"] .profile-dropdown .pm-sw i { transform: translateX(18px); }
+    .profile-dropdown .pm-col { flex-direction: column; align-items: stretch; gap: 10px; cursor: default; }
+    .profile-dropdown .pm-line { display: flex; align-items: center; gap: 12px; }
+    .profile-dropdown .pm-col input[type="range"] { width: 100%; margin: 0 0 2px; padding: 0; accent-color: #6366f1; }
+    .profile-dropdown .pm-col .order-toggle-wrap { gap: 8px; }
+    .profile-dropdown .pm-col .order-toggle-btn { padding: 10px 4px !important; font-size: 12.5px !important; border-radius: 12px !important; }
+    .profile-dropdown .pm-tiles { flex-direction: row; gap: 8px; padding: 8px 4px; }
+    .profile-dropdown .pm-tile { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 8px; border: 1px solid rgba(99,102,241,.2); border-radius: 14px; background: linear-gradient(135deg, var(--card-bg), rgba(99,102,241,.1)); color: var(--text-color); font-size: 13px; font-weight: 700; cursor: pointer; margin: 0; }
+    .profile-dropdown .pm-tile .pm-ic { width: 26px; height: 26px; border-radius: 8px; font-size: 14px; }
+    .profile-dropdown .pm-accent { color: #4f46e5; }
+    .profile-dropdown .pm-danger { color: #e74c3c; }
+    .profile-dropdown .pm-danger .pm-ic { background: rgba(231,76,60,.12); }
+    [data-theme="dark"] .profile-dropdown { border-color: rgba(129,140,248,.25); box-shadow: 0 28px 60px -22px rgba(0,0,0,.9); }
+    [data-theme="dark"] .profile-dropdown .pm-accent { color: #a5b4fc; }
     /* --- PREMIUM PRACTICE CARDS --- */
     .mode-select-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
     .mode-select-grid .mode-card { --ac: 99,102,241; --ad: 67,56,202; position: relative; overflow: hidden; isolation: isolate; display: flex; flex-direction: column; align-items: flex-start; text-align: left; min-height: 146px; padding: 16px 14px 15px; border-radius: 24px; border: 1px solid rgba(var(--ac), .22); background: linear-gradient(155deg, #ffffff 0%, rgba(var(--ac), .12) 100%); box-shadow: 0 14px 26px -18px rgba(var(--ac), .85), inset 0 1px 0 rgba(255,255,255,.9); transition: transform .22s ease, box-shadow .22s ease; -webkit-tap-highlight-color: transparent; }
@@ -1073,11 +1105,7 @@
             </button>
         </div>
 
-        <div class="backup-area">
-          <button class="backup-btn" onclick="exportData()">📤 Backup Data</button>
-          <button class="backup-btn" onclick="document.getElementById('importFile').click()">📥 Restore Data</button>
-          <input type="file" id="importFile" style="display:none" onchange="importData(event)">
-        </div>
+        <input type="file" id="importFile" style="display:none" onchange="importData(event)">
 
         <div id="trackerArea" class="tracker-card">
           <h3 style="text-align:center;">📅 रिवीजन स्टेटस</h3>
@@ -1335,23 +1363,7 @@
             
             up.innerHTML = `
                 <img src="${photo}" alt="User">
-                <div id="profileDropdown" class="profile-dropdown">
-                    <div class="user-info-header">Hi, ${name.split(' ')[0]}</div>
-                    <button onclick="toggleTheme()">🌙 Dark Mode</button>
-                    <div class="voice-speed-row">
-                      <span>🔊 Speed</span>
-                      <input type="range" id="voiceSpeed" min="0.5" max="1.5" step="0.1" value="1" onchange="saveVoiceSpeed(this.value)">
-                    </div>
-                    <div class="voice-speed-row">
-                      <span>🔀 Order</span>
-                      <div class="order-toggle-wrap">
-                        <button type="button" id="orderRandomBtn" class="order-toggle-btn" onclick="setOrderMode('random')">🔀 Random</button>
-                        <button type="button" id="orderSequenceBtn" class="order-toggle-btn" onclick="setOrderMode('sequence')">📋 Sequence</button>
-                      </div>
-                    </div>
-                    <button onclick="changeDisplayName()">✏️ Name Change</button>
-                    <button onclick="logoutUser()" style="color:#e74c3c; border-top:1px solid #eee;">🚪 Logout</button>
-                </div>`;
+                ${buildProfileMenu(`Hi, ${name.split(' ')[0]}`, user.email || 'Signed in', false, photo)}`;
             up.style.display = "flex";
             initVoiceSpeedUI();
             updateOrderModeUI();
@@ -1372,6 +1384,41 @@
             document.getElementById("mainHeader").style.display = "none";
         }
     });
+
+    function buildProfileMenu(title, sub, isGuest, photo) {
+      const av = photo ? `<img src="${photo}" alt="">` : '<span class="pm-emoji">👤</span>';
+      return `<div id="profileDropdown" class="profile-dropdown">
+        <div class="pm-head"><div class="pm-av">${av}</div><div class="pm-who"><b>${title}</b><small>${sub}</small></div></div>
+        <div class="pm-sec">
+          <button type="button" class="pm-row" onclick="toggleTheme()"><span class="pm-ic">🌙</span><span class="pm-tx">Dark Mode</span><span class="pm-sw"><i></i></span></button>
+          <div class="pm-row pm-col"><div class="pm-line"><span class="pm-ic">🔊</span><span class="pm-tx">Voice Speed</span></div>
+            <input type="range" id="voiceSpeed" min="0.5" max="1.5" step="0.1" value="1" onchange="saveVoiceSpeed(this.value)"></div>
+          <div class="pm-row pm-col"><div class="pm-line"><span class="pm-ic">🔀</span><span class="pm-tx">Question Order</span></div>
+            <div class="order-toggle-wrap">
+              <button type="button" id="orderRandomBtn" class="order-toggle-btn" onclick="setOrderMode('random')">🔀 Random</button>
+              <button type="button" id="orderSequenceBtn" class="order-toggle-btn" onclick="setOrderMode('sequence')">📋 Sequence</button>
+            </div></div>
+        </div>
+        <div class="pm-sec pm-tiles">
+          <button type="button" class="pm-tile" onclick="menuBackup()"><span class="pm-ic">📤</span>Backup</button>
+          <button type="button" class="pm-tile" onclick="menuRestore()"><span class="pm-ic">📥</span>Restore</button>
+        </div>
+        <div class="pm-sec">
+          ${isGuest
+            ? '<button type="button" class="pm-row pm-accent" onclick="clearGuestAndLogin()"><span class="pm-ic">✨</span><span class="pm-tx">Sign Up / Login</span></button>'
+            : '<button type="button" class="pm-row" onclick="changeDisplayName()"><span class="pm-ic">✏️</span><span class="pm-tx">Change Name</span></button><button type="button" class="pm-row pm-danger" onclick="logoutUser()"><span class="pm-ic">🚪</span><span class="pm-tx">Logout</span></button>'}
+        </div>
+      </div>`;
+    }
+
+    function menuBackup() {
+      if (!currentMode) { alert("Open a practice mode first, then take a backup."); return; }
+      closeProfileMenu(); exportData();
+    }
+    function menuRestore() {
+      if (!currentMode) { alert("Open a practice mode first, then restore your backup."); return; }
+      closeProfileMenu(); document.getElementById("importFile").click();
+    }
 
     function toggleProfileMenu(e) {
         e.stopPropagation();
@@ -1454,22 +1501,7 @@
         const up = document.getElementById("userProfile");
         up.innerHTML = `
             <div style="font-size:24px;">👤</div>
-            <div id="profileDropdown" class="profile-dropdown">
-                <div class="user-info-header">Guest Mode</div>
-                <button onclick="toggleTheme()">🌙 Dark Mode</button>
-                <div class="voice-speed-row">
-                  <span>🔊 Speed</span>
-                  <input type="range" id="voiceSpeed" min="0.5" max="1.5" step="0.1" value="1" onchange="saveVoiceSpeed(this.value)">
-                </div>
-                <div class="voice-speed-row">
-                  <span>🔀 Order</span>
-                  <div class="order-toggle-wrap">
-                    <button type="button" id="orderRandomBtn" class="order-toggle-btn" onclick="setOrderMode('random')">🔀 Random</button>
-                    <button type="button" id="orderSequenceBtn" class="order-toggle-btn" onclick="setOrderMode('sequence')">📋 Sequence</button>
-                  </div>
-                </div>
-                <button onclick="clearGuestAndLogin()">✨ Sign Up / Login</button>
-            </div>`;
+            ${buildProfileMenu('Guest Mode', 'Sign up to sync your progress', true)}`;
         up.style.display = "flex";
         initVoiceSpeedUI();
         updateOrderModeUI();
@@ -2693,7 +2725,7 @@
       toggleProfileMenu, logoutUser, changeDisplayName, loginWithGoogle, loginWithEmail,
       forgotPassword, continueAsGuest, clearGuestAndLogin, toggleTheme, selectSubject, renderChapterList,
       toggleAllChapters, toggleTracker, startQuiz, resumeQuiz, selectMode, backToModeSelect,
-      exportData, importData, saveVoiceSpeed, setOrderMode, readFullQuestion,
+      exportData, importData, menuBackup, menuRestore, saveVoiceSpeed, setOrderMode, readFullQuestion,
       openExplanationEditor, closeExplanationEditor, applyExpFormat, applyExpFontSize,
       clearExpFormatting, saveCustomExplanationFromEditor,
       handleHeartClick, toggleCollection, selectCollSubject, toggleAllCollChapters, startCollectionPractice,
