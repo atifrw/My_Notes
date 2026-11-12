@@ -192,6 +192,8 @@
     /* --- PREMIUM TOP BAR --- */
     .header-btns { padding: 9px 10px 9px 9px; border-radius: 22px; border: 1px solid rgba(99,102,241,.16); background: linear-gradient(135deg, #ffffff 0%, #f1f0ff 100%); box-shadow: 0 12px 26px -18px rgba(99,102,241,.8), inset 0 1px 0 rgba(255,255,255,.95); }
     #headerTitle { display: inline-flex !important; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -.2px; }
+    #headerTitle[style*="display: none"] { display: none !important; }
+    #headerTitle[style*="display: none"], #headerTitle[style*="display:none"] { display: none !important; }
     #headerTitle { --h1: #6366f1; --h2: #c084fc; --t1: #4338ca; --t2: #7c3aed; --d1: #a5b4fc; --d2: #d8b4fe; --hs: 99,102,241; }
     #headerTitle[data-m="mcq"] { --h1: #3b82f6; --h2: #6366f1; --t1: #1d4ed8; --t2: #4f46e5; --d1: #93c5fd; --d2: #a5b4fc; --hs: 59,130,246; }
     #headerTitle[data-m="subjective"] { --h1: #f97316; --h2: #ef4444; --t1: #c2410c; --t2: #dc2626; --d1: #fdba74; --d2: #fca5a5; --hs: 249,115,22; }
