@@ -1235,6 +1235,25 @@
     const auth = firebase.auth();
     const database = firebase.database();
 
+    // ---- Keep the login alive (stops the "logged out after ~30 min" problem) ----
+    // 1) store the session explicitly in long-term browser storage
+    try { auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {}); } catch (e) {}
+    // 2) ask the browser not to evict this site's saved data (the login lives there) when it needs space
+    try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); } catch (e) {}
+    // 3) refresh the login token whenever the app comes back to the foreground / network returns / every 20 min,
+    //    so it never sits expired after the tab was asleep in the background
+    let authKeepAliveAt = 0;
+    function keepAuthAlive(force) {
+      const u = auth.currentUser; if (!u) return;
+      if (!force && Date.now() - authKeepAliveAt < 10 * 60 * 1000) return;
+      authKeepAliveAt = Date.now();
+      u.getIdToken(true).catch(e => console.warn("token refresh skipped:", e && e.code));
+    }
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) keepAuthAlive(); });
+    window.addEventListener("focus", () => keepAuthAlive());
+    window.addEventListener("online", () => keepAuthAlive(true));
+    setInterval(() => keepAuthAlive(), 20 * 60 * 1000);
+
     // ============================================================
     // MODE CONFIG
     // currentMode: 'mcq' | 'subjective' | null
