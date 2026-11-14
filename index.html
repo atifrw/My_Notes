@@ -69,43 +69,70 @@
     @media (prefers-reduced-motion: reduce) { #loadingScreen *, #loadingScreen *::after { animation-duration: 0s !important; animation-iteration-count: 1 !important; } }
 
     /* --- LOGIN --- */
-    #loginArea { 
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: linear-gradient(135deg, #f5f2eb 0%, #e0dcd0 100%);
-      display: flex; align-items: center; justify-content: center; z-index: 9999;
+    #loginArea {
+      position: fixed; inset: 0; overflow: hidden; z-index: 9999;
+      background: radial-gradient(90% 55% at 50% 0%, rgba(129,140,248,.30), transparent 70%), radial-gradient(70% 50% at 100% 100%, rgba(192,132,252,.25), transparent 70%), linear-gradient(180deg, #f8f7ff 0%, #eeeafd 100%);
+      display: flex; align-items: center; justify-content: center;
     }
-    [data-theme="dark"] #loginArea { background: linear-gradient(135deg, #111827 0%, #030712 100%); }
+    [data-theme="dark"] #loginArea { background: radial-gradient(90% 55% at 50% 0%, rgba(99,102,241,.32), transparent 70%), radial-gradient(70% 50% at 100% 100%, rgba(168,85,247,.25), transparent 70%), linear-gradient(180deg, #111827 0%, #070b16 100%); }
+    #loginArea .lg-blob { position: absolute; border-radius: 50%; filter: blur(46px); opacity: .5; pointer-events: none; animation: ldFloat 9s ease-in-out infinite; }
+    #loginArea .lg-b1 { width: 240px; height: 240px; left: -70px; top: 10%; background: #a5b4fc; }
+    #loginArea .lg-b2 { width: 260px; height: 260px; right: -90px; bottom: 6%; background: #e9b8ff; animation-delay: -4s; }
+    [data-theme="dark"] #loginArea .lg-blob { opacity: .2; }
 
     .login-glass-card {
-      background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.4); padding: 30px;
-      border-radius: 30px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-      max-width: 400px; width: 90%; animation: fadeIn 0.8s ease-out;
+      position: relative; max-width: 420px; width: calc(100% - 40px); max-height: 94vh; overflow-y: auto; box-sizing: border-box;
+      padding: 34px 26px 26px; border-radius: 32px; text-align: center;
+      background: rgba(255,255,255,.72); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+      border: 1px solid rgba(255,255,255,.8);
+      box-shadow: 0 30px 60px -24px rgba(79,70,229,.35), 0 2px 0 rgba(255,255,255,.7) inset;
+      animation: fadeIn .7s cubic-bezier(.2,.9,.3,1) both;
     }
-    [data-theme="dark"] .login-glass-card { background: rgba(31, 41, 55, 0.7); border-color: rgba(255, 255, 255, 0.1); }
+    [data-theme="dark"] .login-glass-card { background: rgba(31,41,55,.62); border-color: rgba(255,255,255,.09); box-shadow: 0 30px 60px -24px rgba(0,0,0,.7), 0 1px 0 rgba(255,255,255,.06) inset; }
 
-    .login-brand-icon { font-size: 50px; margin-bottom: 10px; display: block; }
-    .login-glass-card h1 { margin: 0; font-size: 26px; color: var(--text-color); font-weight: 600; }
-    
-    .input-group { margin-bottom: 15px; text-align: left; }
-    .input-group label { display: block; font-size: 12px; margin-bottom: 5px; font-weight: bold; }
-    .login-input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); font-family: inherit; box-sizing: border-box; }
+    .login-brand-icon { width: 68px; height: 68px; margin: 0 auto 16px; border-radius: 22px; display: grid; place-items: center; font-size: 34px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6 60%, #c084fc); box-shadow: 0 18px 28px -12px rgba(99,102,241,.85), inset 0 1px 0 rgba(255,255,255,.5); }
+    .login-glass-card h1 { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -.5px;
+      background: linear-gradient(90deg, #4338ca, #7c3aed 55%, #c026d3); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+    [data-theme="dark"] .login-glass-card h1 { background: linear-gradient(90deg, #a5b4fc, #d8b4fe 60%, #f0abfc); -webkit-background-clip: text; background-clip: text; }
+    .login-tag { margin: 6px 0 0; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: #8b8fb5; }
+    [data-theme="dark"] .login-tag { color: #7d83a8; }
 
-    .modern-google-btn {
-      background: white; color: #2c3e50; border: 1px solid #ddd; padding: 12px 24px;
-      border-radius: 12px; font-size: 14px; font-weight: 500; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;
-      transition: all 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-top: 15px;
-    }
+    .input-group { position: relative; margin-bottom: 12px; text-align: left; }
+    .input-group .lg-ic { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 16px; opacity: .65; pointer-events: none; }
+    .input-group .lg-eye { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 38px; height: 38px; border: 0; background: none; font-size: 16px; cursor: pointer; opacity: .65; border-radius: 10px; }
+    .login-input { width: 100%; margin: 0 !important; height: 50px; padding: 0 44px 0 42px; border-radius: 15px; font-size: 15px; font-family: inherit; box-sizing: border-box; outline: none;
+      border: 1.5px solid rgba(99,102,241,.16); background: rgba(255,255,255,.85); color: var(--text-color); transition: border-color .2s, box-shadow .2s; }
+    [data-theme="dark"] .login-input { background: rgba(17,24,39,.7); border-color: rgba(165,180,252,.16); }
+    .login-input:focus { border-color: #6366f1; box-shadow: 0 0 0 4px rgba(99,102,241,.14); }
+
+    .email-login-btn { width: 100%; height: 52px; margin-top: 6px; border: 0; border-radius: 16px; cursor: pointer; font-family: inherit; font-size: 15px; font-weight: 600; color: #fff;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6 60%, #a855f7); box-shadow: 0 16px 26px -12px rgba(99,102,241,.9), inset 0 1px 0 rgba(255,255,255,.35); transition: transform .15s, box-shadow .15s; }
+    .email-login-btn:active { transform: scale(.97); }
+    .lg-forgot { display: inline-block; margin-top: 14px; font-size: 13px; color: #6366f1; text-decoration: none; font-weight: 500; }
+
+    .lg-or { display: flex; align-items: center; gap: 12px; margin: 16px 0 4px; color: #9aa0c3; font-size: 11px; letter-spacing: .18em; }
+    .lg-or::before, .lg-or::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(99,102,241,.25), transparent); }
+
+    .modern-google-btn, .guest-btn {
+      width: 100%; height: 50px; margin-top: 12px; border-radius: 15px; cursor: pointer; font-family: inherit; font-size: 14.5px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center; gap: 10px; transition: transform .15s, box-shadow .2s;
+      background: rgba(255,255,255,.92); color: #2c3e50; border: 1.5px solid rgba(99,102,241,.14); box-shadow: 0 6px 14px -8px rgba(79,70,229,.35); }
+    [data-theme="dark"] .modern-google-btn, [data-theme="dark"] .guest-btn { background: rgba(31,41,55,.85); color: #e5e7eb; border-color: rgba(165,180,252,.16); }
+    .modern-google-btn:active, .guest-btn:active { transform: scale(.97); }
     .modern-google-btn svg { width: 18px; height: 18px; }
 
-    .email-login-btn { background: #3498db; color: white; border: none; padding: 12px; border-radius: 12px; width: 100%; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.3s; }
-    .email-login-btn:hover { background: #2980b9; }
-
-    .guest-btn { background: white; color: #3c4043; border: 1px solid #ddd; padding: 12px 24px; border-radius: 12px;
-      width: 100%; margin-top: 15px; cursor: pointer; font-size: 14px; font-weight: 500; display: flex;
-      align-items: center; justify-content: center; gap: 10px; transition: all 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-    .guest-btn:hover { background-color: #f8f9fa; box-shadow: 0 1px 4px rgba(0,0,0,0.15); }
+    /* guest lock panel */
+    #lgGuest { display: none; }
+    .login-glass-card.guest-open #lgMain { display: none; }
+    .login-glass-card.guest-open #lgGuest { display: block; animation: fadeIn .4s ease both; }
+    .lg-lock { width: 64px; height: 64px; margin: 4px auto 14px; border-radius: 20px; display: grid; place-items: center; font-size: 30px; background: linear-gradient(135deg, rgba(99,102,241,.16), rgba(192,132,252,.2)); border: 1px solid rgba(99,102,241,.2); }
+    #lgGuest h2 { margin: 0; font-size: 21px; font-weight: 700; color: var(--text-color); }
+    #lgGuest p { margin: 6px 0 20px; font-size: 13px; color: #8b8fb5; }
+    .lg-err { min-height: 18px; margin: 2px 0 8px; font-size: 12.5px; color: #ef4444; font-weight: 500; }
+    .lg-back { margin-top: 14px; background: none; border: 0; color: #6366f1; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; padding: 8px 14px; }
+    .shake { animation: lgShake .4s; }
+    @keyframes lgShake { 20%,60% { transform: translateX(-7px); } 40%,80% { transform: translateX(7px); } }
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -1014,29 +1041,39 @@
   </div>
 
   <div id="loginArea" style="display:none;">
-    <div class="login-glass-card">
-        <span class="login-brand-icon">📖</span>
+    <span class="lg-blob lg-b1"></span><span class="lg-blob lg-b2"></span>
+    <div class="login-glass-card" id="loginCard">
+      <div id="lgMain">
+        <div class="login-brand-icon">📚</div>
         <h1>Study Hub</h1>
-        <div style="margin-top:20px;">
-          <div class="input-group">
-            <input type="email" id="emailInput" class="login-input" placeholder="Gmail ID">
-          </div>
-          <div class="input-group">
-            <input type="password" id="passwordInput" class="login-input" placeholder="Apna Password">
-          </div>
+        <p class="login-tag">Learn · Plan · Grow</p>
+        <div style="margin-top:26px;">
+          <div class="input-group"><span class="lg-ic">✉️</span>
+            <input type="email" id="emailInput" class="login-input" placeholder="Gmail ID" autocomplete="email"></div>
+          <div class="input-group"><span class="lg-ic">🔒</span>
+            <input type="password" id="passwordInput" class="login-input" placeholder="Apna Password" autocomplete="current-password">
+            <button type="button" class="lg-eye" onclick="lgToggleEye('passwordInput',this)">👁</button></div>
           <button class="email-login-btn" onclick="loginWithEmail()">Login / Sign Up</button>
-          <p style="margin-top:10px; font-size:12px;">
-            <a href="javascript:void(0)" onclick="forgotPassword()" style="color:#3498db; text-decoration:none;">Forgot Password?</a>
-          </p>
+          <a href="javascript:void(0)" class="lg-forgot" onclick="forgotPassword()">Forgot Password?</a>
         </div>
-        <div style="margin: 15px 0; color: #888; font-size: 12px;">OR</div>
+        <div class="lg-or">OR</div>
         <button class="modern-google-btn" onclick="loginWithGoogle()">
-            <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24s.92 7.54 2.56 10.78l7.97-6.19z"></path><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path></svg>
-            Continue with Google
+          <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24s.92 7.54 2.56 10.78l7.97-6.19z"></path><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path></svg>
+          Continue with Google
         </button>
-        <button class="guest-btn" onclick="continueAsGuest()">
-            <span style="font-size: 18px;">👤</span> Bina login ke chalayein (Guest)
-        </button>
+        <button class="guest-btn" onclick="openGuestLock()"><span style="font-size:17px;">👤</span> Guest <span style="opacity:.55;font-size:14px;">🔒</span></button>
+      </div>
+      <div id="lgGuest">
+        <div class="lg-lock">🔐</div>
+        <h2>Guest</h2>
+        <p>Guest mode kholne ke liye password daalein</p>
+        <div class="input-group"><span class="lg-ic">🔑</span>
+          <input type="password" id="guestPass" class="login-input" placeholder="Password" autocomplete="off">
+          <button type="button" class="lg-eye" onclick="lgToggleEye('guestPass',this)">👁</button></div>
+        <div class="lg-err" id="guestErr"></div>
+        <button class="email-login-btn" style="margin-top:0" onclick="unlockGuest()">Unlock</button>
+        <button class="lg-back" onclick="closeGuestLock()">← Wapas</button>
+      </div>
     </div>
   </div>
 
@@ -1566,6 +1603,25 @@
         .catch((error) => alert("Error: " + error.message));
     }
 
+    // ---- Guest lock (client-side only) ----
+    const GUEST_PW_B64 = "U3R1ZHkjI2h1Yg==";
+    function lgToggleEye(id, btn) { const i = document.getElementById(id); const show = i.type === "password"; i.type = show ? "text" : "password"; btn.style.opacity = show ? 1 : .65; }
+    function openGuestLock() {
+      document.getElementById("loginCard").classList.add("guest-open");
+      document.getElementById("guestErr").textContent = "";
+      const i = document.getElementById("guestPass"); i.value = "";
+      setTimeout(() => i.focus(), 150);
+    }
+    function closeGuestLock() { document.getElementById("loginCard").classList.remove("guest-open"); }
+    function unlockGuest() {
+      const i = document.getElementById("guestPass");
+      if (i.value === atob(GUEST_PW_B64)) { i.value = ""; continueAsGuest(); return; }
+      document.getElementById("guestErr").textContent = "Galat password";
+      const c = document.getElementById("loginCard"); c.classList.remove("shake"); void c.offsetWidth; c.classList.add("shake");
+      i.select();
+    }
+    document.addEventListener("keydown", (e) => { if (e.key === "Enter" && document.activeElement && document.activeElement.id === "guestPass") unlockGuest(); });
+
     function continueAsGuest() {
         isGuest = true;
         localStorage.setItem(GUEST_FLAG_KEY, "true");
@@ -1576,7 +1632,7 @@
         const up = document.getElementById("userProfile");
         up.innerHTML = `
             <div style="font-size:24px;">👤</div>
-            ${buildProfileMenu('Guest Mode', 'Sign up to sync your progress', true)}`;
+            ${buildProfileMenu('Guest', 'Sign up to sync your progress', true)}`;
         up.style.display = "flex";
         initVoiceSpeedUI();
         updateOrderModeUI();
@@ -2798,7 +2854,7 @@
 
     Object.assign(window, {
       toggleProfileMenu, logoutUser, changeDisplayName, loginWithGoogle, loginWithEmail,
-      forgotPassword, continueAsGuest, clearGuestAndLogin, toggleTheme, selectSubject, renderChapterList,
+      forgotPassword, continueAsGuest, openGuestLock, closeGuestLock, unlockGuest, lgToggleEye, clearGuestAndLogin, toggleTheme, selectSubject, renderChapterList,
       toggleAllChapters, toggleTracker, startQuiz, resumeQuiz, selectMode, backToModeSelect,
       exportData, importData, menuBackup, menuRestore, saveVoiceSpeed, setOrderMode, readFullQuestion,
       openExplanationEditor, closeExplanationEditor, applyExpFormat, applyExpFontSize,
