@@ -444,6 +444,74 @@
     .edit-exp-toggle-btn { background: none; border: none; color: var(--primary-color); font-size: 13px; font-weight: 500; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: 0.2s; }
     .edit-exp-toggle-btn:hover { background: var(--btn-bg); text-decoration: underline; }
 
+    /* --- PREMIUM QUIZ SCREEN --- */
+    .progress-container { height: 10px; border-radius: 10px; margin-bottom: 14px; background: rgba(99,102,241,.14); overflow: hidden; box-shadow: inset 0 1px 2px rgba(79,70,229,.12); }
+    #progressBar { border-radius: 10px; background: linear-gradient(90deg, #6366f1, #8b5cf6 60%, #c084fc); position: relative; transition: width .5s cubic-bezier(.3,.8,.3,1); }
+    #progressBar::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255,255,255,.45) 50%, transparent 70%); background-size: 200% 100%; animation: pbShine 2.4s linear infinite; }
+    @keyframes pbShine { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+    #qCount { display: flex !important; justify-content: flex-end; margin-bottom: 12px !important; }
+    #qCount { font-size: 12.5px !important; font-weight: 600 !important; letter-spacing: .04em; color: #6366f1; }
+    [data-theme="dark"] #qCount { color: #a5b4fc; }
+
+    .question-card { position: relative; padding: 20px 20px 20px 22px; border: 1px solid rgba(99,102,241,.14); border-left: 0; border-radius: 20px; margin-bottom: 18px;
+      font-size: 20px; font-weight: 600; line-height: 1.55; overflow: hidden;
+      background: linear-gradient(135deg, rgba(99,102,241,.09), rgba(192,132,252,.08)), var(--card-bg); box-shadow: 0 14px 28px -20px rgba(79,70,229,.5); }
+    .question-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: linear-gradient(180deg, #6366f1, #c084fc); }
+    [data-theme="dark"] .question-card { border-color: rgba(165,180,252,.14); }
+
+    #optionsBox { counter-reset: opt; }
+    #optionsBox .option-btn { counter-increment: opt; position: relative; display: flex; align-items: center; gap: 14px; min-height: 58px; padding: 10px 16px 10px 12px; margin: 0 0 11px; border-radius: 18px;
+      font-size: 17px; font-weight: 500; line-height: 1.4; border: 1.5px solid rgba(99,102,241,.16);
+      background: var(--card-bg); box-shadow: 0 8px 18px -14px rgba(79,70,229,.55); transition: border-color .2s, background .2s, box-shadow .2s, transform .12s; }
+    #optionsBox .option-btn::before { content: counter(opt, upper-alpha); flex: 0 0 34px; height: 34px; border-radius: 12px; display: grid; place-items: center; font-size: 14px; font-weight: 700; color: #6366f1;
+      background: rgba(99,102,241,.12); transition: background .2s, color .2s; }
+    #optionsBox .option-btn:hover { border-color: rgba(99,102,241,.45); background: var(--card-bg); }
+    #optionsBox .option-btn.correct-answer { border-color: #10b981; background: linear-gradient(135deg, rgba(16,185,129,.16), rgba(16,185,129,.05)), var(--card-bg); box-shadow: 0 10px 22px -14px rgba(16,185,129,.8); }
+    #optionsBox .option-btn.correct-answer::before { content: "✓"; background: #10b981; color: #fff; font-size: 17px; }
+    #optionsBox .option-btn.wrong-answer { border-color: #ef4444; background: linear-gradient(135deg, rgba(239,68,68,.15), rgba(239,68,68,.04)), var(--card-bg); box-shadow: 0 10px 22px -14px rgba(239,68,68,.8); }
+    #optionsBox .option-btn.wrong-answer::before { content: "✕"; background: #ef4444; color: #fff; font-size: 16px; }
+    [data-theme="dark"] #optionsBox .option-btn { border-color: rgba(165,180,252,.16); }
+    [data-theme="dark"] #optionsBox .option-btn::before { color: #c7d2fe; background: rgba(165,180,252,.14); }
+    [data-theme="dark"] #optionsBox .option-btn.correct-answer::before { background: #10b981; color: #fff; }
+    [data-theme="dark"] #optionsBox .option-btn.wrong-answer::before { background: #ef4444; color: #fff; }
+
+    #resultBox:not(:empty) { display: block; width: fit-content; max-width: 100%; margin: 6px auto 4px !important; padding: 9px 18px; border-radius: 14px; font-size: 15px; background: rgba(99,102,241,.07); animation: fadeIn .35s ease both; }
+
+    #nextBtn { height: 54px; padding: 0 !important; margin-top: 14px; border-radius: 18px; font-size: 16.5px; letter-spacing: .01em;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6 60%, #a855f7) !important; box-shadow: 0 16px 26px -14px rgba(99,102,241,.95), inset 0 1px 0 rgba(255,255,255,.35); }
+    #nextBtn:hover { transform: none; box-shadow: 0 16px 26px -14px rgba(99,102,241,.95), inset 0 1px 0 rgba(255,255,255,.35); }
+    #nextBtn:active { transform: scale(.97); }
+
+    .explanation-box { border: 1px solid rgba(99,102,241,.16); border-left: 0; border-radius: 20px; padding: 18px 18px 18px 22px; overflow: hidden; font-size: 16px;
+      background: linear-gradient(135deg, rgba(99,102,241,.07), rgba(192,132,252,.06)), var(--card-bg); box-shadow: 0 14px 28px -22px rgba(79,70,229,.5); }
+    .explanation-box::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: linear-gradient(180deg, #6366f1, #c084fc); }
+    .explanation-header-row { border-bottom: 1px solid rgba(99,102,241,.14); }
+    .explanation-title { color: #6366f1; }
+    [data-theme="dark"] .explanation-title { color: #a5b4fc; }
+
+    /* result screen */
+    .qr { text-align: center; padding: 6px 2px 4px; animation: fadeIn .5s ease both; }
+    .qr-ring { --p: 0; position: relative; width: 150px; height: 150px; margin: 8px auto 16px; border-radius: 50%; display: grid; place-items: center;
+      background: conic-gradient(#6366f1 calc(var(--p) * 1%), #c084fc calc(var(--p) * 1%), rgba(99,102,241,.14) 0); }
+    .qr-ring::before { content: ""; position: absolute; inset: 11px; border-radius: 50%; background: var(--card-bg); }
+    .qr-ring b { position: relative; font-size: 34px; font-weight: 700; background: linear-gradient(135deg, #4338ca, #c026d3); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+    .qr-title { margin: 0; font-size: 22px; font-weight: 700; color: var(--text-color); }
+    .qr-sub { margin: 4px 0 18px; font-size: 14px; color: #8b8fb5; }
+    .qr-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+    .qr-stat { padding: 12px 6px; border-radius: 16px; border: 1px solid rgba(99,102,241,.14); background: linear-gradient(135deg, rgba(99,102,241,.07), rgba(192,132,252,.05)), var(--card-bg); }
+    .qr-stat b { display: block; font-size: 20px; font-weight: 700; color: var(--text-color); }
+    .qr-stat span { font-size: 11.5px; letter-spacing: .04em; color: #8b8fb5; }
+    .qr-stat.ok b { color: #10b981; } .qr-stat.bad b { color: #ef4444; }
+    .qr .main-btn { height: 52px; margin: 10px 0 0; border-radius: 16px; font-size: 15px; font-weight: 600; border: 0; box-shadow: 0 14px 22px -14px rgba(0,0,0,.45); }
+    .qr .qr-home { background: linear-gradient(135deg, #6366f1, #8b5cf6 60%, #a855f7) !important; color: #fff !important; }
+    .qr .qr-perfect { margin: 0 0 14px; font-weight: 600; color: #10b981; }
+    @media (min-width: 540px) {
+      .question-card { font-size: 24px; padding: 24px 26px 24px 28px; }
+      #optionsBox .option-btn { font-size: 19px; min-height: 64px; }
+      #optionsBox .option-btn::before { flex-basis: 38px; height: 38px; font-size: 15px; }
+    }
+
     /* --- RICH TEXT EXPLANATION EDITOR --- */
     .exp-editor-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -2385,12 +2453,7 @@
       if(finalText) inner += `<div>${finalText}</div>`;
       else inner += `<div style="color: #888; font-style: italic; font-size: 14px;">इस सवाल की कोई व्याख्या नहीं है। नोट्स जोड़ने के लिए Edit पर क्लिक करें।</div>`;
       if(q.image) inner += `<img src="${q.image}" class="exp-img" onclick="openFullImg('${q.image}')">`;
-      return `
-        <div class="explanation-header-row">
-          <span class="explanation-title">💡 व्याख्या</span>
-          <button class="edit-exp-toggle-btn" onclick="openExplanationEditor()">${finalText ? "Edit ✎" : "Add ✎"}</button>
-        </div>
-        ${inner}`;
+      return `<div class="explanation-header-row"><span class="explanation-title">💡 व्याख्या</span><button class="edit-exp-toggle-btn" onclick="openExplanationEditor()">${finalText ? "Edit ✎" : "Add ✎"}</button></div>${inner}`;
     }
 
     function loadExplanationForCurrentQuestion(q, onUpdate) {
@@ -2779,17 +2842,26 @@
       document.getElementById("speakBtn").style.display = "none";
 
       let wrongCount = wrongQuestions.length;
-      let resultHTML = `<div style="text-align:center;"><h3>🏁 रिजल्ट: ${score}/${selectedQuestions.length}</h3>
-        <p style="font-size:15px; color:#888;">⏱️ कुल समय: ${timeTakenStr} में ${questionsAttempted} सवाल हल किए</p>`;
+      const total = selectedQuestions.length || 1;
+      const pct = Math.round(score / total * 100);
+      const msg = pct === 100 ? "🌟 जबरदस्त! सब सही था।" : pct >= 70 ? "👏 बहुत बढ़िया प्रदर्शन!" : pct >= 40 ? "👍 अच्छा प्रयास, और अभ्यास करें" : "💪 हिम्मत रखें, फिर कोशिश करें";
+      let resultHTML = `<div class="qr">
+        <div class="qr-ring" style="--p:${pct}"><b>${pct}%</b></div>
+        <h3 class="qr-title">रिजल्ट: ${score}/${selectedQuestions.length}</h3>
+        <p class="qr-sub">${msg}</p>
+        <div class="qr-stats">
+          <div class="qr-stat ok"><b>${score}</b><span>सही</span></div>
+          <div class="qr-stat bad"><b>${wrongCount}</b><span>गलत</span></div>
+          <div class="qr-stat"><b>${timeTakenStr}</b><span>समय</span></div>
+        </div>`;
       if(wrongCount > 0) {
-        resultHTML += `<button class="main-btn" style="background:#f39c12; color:white;" onclick="retryWrong()">🔄 गलत सुधारें (${wrongCount})</button>`;
-        resultHTML += `<button class="main-btn" style="background:#e67e22; color:white;" onclick="openReview()">🔍 Review Wrong Questions</button>`;
-      } else {
-        resultHTML += `<p style="color:var(--progress-color); font-weight:bold;">🌟 जबरदस्त! सब सही था।</p>`;
+        resultHTML += `<button class="main-btn" style="background:#f59e0b; color:white;" onclick="retryWrong()">🔄 गलत सुधारें (${wrongCount})</button>`;
+        resultHTML += `<button class="main-btn" style="background:#f97316; color:white;" onclick="openReview()">🔍 Review Wrong Questions</button>`;
       }
-      resultHTML += `<button class="main-btn" onclick="goToHome()">🏠 होम</button></div>`;
+      resultHTML += `<button class="main-btn qr-home" onclick="goToHome()">🏠 होम</button></div>`;
 
       document.getElementById("quizArea").innerHTML = resultHTML;
+      document.getElementById("pCont").style.display = "none";
       document.getElementById("quitBtn").style.display = "none";
       updateWeakBtn(); updateCollectionBtn();
     }
