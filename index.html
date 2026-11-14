@@ -127,10 +127,12 @@
     .login-glass-card.guest-open #lgMain { display: none; }
     .login-glass-card.guest-open #lgGuest { display: block; animation: fadeIn .4s ease both; }
     .lg-lock { width: 64px; height: 64px; margin: 4px auto 14px; border-radius: 20px; display: grid; place-items: center; font-size: 30px; background: linear-gradient(135deg, rgba(99,102,241,.16), rgba(192,132,252,.2)); border: 1px solid rgba(99,102,241,.2); }
-    #lgGuest h2 { margin: 0; font-size: 21px; font-weight: 700; color: var(--text-color); }
-    #lgGuest p { margin: 6px 0 20px; font-size: 13px; color: #8b8fb5; }
+    #lgGuest h2 { margin: 0 0 20px; font-size: 21px; font-weight: 700; color: var(--text-color); }
     .lg-err { min-height: 18px; margin: 2px 0 8px; font-size: 12.5px; color: #ef4444; font-weight: 500; }
-    .lg-back { margin-top: 14px; background: none; border: 0; color: #6366f1; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; padding: 8px 14px; }
+    .lg-back { width: 100%; height: 50px; margin-top: 12px; border-radius: 15px; cursor: pointer; font-family: inherit; font-size: 14.5px; font-weight: 600; color: #2c3e50;
+      background: rgba(255,255,255,.92); border: 1.5px solid rgba(99,102,241,.14); box-shadow: 0 6px 14px -8px rgba(79,70,229,.35); transition: transform .15s; }
+    .lg-back:active { transform: scale(.97); }
+    [data-theme="dark"] .lg-back { background: rgba(31,41,55,.85); color: #e5e7eb; border-color: rgba(165,180,252,.16); }
     .shake { animation: lgShake .4s; }
     @keyframes lgShake { 20%,60% { transform: translateX(-7px); } 40%,80% { transform: translateX(7px); } }
 
@@ -1066,13 +1068,12 @@
       <div id="lgGuest">
         <div class="lg-lock">🔐</div>
         <h2>Guest</h2>
-        <p>Guest mode kholne ke liye password daalein</p>
         <div class="input-group"><span class="lg-ic">🔑</span>
           <input type="password" id="guestPass" class="login-input" placeholder="Password" autocomplete="off">
           <button type="button" class="lg-eye" onclick="lgToggleEye('guestPass',this)">👁</button></div>
         <div class="lg-err" id="guestErr"></div>
         <button class="email-login-btn" style="margin-top:0" onclick="unlockGuest()">Unlock</button>
-        <button class="lg-back" onclick="closeGuestLock()">← Wapas</button>
+        <button class="lg-back" onclick="closeGuestLock()">Back</button>
       </div>
     </div>
   </div>
@@ -1644,7 +1645,10 @@
 
     function clearGuestAndLogin() {
         localStorage.removeItem(GUEST_FLAG_KEY);
-        location.reload();
+        // The profile popup closes itself via history.back(), which would cancel an immediate
+        // reload. Drop the nav stack and reload after that history step has settled.
+        navStack.length = 0;
+        setTimeout(() => { location.href = location.href.split("#")[0]; }, 250);
     }
 
     // ============================================================
