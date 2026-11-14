@@ -65,7 +65,7 @@
     #loadingScreen .ld-name { margin-top: 30px; font-size: 30px; font-weight: 700; letter-spacing: -.5px; background: linear-gradient(90deg, #4338ca, #7c3aed 55%, #c026d3); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; animation: ldUp .8s ease .25s both; }
     #loadingScreen .ld-sub { margin-top: 6px; font-size: 13px; letter-spacing: .22em; text-transform: uppercase; color: #8b8fb5; animation: ldUp .8s ease .45s both; }
     @keyframes ldUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-    #loadingScreen .ld-bar { position: relative; width: 150px; height: 4px; margin-top: 34px; border-radius: 4px; background: rgba(99,102,241,.16); overflow: hidden; animation: ldUp .8s ease .6s both; }
+    #loadingScreen .ld-bar { position: relative; width: 150px; height: 4px; margin-top: 26px; border-radius: 4px; background: rgba(99,102,241,.16); overflow: hidden; animation: ldUp .8s ease .6s both; }
     #loadingScreen .ld-bar i { position: absolute; top: 0; bottom: 0; width: 45%; border-radius: 4px; background: linear-gradient(90deg, #6366f1, #c084fc); animation: ldBar 1.3s cubic-bezier(.5,0,.5,1) infinite; }
     @keyframes ldBar { 0% { left: -45%; } 100% { left: 100%; } }
     [data-theme="dark"] #loadingScreen { background: radial-gradient(90% 55% at 50% 0%, rgba(99,102,241,.32), transparent 70%), radial-gradient(70% 50% at 100% 100%, rgba(168,85,247,.25), transparent 70%), linear-gradient(180deg, #111827 0%, #070b16 100%); }
@@ -1103,7 +1103,6 @@
     <span class="ld-blob ld-b1"></span><span class="ld-blob ld-b2"></span>
     <div class="ld-logo"><span class="ld-pulse"></span><span class="ld-ring"></span><span class="ld-ring r2"></span><div class="ld-tile">📚</div></div>
     <div class="ld-name">Study Hub</div>
-    <div class="ld-sub">Learn · Plan · Grow</div>
     <div class="ld-bar"><i></i></div>
   </div>
 
@@ -1123,8 +1122,7 @@
       <div id="lgMain">
         <div class="login-brand-icon">📚</div>
         <h1>Study Hub</h1>
-        <p class="login-tag">Learn · Plan · Grow</p>
-        <div style="margin-top:26px;">
+        <div style="margin-top:22px;">
           <div class="input-group"><span class="lg-ic">✉️</span>
             <input type="email" id="emailInput" class="login-input" placeholder="Gmail ID" autocomplete="email"></div>
           <div class="input-group"><span class="lg-ic">🔒</span>
