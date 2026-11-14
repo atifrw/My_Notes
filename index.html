@@ -13,7 +13,7 @@
 
   <style>
     :root {
-      --bg-color: #f5f2eb; --card-bg: #ffffff; --text-color: #2c3e50;
+      --bg-color: #f3f1fc; --card-bg: #ffffff; --text-color: #2c3e50;
       --question-bg: #ffffff; --border-color: #e0dcd0; --btn-bg: #faf9f6; 
       --primary-color: #4f46e5; --progress-color: #10b981;
       --exp-bg: #f8fafc; --exp-border: #3b82f6;
@@ -23,7 +23,14 @@
       --question-bg: #374151; --border-color: #4b5563; --btn-bg: #374151;
       --primary-color: #818cf8; --exp-bg: #1f2937; --exp-border: #60a5fa;
     }
-    body { font-family: 'Rubik', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 4px; transition: 0.3s; }
+    html { background: #eeeafd; min-height: 100%; }
+    [data-theme="dark"] { color-scheme: dark; }
+    body { min-height: 100vh; min-height: 100dvh; background-color: #eeeafd;
+      background-image: radial-gradient(90% 40% at 50% 0%, rgba(129,140,248,.22), transparent 70%), radial-gradient(70% 40% at 100% 100%, rgba(192,132,252,.20), transparent 70%), linear-gradient(180deg, #f8f7ff 0%, #eeeafd 100%);
+      background-attachment: fixed; }
+    body[data-theme="dark"] { background-color: #0b1020;
+      background-image: radial-gradient(90% 40% at 50% 0%, rgba(99,102,241,.22), transparent 70%), radial-gradient(70% 40% at 100% 100%, rgba(168,85,247,.16), transparent 70%), linear-gradient(180deg, #111827 0%, #070b16 100%); }
+    body { font-family: 'Rubik', sans-serif; color: var(--text-color); margin: 0; padding: 4px; transition: 0.3s; }
 
     @media print {
       body { background: white !important; color: black !important; }
