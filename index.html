@@ -624,6 +624,92 @@
     body[data-skin="royal"] .lg-forgot, body[data-skin="royal"] .lg-back { color: #f6dc8b; } body[data-skin="royal"] .lg-lock { background: rgba(212,175,55,.12); border-color: rgba(212,175,55,.3); }
     body[data-skin="royal"] .lg-or::before, body[data-skin="royal"] .lg-or::after { background: linear-gradient(90deg, transparent, rgba(212,175,55,.35), transparent); }
 
+    /* ============ ROYAL — LAYOUT (editorial / luxury app; whole-site structure change) ============ */
+    #rDock { display: none; }
+    body[data-skin="royal"]:has(#modeSelectArea:not([style*="none"])):has(#mainContainer:not([style*="none"])) #rDock { display: flex; }
+    #rDock { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 900; width: min(92vw, 440px); height: 64px; padding: 6px; box-sizing: border-box; gap: 4px;
+      border-radius: 22px; background: rgba(16,14,10,.86); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border: 1px solid rgba(212,175,55,.32); box-shadow: 0 22px 40px -14px rgba(0,0,0,1), inset 0 1px 0 rgba(246,220,139,.12); }
+    #rDock button { flex: 1; border: 0; border-radius: 16px; background: transparent; color: #a99a73; font: 500 10.5px 'Rubik',sans-serif; letter-spacing: .12em; text-transform: uppercase; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; transition: background .2s, color .2s, transform .12s; }
+    #rDock button span { font-size: 19px; line-height: 1; filter: grayscale(.4); }
+    #rDock button.on { background: linear-gradient(135deg, rgba(246,220,139,.2), rgba(212,175,55,.08)); color: #f6dc8b; box-shadow: inset 0 0 0 1px rgba(212,175,55,.4); }
+    #rDock button.on span { filter: none; }
+    #rDock button:active { transform: scale(.93); }
+
+    /* page: no wrapping card, sections float on the dark canvas */
+    body[data-skin="royal"] .container { background: transparent !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; border-radius: 0 !important; }
+    body[data-skin="royal"]:has(#modeSelectArea:not([style*="none"])) { padding-bottom: 96px; }
+    body[data-skin="royal"] { padding: 10px 12px; }
+    body[data-skin="royal"] .header-btns { border-radius: 16px !important; padding: 8px 12px 8px 8px !important; position: sticky; top: 6px; z-index: 50; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); background: rgba(14,13,10,.82) !important; }
+    body[data-skin="royal"] #headerTitle .hb-ic { border-radius: 11px !important; }
+
+    /* editorial section labels */
+    body[data-skin="royal"] .pl-sec-title, body[data-skin="royal"] .mode-select-wrap .pl-sec-title { font-size: 11px !important; letter-spacing: .28em; text-transform: uppercase; color: #d4af37 !important; font-weight: 600; margin: 26px 2px 14px !important; }
+    body[data-skin="royal"] .pl-sec-title::after { background: linear-gradient(90deg, rgba(212,175,55,.5), transparent) !important; height: 1px !important; }
+    body[data-skin="royal"] .pl-sec-title small { color: #8f8159 !important; letter-spacing: .1em; text-transform: none; }
+
+    /* planner: sharper geometry */
+    body[data-skin="royal"] .pl-hero { border-radius: 16px !important; padding: 20px 18px !important; }
+    body[data-skin="royal"] .pl-d { border-radius: 14px !important; }
+    body[data-skin="royal"] .pl-quick { border-radius: 14px !important; }
+    body[data-skin="royal"] .pl-quick button, body[data-skin="royal"] #plannerArea .pl-quick button.alt { border-radius: 11px !important; }
+    body[data-skin="royal"] .pl-task { border-radius: 14px !important; }
+    body[data-skin="royal"] #plannerArea .pl-ch h3 small, body[data-skin="royal"] #plannerArea .pl-hbtn { border-radius: 9px !important; }
+    body[data-skin="royal"] #plannerArea .pl-ch h3 { font-size: 24px; font-weight: 700; }
+    body[data-skin="royal"] #plannerArea .pl-wrap { padding: 14px; border-radius: 18px; background: linear-gradient(180deg, rgba(212,175,55,.06), rgba(212,175,55,.015)); border: 1px solid rgba(212,175,55,.16); }
+
+    /* practice: numbered single-column list instead of a 2-up grid */
+    body[data-skin="royal"] .mode-select-grid { grid-template-columns: 1fr !important; gap: 10px !important; counter-reset: pm; }
+    body[data-skin="royal"] .mode-select-grid .mode-card { display: grid !important; grid-template-columns: 54px 1fr 34px; grid-template-rows: auto auto; column-gap: 14px; row-gap: 2px; align-items: center; min-height: 0 !important; padding: 14px 14px 14px 12px !important; border-radius: 16px !important; counter-increment: pm; background: linear-gradient(90deg, rgba(212,175,55,.1), rgba(212,175,55,.02) 60%), #14120d !important; }
+    body[data-skin="royal"] .mode-select-grid .mode-card::before { display: none !important; }
+    body[data-skin="royal"] .mode-select-grid .mode-card .mode-icon { grid-row: 1 / span 2; width: 54px !important; height: 54px !important; margin: 0 !important; border-radius: 14px !important; font-size: 25px !important; position: relative; }
+    body[data-skin="royal"] .mode-select-grid .mode-card .mode-icon::after { content: "0" counter(pm); position: absolute; left: -2px; top: -8px; padding: 1px 5px; border-radius: 6px; font: 600 9px 'Rubik',sans-serif; letter-spacing: .08em; color: #1b1402; background: var(--rg); }
+    body[data-skin="royal"] .mode-select-grid .mode-card .mode-title { margin: 0 !important; font-family: 'Playfair Display', Georgia, serif; font-size: 18px !important; align-self: end; }
+    body[data-skin="royal"] .mode-select-grid .mode-card .mode-sub { align-self: start; -webkit-line-clamp: 1 !important; color: #a29571 !important; }
+    body[data-skin="royal"] .mode-select-grid .mode-card::after { position: static !important; grid-column: 3; grid-row: 1 / span 2; width: 34px !important; height: 34px !important; border-radius: 11px !important; justify-self: end; }
+    body[data-skin="royal"] .mode-select-grid .mode-card:hover { transform: none; }
+
+    /* setup (subjects / chapters) */
+    body[data-skin="royal"] #setupArea .subject-panel, body[data-skin="royal"] #setupArea .chapter-panel { border-radius: 16px !important; }
+    body[data-skin="royal"] #setupArea .subject-item, body[data-skin="royal"] #setupArea .chapter-item { border-radius: 12px !important; }
+    body[data-skin="royal"] .start-quiz-btn, body[data-skin="royal"] .resume-quiz-btn { border-radius: 14px !important; letter-spacing: .14em; text-transform: uppercase; font-size: 14px !important; }
+    body[data-skin="royal"] #setupArea .grid-card { border-radius: 16px !important; }
+
+    /* quiz: thin top progress, centered serif question, hairline option rows, sticky Next */
+    body[data-skin="royal"] .progress-container { position: fixed; top: 0; left: 0; right: 0; height: 3px !important; margin: 0 !important; border-radius: 0 !important; z-index: 1000; background: rgba(212,175,55,.12); }
+    body[data-skin="royal"] #progressBar { border-radius: 0 3px 3px 0; box-shadow: 0 0 12px rgba(212,175,55,.8); }
+    body[data-skin="royal"] #qCount { justify-content: center !important; margin: 20px 0 10px !important; letter-spacing: .3em !important; text-transform: uppercase; font-size: 11px !important; color: #d4af37 !important; }
+    body[data-skin="royal"] .question-card { text-align: center; background: transparent !important; border: 0 !important; box-shadow: none !important; padding: 10px 6px 26px !important; margin-bottom: 6px !important; font-size: 23px !important; line-height: 1.55; border-radius: 0 !important; }
+    body[data-skin="royal"] .question-card::before { position: static; display: block; width: 54px; height: 2px; margin: 0 auto 18px; background: var(--rg); }
+    body[data-skin="royal"] .question-card::after { content: ""; display: block; width: 100%; height: 1px; margin-top: 22px; background: linear-gradient(90deg, transparent, rgba(212,175,55,.4), transparent); }
+    body[data-skin="royal"] #optionsBox .option-btn { border: 0 !important; border-bottom: 1px solid rgba(212,175,55,.18) !important; border-radius: 0 !important; background: transparent !important; box-shadow: none !important; margin: 0 !important; min-height: 66px; padding: 12px 6px !important; }
+    body[data-skin="royal"] #optionsBox .option-btn::before { border-radius: 50% !important; background: transparent !important; box-shadow: inset 0 0 0 1.5px rgba(212,175,55,.55); }
+    body[data-skin="royal"] #optionsBox .option-btn:hover { background: rgba(212,175,55,.05) !important; }
+    body[data-skin="royal"] #optionsBox .option-btn.correct-answer { background: linear-gradient(90deg, rgba(62,207,142,.16), transparent) !important; box-shadow: inset 3px 0 0 #3ecf8e !important; }
+    body[data-skin="royal"] #optionsBox .option-btn.wrong-answer { background: linear-gradient(90deg, rgba(239,83,80,.16), transparent) !important; box-shadow: inset 3px 0 0 #ef5350 !important; }
+    body[data-skin="royal"] #optionsBox .option-btn.correct-answer::before { box-shadow: none; } body[data-skin="royal"] #optionsBox .option-btn.wrong-answer::before { box-shadow: none; }
+    body[data-skin="royal"] #resultBox:not(:empty) { border-radius: 10px; }
+    body[data-skin="royal"] #nextBtn { position: sticky; bottom: 14px; z-index: 20; border-radius: 14px !important; letter-spacing: .16em; text-transform: uppercase; font-size: 13.5px !important; }
+    body[data-skin="royal"] .explanation-box { border-radius: 14px !important; }
+    body[data-skin="royal"] .qr-ring b { font-size: 38px; } body[data-skin="royal"] .qr-stat { border-radius: 12px; }
+    body[data-skin="royal"] .qr .main-btn, body[data-skin="royal"] .qr .qr-home { border-radius: 14px !important; letter-spacing: .1em; text-transform: uppercase; font-size: 13px !important; }
+
+    /* sheets / popups */
+    body[data-skin="royal"] .profile-dropdown { border-radius: 18px; }
+    body[data-skin="royal"] .profile-dropdown .pm-head { border-radius: 14px; }
+    body[data-skin="royal"] .login-glass-card { border-radius: 22px; }
+    body[data-skin="royal"] .email-login-btn, body[data-skin="royal"] .modern-google-btn, body[data-skin="royal"] .guest-btn, body[data-skin="royal"] .lg-back { border-radius: 12px; }
+    body[data-skin="royal"] .login-input { border-radius: 12px; }
+    body[data-skin="royal"] .email-login-btn { letter-spacing: .12em; text-transform: uppercase; font-size: 13.5px; }
+
+    /* warm out the leftover blue-grey surfaces */
+    body[data-skin="royal"] .pl-dc, body[data-skin="royal"] .plh-back, body[data-skin="royal"] .plh-k, body[data-skin="royal"] .plh-day, body[data-skin="royal"] .plc-card, body[data-skin="royal"] .plh-mc, body[data-skin="royal"] #plHist .plh-k, body[data-skin="royal"] #plannerArea .pl-quick { background: #15120c !important; box-shadow: 0 0 0 1px rgba(212,175,55,.2), 0 14px 26px -18px rgba(0,0,0,1) !important; }
+    body[data-skin="royal"] .pl-task { background: radial-gradient(130% 160% at 0% 0%, rgba(var(--pr), .16), rgba(var(--pr), 0) 60%), #15120c !important; box-shadow: 0 0 0 1px rgba(212,175,55,.18), 0 16px 30px -18px rgba(0,0,0,1) !important; }
+    body[data-skin="royal"] .plc-c { background: rgba(212,175,55,.07) !important; } body[data-skin="royal"] .plc-c.on { background: var(--rg) !important; }
+    body[data-skin="royal"] .pl-d { background: #1a1710 !important; }
+    body[data-skin="royal"] .pl-d.on { background: var(--rg) !important; }
+    body[data-skin="royal"] .pl-d.td, body[data-skin="royal"] .pl-d.on.td { box-shadow: 0 0 0 2px #d4af37 !important; }
+
+    body[data-skin="royal"] .pl-d.on.td small, body[data-skin="royal"] .pl-d.on small { color: var(--rk) !important; opacity: .8; }
     /* --- RICH TEXT EXPLANATION EDITOR --- */
     .exp-editor-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -2119,6 +2205,16 @@
       try { localStorage.setItem("hub_theme", t); } catch (e) {}
       document.querySelectorAll("#themeGrid .th-opt").forEach(b => b.classList.toggle("on", b.dataset.th === t));
     }
+
+    // Royal layout dock: quick jumps on the home screen
+    function rDock(k) {
+      const mark = (kk) => document.querySelectorAll("#rDock button").forEach(b => b.classList.toggle("on", b.dataset.d === kk));
+      const go = (el) => { if (!el) return; const y = el.getBoundingClientRect().top + window.scrollY - 84; window.scrollTo({ top: Math.max(0, y), behavior: "smooth" }); };
+      if (k === "home") { window.scrollTo({ top: 0, behavior: "smooth" }); mark("home"); }
+      else if (k === "plan") { go(document.getElementById("plannerArea")); mark("plan"); }
+      else if (k === "practice") { go(document.querySelector(".mode-select-grid")); mark("practice"); }
+      else if (k === "me") { const u = document.getElementById("userProfile"); if (u) u.click(); }
+    }
     function toggleTheme() { setTheme(currentTheme() === "light" ? "dark" : "light"); }
     try { applyTheme(localStorage.getItem("hub_theme") || "light"); } catch (e) {}
 
@@ -3066,7 +3162,7 @@
 
     Object.assign(window, {
       toggleProfileMenu, logoutUser, changeDisplayName, loginWithGoogle, loginWithEmail,
-      forgotPassword, continueAsGuest, openGuestLock, closeGuestLock, unlockGuest, lgToggleEye, clearGuestAndLogin, toggleTheme, setTheme, currentTheme, selectSubject, renderChapterList,
+      forgotPassword, continueAsGuest, openGuestLock, closeGuestLock, unlockGuest, lgToggleEye, clearGuestAndLogin, toggleTheme, rDock, setTheme, currentTheme, selectSubject, renderChapterList,
       toggleAllChapters, toggleTracker, startQuiz, resumeQuiz, selectMode, backToModeSelect,
       exportData, importData, menuBackup, menuRestore, saveVoiceSpeed, setOrderMode, readFullQuestion,
       openExplanationEditor, closeExplanationEditor, applyExpFormat, applyExpFontSize,
@@ -3539,5 +3635,11 @@
 
     }); // end DOMContentLoaded
   </script>
+  <nav id="rDock" aria-label="Quick navigation">
+    <button type="button" class="on" data-d="home" onclick="rDock('home')"><span>🏠</span>Home</button>
+    <button type="button" data-d="plan" onclick="rDock('plan')"><span>📅</span>Planner</button>
+    <button type="button" data-d="practice" onclick="rDock('practice')"><span>🎯</span>Practice</button>
+    <button type="button" data-d="me" onclick="rDock('me')"><span>👤</span>Profile</button>
+  </nav>
 </body>
 </html>
