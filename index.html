@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>📖 Study Hub - Premium Edition</title>
   <link rel="preload" as="image" href="image/anime.png">
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
   <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -511,6 +511,118 @@
       #optionsBox .option-btn { font-size: 19px; min-height: 64px; }
       #optionsBox .option-btn::before { flex-basis: 38px; height: 38px; font-size: 15px; }
     }
+
+    /* --- THEME PICKER (profile menu) --- */
+    .profile-dropdown .pm-theme { padding: 6px 2px 8px; }
+    .profile-dropdown .pm-theme-h { display: flex; align-items: center; gap: 12px; padding: 4px 8px 10px; font-size: 14px; font-weight: 500; color: var(--text-color); }
+    .profile-dropdown .pm-theme-g { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 4px; }
+    .profile-dropdown .th-opt { position: relative; display: flex; flex-direction: column; align-items: center; gap: 7px; padding: 7px 5px 8px; border-radius: 16px; border: 1.5px solid rgba(99,102,241,.16); background: transparent; color: var(--text-color); font: 600 11.5px 'Rubik',sans-serif; cursor: pointer; transition: border-color .2s, box-shadow .2s, transform .12s; }
+    .profile-dropdown .th-opt .th-pv { width: 100%; height: 46px; border-radius: 11px; position: relative; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); }
+    .profile-dropdown .th-opt .th-pv::before { content: ""; position: absolute; left: 7px; right: 7px; top: 7px; height: 9px; border-radius: 5px; background: var(--pa); }
+    .profile-dropdown .th-opt .th-pv::after { content: ""; position: absolute; left: 7px; right: 22px; bottom: 7px; height: 14px; border-radius: 6px; background: var(--pc); }
+    .profile-dropdown .th-opt[data-th="light"] .th-pv { background: linear-gradient(160deg,#f8f7ff,#e7e3fb); --pa: linear-gradient(90deg,#6366f1,#a855f7); --pc: #fff; }
+    .profile-dropdown .th-opt[data-th="dark"] .th-pv { background: linear-gradient(160deg,#1f2937,#0b1020); --pa: linear-gradient(90deg,#6366f1,#a855f7); --pc: #2b3547; }
+    .profile-dropdown .th-opt[data-th="royal"] .th-pv { background: linear-gradient(160deg,#1b1810,#050505); --pa: linear-gradient(135deg,#f6dc8b 0%,#d4af37 55%,#b08a2e 100%); --pc: #25211a; }
+    .profile-dropdown .th-opt.on { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.16); }
+    .profile-dropdown .th-opt[data-th="royal"].on { border-color: #d4af37; box-shadow: 0 0 0 3px rgba(212,175,55,.2); }
+    .profile-dropdown .th-opt.on::after { content: "✓"; position: absolute; top: 12px; right: 12px; width: 17px; height: 17px; border-radius: 50%; display: grid; place-items: center; font-size: 10px; color: #fff; background: #6366f1; }
+    .profile-dropdown .th-opt[data-th="royal"].on::after { background: #d4af37; color: #1b1402; }
+    .profile-dropdown .th-opt:active { transform: scale(.95); }
+    .profile-dropdown .th-new { position: absolute; top: -7px; left: 50%; transform: translateX(-50%); padding: 1px 7px; border-radius: 8px; font-size: 8.5px; letter-spacing: .08em; color: #1b1402; background: linear-gradient(135deg,#f6dc8b 0%,#d4af37 55%,#b08a2e 100%); }
+
+    /* ============ ROYAL THEME (obsidian + gold) — applied as dark base + data-skin="royal" ============ */
+    body[data-skin="royal"] {
+      --bg-color: #09090b; --card-bg: #131211; --text-color: #f6efdc; --question-bg: #1a1814; --border-color: rgba(212,175,55,.2); --btn-bg: #1d1a14;
+      --primary-color: #d4af37; --progress-color: #d4af37; --exp-bg: #17150f; --exp-border: #d4af37;
+      --rg: linear-gradient(135deg,#f6dc8b 0%,#d4af37 55%,#b08a2e 100%); --rk: #1b1402;
+      background-color: #050505 !important;
+      background-image: radial-gradient(80% 36% at 50% 0%, rgba(212,175,55,.17), transparent 70%), radial-gradient(60% 36% at 100% 100%, rgba(176,138,46,.14), transparent 70%), linear-gradient(180deg, #0c0b09 0%, #040404 100%) !important;
+    }
+    html:has(body[data-skin="royal"]) { background: #050505; }
+    body[data-skin="royal"] ::selection { background: rgba(212,175,55,.35); }
+    body[data-skin="royal"] .container { background: rgba(19,18,17,.92); border-color: rgba(212,175,55,.2); box-shadow: 0 24px 50px -28px rgba(0,0,0,.9), 0 0 0 1px rgba(212,175,55,.04) inset; }
+    body[data-skin="royal"] .header-btns { background: linear-gradient(135deg,#1a1710 0%,#0f0e0b 100%) !important; border-color: rgba(212,175,55,.3) !important; box-shadow: 0 14px 28px -18px rgba(0,0,0,1), inset 0 1px 0 rgba(246,220,139,.12) !important; }
+    body[data-skin="royal"] #headerTitle { --h1:#f6dc8b; --h2:#b08a2e; --d1:#f6dc8b; --d2:#d4af37; --hs: 212,175,55; }
+    body[data-skin="royal"] #headerTitle .hb-ic { background: var(--rg) !important; box-shadow: 0 8px 16px -8px rgba(212,175,55,.9) !important; }
+    body[data-skin="royal"] #headerTitle .hb-tx { background-image: linear-gradient(90deg,#f6dc8b,#d4af37 60%,#c79a2b) !important; -webkit-background-clip: text !important; background-clip: text !important; font-family: 'Playfair Display', Georgia, serif; letter-spacing: .01em; }
+    body[data-skin="royal"] .user-profile img { background: var(--rg) !important; box-shadow: 0 8px 16px -8px rgba(212,175,55,.8) !important; }
+
+    /* planner */
+    body[data-skin="royal"] .pl-hero, body[data-skin="royal"] .plh-hero { background: radial-gradient(120% 140% at 0% 0%, rgba(212,175,55,.42) 0%, transparent 55%), linear-gradient(135deg, #1d1809 0%, #100d06 60%, #2a200a 100%) !important; box-shadow: 0 18px 36px -20px rgba(212,175,55,.45), inset 0 0 0 1px rgba(212,175,55,.35) !important; }
+    body[data-skin="royal"] .pl-d.on, body[data-skin="royal"] .plc-c.on { background: var(--rg) !important; color: var(--rk) !important; box-shadow: 0 12px 22px -10px rgba(212,175,55,.7) !important; }
+    body[data-skin="royal"] .pl-d.on small, body[data-skin="royal"] .pl-d.on i, body[data-skin="royal"] .plc-c.on b { color: var(--rk) !important; }
+    body[data-skin="royal"] .pl-d.td, body[data-skin="royal"] .pl-d.on.td { box-shadow: 0 0 0 2px #d4af37 !important; } 
+    body[data-skin="royal"] .pl-d.td small { color: #d4af37 !important; }
+    body[data-skin="royal"] .pl-d { background: linear-gradient(180deg,#1b1812,#12100c) !important; box-shadow: 0 0 0 1px rgba(212,175,55,.18) !important; }
+    body[data-skin="royal"] .pl-d.on { box-shadow: 0 12px 22px -10px rgba(212,175,55,.7) !important; }
+    body[data-skin="royal"] .pl-quick button, body[data-skin="royal"] #plannerArea .pl-seg button.on, body[data-skin="royal"] .plh-tabs button.on, body[data-skin="royal"] .plc-go, body[data-skin="royal"] #plSheet .pl-save { background: var(--rg) !important; color: var(--rk) !important; box-shadow: 0 10px 20px -10px rgba(212,175,55,.75) !important; }
+    body[data-skin="royal"] #plannerArea .pl-quick button.alt { background: rgba(212,175,55,.14) !important; color: #f6dc8b !important; box-shadow: none !important; }
+    body[data-skin="royal"] #plannerArea .pl-hbtn { background: rgba(212,175,55,.12) !important; color: #f6dc8b !important; box-shadow: inset 0 0 0 1px rgba(212,175,55,.3) !important; }
+    body[data-skin="royal"] .pl-task::before { background: var(--pc, #d4af37); }
+    body[data-skin="royal"] .plc-c.td { box-shadow: inset 0 0 0 2px #d4af37; }
+    body[data-skin="royal"] .pl-ch h3, body[data-skin="royal"] #plannerArea .pl-ch h3 { font-family: 'Playfair Display', Georgia, serif; letter-spacing: .01em; }
+
+    /* practice / setup */
+    body[data-skin="royal"] #setupArea .step-badge { background: var(--rg) !important; color: var(--rk) !important; box-shadow: 0 8px 14px -6px rgba(212,175,55,.8) !important; }
+    body[data-skin="royal"] #setupArea .subject-panel, body[data-skin="royal"] #setupArea .chapter-panel { background: linear-gradient(165deg,#17140e 0%, rgba(212,175,55,.1) 140%) !important; border-color: rgba(212,175,55,.22) !important; }
+    body[data-skin="royal"] #setupArea .subject-item, body[data-skin="royal"] #setupArea .chapter-item { background: #1c1913 !important; border-color: rgba(212,175,55,.16) !important; }
+    body[data-skin="royal"] #setupArea .subject-item.active { background: linear-gradient(135deg, rgba(212,175,55,.22), rgba(176,138,46,.1)) !important; box-shadow: 0 0 0 1.5px #d4af37, 0 12px 20px -12px rgba(212,175,55,.6) !important; }
+    body[data-skin="royal"] #setupArea .subject-item.active .subj-name { color: #f6dc8b !important; }
+    body[data-skin="royal"] #setupArea .subject-item.active .subj-icon { background: var(--rg) !important; box-shadow: 0 8px 14px -8px rgba(212,175,55,.9) !important; }
+    body[data-skin="royal"] #setupArea .subject-item .subj-arrow, body[data-skin="royal"] #setupArea .subject-item.active .subj-arrow { color: #d4af37 !important; background: rgba(212,175,55,.15) !important; }
+    body[data-skin="royal"] #setupArea .chapter-item:has(input:checked):not(.select-all-item) { background: linear-gradient(135deg, rgba(212,175,55,.18), rgba(176,138,46,.08)) !important; box-shadow: 0 0 0 1.5px rgba(212,175,55,.7) !important; }
+    body[data-skin="royal"] #setupArea .chapter-item input[type="checkbox"] { accent-color: #d4af37; }
+    body[data-skin="royal"] .start-quiz-btn { background: var(--rg) !important; color: var(--rk) !important; box-shadow: 0 16px 26px -14px rgba(212,175,55,.85) !important; }
+    body[data-skin="royal"] .resume-quiz-btn { background: linear-gradient(135deg,#2c2411,#4a3a14) !important; color: #f6dc8b !important; box-shadow: inset 0 0 0 1px rgba(212,175,55,.45), 0 14px 24px -16px rgba(0,0,0,1) !important; }
+    body[data-skin="royal"] .mode-select-grid .mode-card, body[data-skin="royal"] #setupArea .grid-card { --ac: 212,175,55; background: linear-gradient(155deg,#1a1710 0%, rgba(212,175,55,.14) 140%) !important; border-color: rgba(212,175,55,.3) !important; box-shadow: 0 16px 28px -20px rgba(0,0,0,1) !important; }
+    body[data-skin="royal"] .mode-select-grid .mode-card .mode-icon, body[data-skin="royal"] #setupArea .grid-card .card-icon { background: linear-gradient(145deg, rgba(246,220,139,.14), rgba(212,175,55,.28)) !important; border-color: rgba(212,175,55,.4) !important; }
+    body[data-skin="royal"] .mode-select-grid .mode-card::after, body[data-skin="royal"] #setupArea .grid-card::after { color: #1b1402 !important; background: var(--rg) !important; }
+
+    /* quiz */
+    body[data-skin="royal"] .progress-container { background: rgba(212,175,55,.12); }
+    body[data-skin="royal"] #progressBar { background: var(--rg); }
+    body[data-skin="royal"] #qCount, body[data-skin="royal"] .explanation-title { color: #f6dc8b !important; }
+    body[data-skin="royal"] .question-card { background: linear-gradient(135deg, rgba(212,175,55,.12), rgba(176,138,46,.04)), #17150f; border-color: rgba(212,175,55,.25); font-family: 'Playfair Display', 'Rubik', Georgia, serif; font-weight: 600; }
+    body[data-skin="royal"] .question-card::before, body[data-skin="royal"] .explanation-box::before { background: linear-gradient(180deg,#f6dc8b,#b08a2e); }
+    body[data-skin="royal"] #optionsBox .option-btn { border-color: rgba(212,175,55,.22); background: #16140f; box-shadow: 0 10px 20px -16px rgba(0,0,0,1); }
+    body[data-skin="royal"] #optionsBox .option-btn::before { color: #f6dc8b; background: rgba(212,175,55,.14); }
+    body[data-skin="royal"] #optionsBox .option-btn:hover { border-color: rgba(212,175,55,.6); }
+    body[data-skin="royal"] #optionsBox .option-btn.correct-answer { border-color: #3ecf8e; }
+    body[data-skin="royal"] #optionsBox .option-btn.wrong-answer { border-color: #ef5350; }
+    body[data-skin="royal"] #resultBox:not(:empty) { background: rgba(212,175,55,.09); }
+    body[data-skin="royal"] #nextBtn { background: var(--rg) !important; color: var(--rk) !important; box-shadow: 0 16px 26px -14px rgba(212,175,55,.85), inset 0 1px 0 rgba(255,255,255,.35) !important; }
+    body[data-skin="royal"] .explanation-box { background: linear-gradient(135deg, rgba(212,175,55,.09), rgba(176,138,46,.03)), #17150f; border-color: rgba(212,175,55,.22); }
+    body[data-skin="royal"] .explanation-header-row { border-bottom-color: rgba(212,175,55,.2); }
+    body[data-skin="royal"] .qr-ring { background: conic-gradient(#f6dc8b 0, #d4af37 calc(var(--p) * 1%), rgba(212,175,55,.14) 0); }
+    body[data-skin="royal"] .qr-ring b, body[data-skin="royal"] .qr-title { font-family: 'Playfair Display', Georgia, serif; }
+    body[data-skin="royal"] .qr-ring b { background: linear-gradient(135deg,#f6dc8b,#d4af37); -webkit-background-clip: text; background-clip: text; }
+    body[data-skin="royal"] .qr-stat { border-color: rgba(212,175,55,.2); background: linear-gradient(135deg, rgba(212,175,55,.09), rgba(212,175,55,.02)), #15130e; }
+    body[data-skin="royal"] .qr .qr-home { background: var(--rg) !important; color: var(--rk) !important; }
+
+    /* profile menu */
+    body[data-skin="royal"] .profile-dropdown { background: #12100c; border-color: rgba(212,175,55,.3); box-shadow: 0 30px 60px -22px rgba(0,0,0,1), inset 0 1px 0 rgba(246,220,139,.08); }
+    body[data-skin="royal"] .profile-dropdown .pm-head { background: linear-gradient(135deg, rgba(212,175,55,.2), rgba(176,138,46,.06)); }
+    body[data-skin="royal"] .profile-dropdown .pm-av { background: var(--rg); }
+    body[data-skin="royal"] .profile-dropdown .pm-ic { background: linear-gradient(145deg, rgba(246,220,139,.16), rgba(212,175,55,.1)); }
+    body[data-skin="royal"] .profile-dropdown .pm-accent { color: #f6dc8b; }
+    body[data-skin="royal"] .profile-dropdown .pm-col input[type="range"] { accent-color: #d4af37; }
+    body[data-skin="royal"] .profile-dropdown .pm-tile { border-color: rgba(212,175,55,.3); }
+    body[data-skin="royal"] .order-toggle-btn.order-active { background: var(--rg) !important; color: var(--rk) !important; border-color: transparent !important; }
+
+    /* loader + login */
+    body[data-skin="royal"] #loadingScreen, body[data-skin="royal"] #loginArea { background: radial-gradient(90% 55% at 50% 0%, rgba(212,175,55,.26), transparent 70%), radial-gradient(70% 50% at 100% 100%, rgba(176,138,46,.2), transparent 70%), linear-gradient(180deg, #0d0c09 0%, #030303 100%); }
+    body[data-skin="royal"] #loadingScreen .ld-b1, body[data-skin="royal"] #loginArea .lg-b1 { background: #d4af37; } body[data-skin="royal"] #loadingScreen .ld-b2, body[data-skin="royal"] #loginArea .lg-b2 { background: #8a6a1c; }
+    body[data-skin="royal"] #loadingScreen .ld-ring { border-top-color: #f6dc8b; border-right-color: rgba(212,175,55,.5); } body[data-skin="royal"] #loadingScreen .ld-ring.r2 { border-bottom-color: #d4af37; border-left-color: rgba(246,220,139,.35); border-top-color: transparent; }
+    body[data-skin="royal"] #loadingScreen .ld-pulse { background: rgba(212,175,55,.35); }
+    body[data-skin="royal"] #loadingScreen .ld-tile, body[data-skin="royal"] .login-brand-icon { background: var(--rg); box-shadow: 0 22px 34px -14px rgba(212,175,55,.8), inset 0 1px 0 rgba(255,255,255,.55); }
+    body[data-skin="royal"] #loadingScreen .ld-name, body[data-skin="royal"] .login-glass-card h1 { background: linear-gradient(90deg,#f6dc8b,#d4af37 60%,#c79a2b); -webkit-background-clip: text; background-clip: text; font-family: 'Playfair Display', Georgia, serif; }
+    body[data-skin="royal"] #loadingScreen .ld-bar { background: rgba(212,175,55,.16); } body[data-skin="royal"] #loadingScreen .ld-bar i { background: var(--rg); }
+    body[data-skin="royal"] .login-glass-card { background: rgba(22,20,15,.7); border-color: rgba(212,175,55,.22); box-shadow: 0 30px 60px -24px rgba(0,0,0,1), inset 0 1px 0 rgba(246,220,139,.1); }
+    body[data-skin="royal"] .login-input { background: rgba(10,9,7,.7); border-color: rgba(212,175,55,.2); } body[data-skin="royal"] .login-input:focus { border-color: #d4af37; box-shadow: 0 0 0 4px rgba(212,175,55,.15); }
+    body[data-skin="royal"] .email-login-btn { background: var(--rg); color: var(--rk); box-shadow: 0 16px 26px -12px rgba(212,175,55,.8), inset 0 1px 0 rgba(255,255,255,.4); }
+    body[data-skin="royal"] .modern-google-btn, body[data-skin="royal"] .guest-btn, body[data-skin="royal"] .lg-back { background: rgba(26,23,16,.9); border-color: rgba(212,175,55,.22); }
+    body[data-skin="royal"] .lg-forgot, body[data-skin="royal"] .lg-back { color: #f6dc8b; } body[data-skin="royal"] .lg-lock { background: rgba(212,175,55,.12); border-color: rgba(212,175,55,.3); }
+    body[data-skin="royal"] .lg-or::before, body[data-skin="royal"] .lg-or::after { background: linear-gradient(90deg, transparent, rgba(212,175,55,.35), transparent); }
 
     /* --- RICH TEXT EXPLANATION EDITOR --- */
     .exp-editor-overlay {
@@ -1098,6 +1210,7 @@
   </style>
 </head>
 <body>
+  <script>try{var _t=localStorage.getItem('hub_theme');if(_t&&_t!=='light'){document.body.setAttribute('data-theme','dark');if(_t==='royal')document.body.setAttribute('data-skin','royal');}}catch(e){}</script>
 
   <div id="loadingScreen">
     <span class="ld-blob ld-b1"></span><span class="ld-blob ld-b2"></span>
@@ -1576,7 +1689,8 @@
       return `<div id="profileDropdown" class="profile-dropdown">
         <div class="pm-head"><div class="pm-av">${av}</div><div class="pm-who"><b>${title}</b><small>${sub}</small></div></div>
         <div class="pm-sec">
-          <button type="button" class="pm-row" onclick="toggleTheme()"><span class="pm-ic">🌙</span><span class="pm-tx">Dark Mode</span><span class="pm-sw"><i></i></span></button>
+          <div class="pm-theme"><div class="pm-theme-h"><span class="pm-ic">🎨</span><span class="pm-tx">Theme</span></div>
+            <div class="pm-theme-g" id="themeGrid">${[["light","Light"],["dark","Dark"],["royal","Royal"]].map(([k,n]) => `<button type="button" class="th-opt${currentTheme()===k?" on":""}" data-th="${k}" onclick="setTheme('${k}')">${k==="royal"?'<span class="th-new">NEW</span>':""}<span class="th-pv"></span>${n}</button>`).join("")}</div></div>
           <div class="pm-row pm-col"><div class="pm-line"><span class="pm-ic">🔊</span><span class="pm-tx">Voice Speed</span></div>
             <input type="range" id="voiceSpeed" min="0.5" max="1.5" step="0.1" value="1" onchange="saveVoiceSpeed(this.value)"></div>
           <div class="pm-row pm-col"><div class="pm-line"><span class="pm-ic">🔀</span><span class="pm-tx">Question Order</span></div>
@@ -1608,6 +1722,8 @@
 
     function toggleProfileMenu(e) {
         e.stopPropagation();
+        // taps on the theme picker / voice speed / question order keep the menu open
+        if (e.target.closest && e.target.closest(".pm-theme, .pm-col")) return;
         const menu = document.getElementById("profileDropdown");
         if (!menu) return;
         if (menu.classList.contains("open")) closeProfileMenu(); else openProfileMenu();
@@ -1986,10 +2102,25 @@
       reader.readAsText(file);
     }
 
-    function toggleTheme() {
+    // Themes: light | dark | royal. "royal" = dark base + data-skin="royal" (so every dark rule still applies).
+    function currentTheme() {
       const b = document.body;
-      b.hasAttribute("data-theme") ? b.removeAttribute("data-theme") : b.setAttribute("data-theme", "dark");
+      return b.getAttribute("data-skin") === "royal" ? "royal" : (b.hasAttribute("data-theme") ? "dark" : "light");
     }
+    function applyTheme(t) {
+      const b = document.body;
+      if (t === "light") { b.removeAttribute("data-theme"); b.removeAttribute("data-skin"); }
+      else { b.setAttribute("data-theme", "dark"); t === "royal" ? b.setAttribute("data-skin", "royal") : b.removeAttribute("data-skin"); }
+      const mc = document.querySelector('meta[name="theme-color"]');
+      if (mc) mc.setAttribute("content", t === "royal" ? "#050505" : t === "dark" ? "#0b1020" : "#eeeafd");
+    }
+    function setTheme(t) {
+      applyTheme(t);
+      try { localStorage.setItem("hub_theme", t); } catch (e) {}
+      document.querySelectorAll("#themeGrid .th-opt").forEach(b => b.classList.toggle("on", b.dataset.th === t));
+    }
+    function toggleTheme() { setTheme(currentTheme() === "light" ? "dark" : "light"); }
+    try { applyTheme(localStorage.getItem("hub_theme") || "light"); } catch (e) {}
 
     function getSubjectIcon(name) {
       const n = name.toLowerCase();
@@ -2935,7 +3066,7 @@
 
     Object.assign(window, {
       toggleProfileMenu, logoutUser, changeDisplayName, loginWithGoogle, loginWithEmail,
-      forgotPassword, continueAsGuest, openGuestLock, closeGuestLock, unlockGuest, lgToggleEye, clearGuestAndLogin, toggleTheme, selectSubject, renderChapterList,
+      forgotPassword, continueAsGuest, openGuestLock, closeGuestLock, unlockGuest, lgToggleEye, clearGuestAndLogin, toggleTheme, setTheme, currentTheme, selectSubject, renderChapterList,
       toggleAllChapters, toggleTracker, startQuiz, resumeQuiz, selectMode, backToModeSelect,
       exportData, importData, menuBackup, menuRestore, saveVoiceSpeed, setOrderMode, readFullQuestion,
       openExplanationEditor, closeExplanationEditor, applyExpFormat, applyExpFontSize,
