@@ -512,6 +512,298 @@
       #optionsBox .option-btn::before { flex-basis: 38px; height: 38px; font-size: 15px; }
     }
 
+    /* --- THEME PICKER (profile menu) --- */
+    .profile-dropdown .pm-theme { padding: 6px 2px 8px; }
+    .profile-dropdown .pm-theme-h { display: flex; align-items: center; gap: 12px; padding: 4px 8px 10px; font-size: 14px; font-weight: 500; color: var(--text-color); }
+    .profile-dropdown .pm-theme-g { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 0 4px; }
+    .profile-dropdown .th-opt { position: relative; display: flex; flex-direction: column; align-items: center; gap: 7px; padding: 7px 5px 8px; border-radius: 16px; border: 1.5px solid rgba(99,102,241,.16); background: transparent; color: var(--text-color); font: 600 11.5px 'Rubik',sans-serif; cursor: pointer; transition: border-color .2s, box-shadow .2s, transform .12s; }
+    .profile-dropdown .th-opt .th-pv { width: 100%; height: 46px; border-radius: 11px; position: relative; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); }
+    .profile-dropdown .th-opt .th-pv::before { content: ""; position: absolute; left: 7px; right: 7px; top: 7px; height: 9px; border-radius: 5px; background: var(--pa); }
+    .profile-dropdown .th-opt .th-pv::after { content: ""; position: absolute; left: 7px; right: 22px; bottom: 7px; height: 14px; border-radius: 6px; background: var(--pc); }
+    .profile-dropdown .th-opt[data-th="light"] .th-pv { background: linear-gradient(160deg,#f8f7ff,#e7e3fb); --pa: linear-gradient(90deg,#6366f1,#a855f7); --pc: #fff; }
+    .profile-dropdown .th-opt[data-th="dark"] .th-pv { background: linear-gradient(160deg,#1f2937,#0b1020); --pa: linear-gradient(90deg,#6366f1,#a855f7); --pc: #2b3547; }
+    .profile-dropdown .th-opt[data-th="aurora"] .th-pv { background: linear-gradient(160deg,#f6fffc,#d5f3ea); --pa: linear-gradient(90deg,#14b8a6,#047857); --pc: #fff; }
+    .profile-dropdown .th-opt.on { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.16); }
+    .profile-dropdown .th-opt[data-th="aurora"].on { border-color: #0d9488; box-shadow: 0 0 0 3px rgba(13,148,136,.18); }
+    .profile-dropdown .th-opt.on::after { content: "✓"; position: absolute; top: 12px; right: 12px; width: 17px; height: 17px; border-radius: 50%; display: grid; place-items: center; font-size: 10px; color: #fff; background: #6366f1; }
+    .profile-dropdown .th-opt[data-th="aurora"].on::after { background: #0d9488; }
+    .profile-dropdown .th-opt:active { transform: scale(.95); }
+    .profile-dropdown .th-new { position: absolute; top: -7px; left: 50%; transform: translateX(-50%); padding: 1px 7px; border-radius: 8px; font-size: 8.5px; letter-spacing: .08em; color: #fff; background: linear-gradient(135deg,#2dd4bf 0%,#0d9488 55%,#047857 100%); }
+
+    /* ============ AURORA THEME (light, fresh teal-emerald) — data-skin="aurora" on the light base ============ */
+    body[data-skin="aurora"] {
+      --bg-color: #eef9f6; --card-bg: #ffffff; --text-color: #0f2f2a; --question-bg: #ffffff; --border-color: rgba(13,148,136,.18); --btn-bg: #f3fbf9;
+      --primary-color: #0d9488; --progress-color: #10b981; --exp-bg: #f2fbf8; --exp-border: #0d9488;
+      --ag: linear-gradient(135deg,#2dd4bf 0%,#0d9488 55%,#047857 100%);
+      background-color: #eaf8f4 !important;
+      background-image: radial-gradient(90% 40% at 50% 0%, rgba(45,212,191,.28), transparent 70%), radial-gradient(70% 40% at 100% 100%, rgba(16,185,129,.2), transparent 70%), linear-gradient(180deg, #f6fffc 0%, #e6f6f1 100%) !important;
+    }
+    html:has(body[data-skin="aurora"]) { background: #e6f6f1; }
+    body[data-skin="aurora"] .container { background: rgba(255,255,255,.88); border-color: rgba(13,148,136,.16); box-shadow: 0 20px 44px -28px rgba(13,148,136,.55); }
+    body[data-skin="aurora"] .header-btns { background: linear-gradient(135deg,#ffffff 0%,#e9faf5 100%) !important; border-color: rgba(13,148,136,.2) !important; box-shadow: 0 12px 26px -18px rgba(13,148,136,.8), inset 0 1px 0 #fff !important; }
+    body[data-skin="aurora"] #headerTitle { --h1:#14b8a6; --h2:#10b981; --t1:#0f766e; --t2:#047857; --hs: 13,148,136; }
+    body[data-skin="aurora"] #headerTitle .hb-ic { background: var(--ag) !important; box-shadow: 0 8px 16px -8px rgba(13,148,136,.9) !important; }
+    body[data-skin="aurora"] #headerTitle .hb-tx { background-image: linear-gradient(90deg,#0f766e,#059669) !important; -webkit-background-clip: text !important; background-clip: text !important; }
+    body[data-skin="aurora"] .user-profile img { background: var(--ag) !important; box-shadow: 0 8px 16px -8px rgba(13,148,136,.8) !important; }
+
+    /* planner */
+    body[data-skin="aurora"] .pl-hero, body[data-skin="aurora"] .plh-hero { background: radial-gradient(120% 140% at 0% 0%, #5eead4 0%, transparent 55%), linear-gradient(135deg, #0d9488 0%, #0f766e 55%, #047857 100%) !important; box-shadow: 0 18px 36px -18px rgba(13,148,136,.65) !important; }
+    body[data-skin="aurora"] .pl-d.on, body[data-skin="aurora"] .plc-c.on { background: var(--ag) !important; color: #fff !important; box-shadow: 0 12px 22px -10px rgba(13,148,136,.7) !important; }
+    body[data-skin="aurora"] .pl-d.td, body[data-skin="aurora"] .pl-d.on.td { box-shadow: 0 0 0 2px #0d9488 !important; }
+    body[data-skin="aurora"] .pl-d.on.td { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #0d9488 !important; }
+    body[data-skin="aurora"] .pl-d.td small { color: #0d9488 !important; }
+    body[data-skin="aurora"] .pl-d { background: linear-gradient(180deg,#ffffff,#effaf7) !important; box-shadow: 0 0 0 1px rgba(13,148,136,.14), 0 8px 16px -12px rgba(13,148,136,.5) !important; }
+    body[data-skin="aurora"] .pl-d.on { background: var(--ag) !important; box-shadow: 0 12px 22px -10px rgba(13,148,136,.7) !important; }
+    body[data-skin="aurora"] .pl-quick button, body[data-skin="aurora"] #plannerArea .pl-seg button.on, body[data-skin="aurora"] .plh-tabs button.on, body[data-skin="aurora"] .plc-go, body[data-skin="aurora"] #plSheet .pl-save { background: var(--ag) !important; color: #fff !important; box-shadow: 0 10px 20px -10px rgba(13,148,136,.75) !important; }
+    body[data-skin="aurora"] #plannerArea .pl-quick button.alt { background: rgba(13,148,136,.1) !important; color: #0f766e !important; box-shadow: none !important; }
+    body[data-skin="aurora"] #plannerArea .pl-hbtn { background: rgba(13,148,136,.1) !important; color: #0f766e !important; box-shadow: inset 0 0 0 1px rgba(13,148,136,.2) !important; }
+    body[data-skin="aurora"] .plc-c.td { box-shadow: inset 0 0 0 2px #0d9488; }
+
+    /* practice / setup */
+    body[data-skin="aurora"] #setupArea .step-badge { background: var(--ag) !important; box-shadow: 0 8px 14px -6px rgba(13,148,136,.8) !important; }
+    body[data-skin="aurora"] #setupArea .subject-panel, body[data-skin="aurora"] #setupArea .chapter-panel { background: linear-gradient(165deg,#ffffff 0%, rgba(45,212,191,.16) 140%) !important; border-color: rgba(13,148,136,.2) !important; }
+    body[data-skin="aurora"] #setupArea .subject-item, body[data-skin="aurora"] #setupArea .chapter-item { background: #ffffff !important; border-color: rgba(13,148,136,.14) !important; }
+    body[data-skin="aurora"] #setupArea .subject-item.active { background: linear-gradient(135deg, rgba(45,212,191,.2), rgba(16,185,129,.12)) !important; box-shadow: 0 0 0 1.5px #0d9488, 0 12px 20px -12px rgba(13,148,136,.7) !important; }
+    body[data-skin="aurora"] #setupArea .subject-item.active .subj-name { color: #0f766e !important; }
+    body[data-skin="aurora"] #setupArea .subject-item.active .subj-icon { background: var(--ag) !important; box-shadow: 0 8px 14px -8px rgba(13,148,136,.9) !important; }
+    body[data-skin="aurora"] #setupArea .subject-item .subj-arrow, body[data-skin="aurora"] #setupArea .subject-item.active .subj-arrow { color: #0d9488 !important; background: rgba(13,148,136,.12) !important; }
+    body[data-skin="aurora"] #setupArea .subject-item.active .subj-arrow { background: #0d9488 !important; color: #fff !important; }
+    body[data-skin="aurora"] #setupArea .chapter-item:has(input:checked):not(.select-all-item) { background: linear-gradient(135deg, rgba(45,212,191,.16), rgba(16,185,129,.08)) !important; box-shadow: 0 0 0 1.5px rgba(13,148,136,.7) !important; }
+    body[data-skin="aurora"] #setupArea .chapter-item input[type="checkbox"] { accent-color: #0d9488; }
+    body[data-skin="aurora"] .start-quiz-btn { background: var(--ag) !important; color: #fff !important; box-shadow: 0 16px 26px -14px rgba(13,148,136,.85) !important; }
+    body[data-skin="aurora"] .resume-quiz-btn { background: linear-gradient(135deg,#f0fdfa,#ccfbf1) !important; color: #0f766e !important; box-shadow: inset 0 0 0 1.5px rgba(13,148,136,.4), 0 12px 22px -16px rgba(13,148,136,.7) !important; }
+    body[data-skin="aurora"] .mode-select-grid .mode-card, body[data-skin="aurora"] #setupArea .grid-card { --ac: 13,148,136; }
+    body[data-skin="aurora"] .mode-select-grid .mode-card.mcq-card, body[data-skin="aurora"] #setupArea .grid-card.mcq-card { --ac: 13,148,136; }
+    body[data-skin="aurora"] .mode-select-grid .mode-card.subj-card { --ac: 5,150,105; } body[data-skin="aurora"] .mode-select-grid .mode-card.vijeta-card { --ac: 8,145,178; } body[data-skin="aurora"] .mode-select-grid .mode-card.notes-card { --ac: 22,163,74; }
+
+    /* quiz */
+    body[data-skin="aurora"] .progress-container { background: rgba(13,148,136,.14); }
+    body[data-skin="aurora"] #progressBar { background: var(--ag); }
+    body[data-skin="aurora"] #qCount, body[data-skin="aurora"] .explanation-title { color: #0f766e !important; }
+    body[data-skin="aurora"] .question-card { background: linear-gradient(135deg, rgba(45,212,191,.14), rgba(16,185,129,.06)), #fff; border-color: rgba(13,148,136,.18); box-shadow: 0 14px 28px -20px rgba(13,148,136,.6); }
+    body[data-skin="aurora"] .question-card::before, body[data-skin="aurora"] .explanation-box::before { background: linear-gradient(180deg,#2dd4bf,#047857); }
+    body[data-skin="aurora"] #optionsBox .option-btn { border-color: rgba(13,148,136,.2); box-shadow: 0 8px 18px -14px rgba(13,148,136,.6); }
+    body[data-skin="aurora"] #optionsBox .option-btn::before { color: #0f766e; background: rgba(13,148,136,.12); }
+    body[data-skin="aurora"] #optionsBox .option-btn:hover { border-color: rgba(13,148,136,.5); }
+    body[data-skin="aurora"] #optionsBox .option-btn.correct-answer { border-color: #16a34a; }
+    body[data-skin="aurora"] #optionsBox .option-btn.correct-answer::before { background: #16a34a; color: #fff; }
+    body[data-skin="aurora"] #resultBox:not(:empty) { background: rgba(13,148,136,.08); }
+    body[data-skin="aurora"] #nextBtn { background: var(--ag) !important; box-shadow: 0 16px 26px -14px rgba(13,148,136,.9), inset 0 1px 0 rgba(255,255,255,.35) !important; }
+    body[data-skin="aurora"] .explanation-box { background: linear-gradient(135deg, rgba(45,212,191,.1), rgba(16,185,129,.04)), #fff; border-color: rgba(13,148,136,.16); box-shadow: 0 14px 28px -22px rgba(13,148,136,.6); }
+    body[data-skin="aurora"] .explanation-header-row { border-bottom-color: rgba(13,148,136,.16); }
+    body[data-skin="aurora"] .qr-ring { background: conic-gradient(#14b8a6 0, #059669 calc(var(--p) * 1%), rgba(13,148,136,.14) 0); }
+    body[data-skin="aurora"] .qr-ring b { background: linear-gradient(135deg,#0f766e,#059669); -webkit-background-clip: text; background-clip: text; }
+    body[data-skin="aurora"] .qr-stat { border-color: rgba(13,148,136,.16); background: linear-gradient(135deg, rgba(45,212,191,.1), rgba(16,185,129,.04)), #fff; }
+    body[data-skin="aurora"] .qr .qr-home { background: var(--ag) !important; color: #fff !important; }
+
+    /* profile menu */
+    body[data-skin="aurora"] .profile-dropdown { border-color: rgba(13,148,136,.22); box-shadow: 0 28px 60px -24px rgba(13,148,136,.6); }
+    body[data-skin="aurora"] .profile-dropdown .pm-head { background: linear-gradient(135deg, rgba(45,212,191,.22), rgba(16,185,129,.1)); }
+    body[data-skin="aurora"] .profile-dropdown .pm-av { background: var(--ag); }
+    body[data-skin="aurora"] .profile-dropdown .pm-ic { background: linear-gradient(145deg, rgba(45,212,191,.2), rgba(16,185,129,.1)); }
+    body[data-skin="aurora"] .profile-dropdown .pm-accent { color: #0f766e; }
+    body[data-skin="aurora"] .profile-dropdown button.pm-row:hover { background: rgba(13,148,136,.08); }
+    body[data-skin="aurora"] .profile-dropdown .pm-col input[type="range"] { accent-color: #0d9488; }
+    body[data-skin="aurora"] .profile-dropdown .pm-tile { border-color: rgba(13,148,136,.24); background: linear-gradient(135deg,#ffffff,#e6f8f3); }
+    body[data-skin="aurora"] .order-toggle-btn.order-active { background: var(--ag) !important; color: #fff !important; border-color: transparent !important; }
+
+    /* loader + login */
+    body[data-skin="aurora"] #loadingScreen, body[data-skin="aurora"] #loginArea { background: radial-gradient(90% 55% at 50% 0%, rgba(45,212,191,.34), transparent 70%), radial-gradient(70% 50% at 100% 100%, rgba(16,185,129,.26), transparent 70%), linear-gradient(180deg, #f6fffc 0%, #e3f6f0 100%); }
+    body[data-skin="aurora"] #loadingScreen .ld-b1, body[data-skin="aurora"] #loginArea .lg-b1 { background: #5eead4; } body[data-skin="aurora"] #loadingScreen .ld-b2, body[data-skin="aurora"] #loginArea .lg-b2 { background: #86efac; }
+    body[data-skin="aurora"] #loadingScreen .ld-ring { border-top-color: #0d9488; border-right-color: rgba(16,185,129,.55); } body[data-skin="aurora"] #loadingScreen .ld-ring.r2 { border-bottom-color: #10b981; border-left-color: rgba(13,148,136,.4); border-top-color: transparent; }
+    body[data-skin="aurora"] #loadingScreen .ld-pulse { background: rgba(13,148,136,.35); }
+    body[data-skin="aurora"] #loadingScreen .ld-tile, body[data-skin="aurora"] .login-brand-icon { background: var(--ag); box-shadow: 0 22px 34px -14px rgba(13,148,136,.85), inset 0 1px 0 rgba(255,255,255,.5); }
+    body[data-skin="aurora"] #loadingScreen .ld-name, body[data-skin="aurora"] .login-glass-card h1 { background: linear-gradient(90deg,#0f766e,#059669 60%,#10b981); -webkit-background-clip: text; background-clip: text; }
+    body[data-skin="aurora"] #loadingScreen .ld-bar { background: rgba(13,148,136,.16); } body[data-skin="aurora"] #loadingScreen .ld-bar i { background: var(--ag); }
+    body[data-skin="aurora"] .login-glass-card { box-shadow: 0 30px 60px -24px rgba(13,148,136,.45), 0 2px 0 rgba(255,255,255,.7) inset; }
+    body[data-skin="aurora"] .login-input { border-color: rgba(13,148,136,.2); } body[data-skin="aurora"] .login-input:focus { border-color: #0d9488; box-shadow: 0 0 0 4px rgba(13,148,136,.14); }
+    body[data-skin="aurora"] .email-login-btn { background: var(--ag); box-shadow: 0 16px 26px -12px rgba(13,148,136,.85), inset 0 1px 0 rgba(255,255,255,.35); }
+    body[data-skin="aurora"] .modern-google-btn, body[data-skin="aurora"] .guest-btn, body[data-skin="aurora"] .lg-back { border-color: rgba(13,148,136,.18); }
+    body[data-skin="aurora"] .lg-forgot, body[data-skin="aurora"] .lg-back { color: #0f766e; } body[data-skin="aurora"] .lg-lock { background: rgba(13,148,136,.12); border-color: rgba(13,148,136,.28); }
+    body[data-skin="aurora"] .lg-or::before, body[data-skin="aurora"] .lg-or::after { background: linear-gradient(90deg, transparent, rgba(13,148,136,.3), transparent); }
+
+    /* Aurora dock */
+    #rDock { display: none; }
+    body[data-skin="aurora"] #rDock.show { display: flex; position: fixed; left: 0; right: 0; margin: 0 auto; width: max-content; max-width: calc(100% - 24px); bottom: max(14px, env(safe-area-inset-bottom)); z-index: 900; gap: 4px; padding: 6px;
+      border-radius: 26px; background: rgba(255,255,255,.78); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border: 1px solid rgba(13,148,136,.2);
+      box-shadow: 0 22px 40px -18px rgba(13,148,136,.65), inset 0 1px 0 #fff; animation: fadeIn .4s ease both; }
+    body[data-skin="aurora"] #rDock button { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 64px; padding: 8px 10px 7px; border: 0; border-radius: 20px; background: transparent; color: #4b6b65; font: 600 10.5px 'Rubik', sans-serif; cursor: pointer; transition: background .2s, color .2s, transform .12s; }
+    body[data-skin="aurora"] #rDock button span { font-size: 18px; line-height: 1; }
+    body[data-skin="aurora"] #rDock button.on { background: var(--ag); color: #fff; box-shadow: 0 10px 18px -10px rgba(13,148,136,.9); }
+    body[data-skin="aurora"] #rDock button:active { transform: scale(.94); }
+    body.has-dock { padding-bottom: 96px !important; }
+    /* ============ GLASS THEME (glassmorphism) — data-skin="glass" on the dark base ============ */
+    body[data-skin="glass"] {
+      --bg-color: transparent; --card-bg: rgba(255,255,255,.10); --text-color: #f5f3ff; --question-bg: rgba(255,255,255,.10); --border-color: rgba(255,255,255,.2); --btn-bg: rgba(255,255,255,.1);
+      --primary-color: #a78bfa; --progress-color: #34d399; --exp-bg: rgba(255,255,255,.08); --exp-border: #a78bfa;
+      --gl: linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.06));
+      --gb: 1px solid rgba(255,255,255,.24);
+      --gs: 0 18px 40px -20px rgba(8,6,40,.65), inset 0 1px 0 rgba(255,255,255,.28);
+      --ag: linear-gradient(135deg,#8b5cf6 0%,#6366f1 50%,#22d3ee 130%);
+      background-color: #1b1146 !important;
+      background-image: linear-gradient(160deg, #1e1b4b 0%, #312e81 38%, #4c1d95 72%, #831843 125%) !important;
+      background-attachment: fixed !important;
+    }
+    html:has(body[data-skin="glass"]) { background: #1b1146; }
+    body[data-skin="glass"]::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background: radial-gradient(38% 30% at 12% 14%, rgba(56,189,248,.55), transparent 70%), radial-gradient(36% 30% at 92% 30%, rgba(244,114,182,.5), transparent 70%), radial-gradient(44% 34% at 20% 92%, rgba(167,139,250,.55), transparent 72%), radial-gradient(34% 28% at 88% 96%, rgba(45,212,191,.4), transparent 70%); }
+    body[data-skin="glass"] ::selection { background: rgba(167,139,250,.5); }
+
+    /* big blurred surfaces */
+    body[data-skin="glass"] .container,
+    body[data-skin="glass"] .profile-dropdown,
+    body[data-skin="glass"] #plSheet,
+    body[data-skin="glass"] .modal-card,
+    body[data-skin="glass"] .modal-content,
+    body[data-skin="glass"] .exp-editor-card,
+    body[data-skin="glass"] #plCal .plc-card,
+    body[data-skin="glass"] .login-glass-card {
+      background: var(--gl) !important; border: var(--gb) !important; box-shadow: var(--gs) !important;
+      -webkit-backdrop-filter: blur(22px) saturate(170%); backdrop-filter: blur(22px) saturate(170%); }
+    body[data-skin="glass"] .container { background: linear-gradient(135deg, rgba(255,255,255,.13), rgba(255,255,255,.04)) !important; }
+    body[data-skin="glass"] .header-btns { position: relative; z-index: 20; isolation: isolate; background: linear-gradient(135deg, rgba(255,255,255,.2), rgba(255,255,255,.07)) !important; border: var(--gb) !important; box-shadow: var(--gs) !important; }
+    body[data-skin="glass"] .header-btns::before { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: -1; pointer-events: none; -webkit-backdrop-filter: blur(22px) saturate(170%); backdrop-filter: blur(22px) saturate(170%); }
+    .profile-dropdown .th-opt[data-th="glass"] .th-pv { background: linear-gradient(160deg,#4338ca,#be185d); --pa: rgba(255,255,255,.6); --pc: rgba(255,255,255,.32); }
+    .profile-dropdown .th-opt[data-th="glass"].on { border-color: #8b5cf6; box-shadow: 0 0 0 3px rgba(139,92,246,.2); }
+    .profile-dropdown .th-opt[data-th="glass"].on::after { background: #8b5cf6; }
+    body[data-skin="glass"] #plSheet, body[data-skin="glass"] .profile-dropdown { background: linear-gradient(160deg, rgba(49,46,129,.72), rgba(76,29,149,.62)) !important; }
+
+    /* inner cards: lighter glass fill, no extra blur (keeps scrolling smooth) */
+    body[data-skin="glass"] .mode-select-grid .mode-card,
+    body[data-skin="glass"] #setupArea .grid-card,
+    body[data-skin="glass"] #setupArea .subject-panel,
+    body[data-skin="glass"] #setupArea .chapter-panel,
+    body[data-skin="glass"] .pl-card,
+    body[data-skin="glass"] #plannerArea .pl-card,
+    body[data-skin="glass"] .pl-task,
+    body[data-skin="glass"] .pl-dc,
+    body[data-skin="glass"] .pl-d,
+    body[data-skin="glass"] .qr-stat,
+    body[data-skin="glass"] .tracker-card,
+    body[data-skin="glass"] .tracker-stat-box,
+    body[data-skin="glass"] .list-item,
+    body[data-skin="glass"] .explanation-box,
+    body[data-skin="glass"] .question-card,
+    body[data-skin="glass"] #plCal .plh-k,
+    body[data-skin="glass"] #plCal .plh-day,
+    body[data-skin="glass"] .plh-k,
+    body[data-skin="glass"] .plh-day,
+    body[data-skin="glass"] .plh-it,
+    body[data-skin="glass"] .pl-quick,
+    body[data-skin="glass"] #plannerArea .pl-quick,
+    body[data-skin="glass"] .pl-seg,
+    body[data-skin="glass"] #plannerArea .pl-seg,
+    body[data-skin="glass"] #setupArea .backup-btn,
+    body[data-skin="glass"] .profile-dropdown .pm-tile,
+    body[data-skin="glass"] .profile-dropdown .th-opt {
+      background: linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.05)) !important; border: 1px solid rgba(255,255,255,.2) !important; box-shadow: 0 12px 26px -18px rgba(8,6,40,.7), inset 0 1px 0 rgba(255,255,255,.22) !important; color: var(--text-color); }
+    body[data-skin="glass"] #setupArea .subject-item,
+    body[data-skin="glass"] #setupArea .chapter-item,
+    body[data-skin="glass"] #optionsBox .option-btn,
+    body[data-skin="glass"] .order-toggle-btn,
+    body[data-skin="glass"] .plc-c {
+      background: rgba(255,255,255,.09) !important; border: 1px solid rgba(255,255,255,.18) !important; box-shadow: inset 0 1px 0 rgba(255,255,255,.14) !important; color: var(--text-color) !important; }
+    body[data-skin="glass"] #setupArea .subject-item.active,
+    body[data-skin="glass"] #setupArea .chapter-item:has(input:checked):not(.select-all-item),
+    body[data-skin="glass"] .plc-c.on,
+    body[data-skin="glass"] .pl-d.on,
+    body[data-skin="glass"] #plannerArea .pl-seg button.on,
+    body[data-skin="glass"] .order-toggle-btn.order-active {
+      background: linear-gradient(135deg, rgba(139,92,246,.55), rgba(34,211,238,.28)) !important; border-color: rgba(255,255,255,.4) !important; box-shadow: 0 12px 24px -12px rgba(139,92,246,.9), inset 0 1px 0 rgba(255,255,255,.35) !important; color: #fff !important; }
+    body[data-skin="glass"] #optionsBox .option-btn:hover { border-color: rgba(255,255,255,.45) !important; background: rgba(255,255,255,.15) !important; }
+    body[data-skin="glass"] #optionsBox .option-btn::before { background: rgba(255,255,255,.16) !important; color: #fff !important; }
+    body[data-skin="glass"] #optionsBox .option-btn.correct-answer { background: linear-gradient(135deg, rgba(52,211,153,.32), rgba(52,211,153,.1)) !important; border-color: #34d399 !important; }
+    body[data-skin="glass"] #optionsBox .option-btn.correct-answer::before { background: #10b981 !important; }
+    body[data-skin="glass"] #optionsBox .option-btn.wrong-answer { background: linear-gradient(135deg, rgba(248,113,113,.32), rgba(248,113,113,.1)) !important; border-color: #f87171 !important; }
+    body[data-skin="glass"] #optionsBox .option-btn.wrong-answer::before { background: #ef4444 !important; }
+
+    /* accents */
+    body[data-skin="glass"] .start-quiz-btn,
+    body[data-skin="glass"] #nextBtn,
+    body[data-skin="glass"] .email-login-btn,
+    body[data-skin="glass"] .qr .qr-home,
+    body[data-skin="glass"] #plSheet .pl-save,
+    body[data-skin="glass"] .plc-go,
+    body[data-skin="glass"] .pl-quick button,
+    body[data-skin="glass"] #plannerArea .pl-quick button,
+    body[data-skin="glass"] .plh-tabs button.on,
+    body[data-skin="glass"] #setupArea .step-badge,
+    body[data-skin="glass"] #progressBar,
+    body[data-skin="glass"] #headerTitle .hb-ic,
+    body[data-skin="glass"] .login-brand-icon,
+    body[data-skin="glass"] #loadingScreen .ld-tile { background: var(--ag) !important; color: #fff !important; box-shadow: 0 14px 26px -12px rgba(99,102,241,.95), inset 0 1px 0 rgba(255,255,255,.4) !important; }
+    body[data-skin="glass"] .resume-quiz-btn { background: rgba(255,255,255,.14) !important; color: #fff !important; border: 1px solid rgba(255,255,255,.3) !important; box-shadow: inset 0 1px 0 rgba(255,255,255,.3) !important; }
+    body[data-skin="glass"] .pl-hero,
+    body[data-skin="glass"] .plh-hero { background: radial-gradient(120% 140% at 0% 0%, rgba(34,211,238,.55) 0%, transparent 55%), linear-gradient(135deg, rgba(139,92,246,.85) 0%, rgba(99,102,241,.7) 55%, rgba(236,72,153,.6) 125%) !important; border: 1px solid rgba(255,255,255,.3) !important; box-shadow: 0 22px 44px -22px rgba(139,92,246,.9), inset 0 1px 0 rgba(255,255,255,.4) !important; }
+    body[data-skin="glass"] .progress-container { background: rgba(255,255,255,.14) !important; box-shadow: none !important; }
+    body[data-skin="glass"] #headerTitle .hb-tx,
+    body[data-skin="glass"] .login-glass-card h1,
+    body[data-skin="glass"] #loadingScreen .ld-name { background-image: linear-gradient(90deg, #ffffff, #c4b5fd 60%, #67e8f9) !important; -webkit-background-clip: text !important; background-clip: text !important; color: transparent !important; -webkit-text-fill-color: transparent !important; }
+    body[data-skin="glass"] #qCount,
+    body[data-skin="glass"] .explanation-title,
+    body[data-skin="glass"] .lg-forgot,
+    body[data-skin="glass"] .lg-back,
+    body[data-skin="glass"] .edit-exp-toggle-btn { color: #c4b5fd !important; }
+    body[data-skin="glass"] .question-card::before,
+    body[data-skin="glass"] .explanation-box::before { background: linear-gradient(180deg, #67e8f9, #a78bfa 60%, #f472b6) !important; }
+    body[data-skin="glass"] .profile-dropdown .pm-head { background: linear-gradient(135deg, rgba(167,139,250,.35), rgba(34,211,238,.16)) !important; }
+    body[data-skin="glass"] .profile-dropdown .pm-av { background: var(--ag) !important; }
+    body[data-skin="glass"] .profile-dropdown .pm-ic { background: rgba(255,255,255,.16) !important; }
+    body[data-skin="glass"] .profile-dropdown .pm-accent { color: #67e8f9 !important; }
+    body[data-skin="glass"] .profile-dropdown .th-opt.on { border-color: #a78bfa !important; box-shadow: 0 0 0 3px rgba(167,139,250,.35) !important; }
+    body[data-skin="glass"] .profile-dropdown .th-opt.on::after { background: #8b5cf6 !important; }
+    body[data-skin="glass"] .profile-dropdown .th-opt[data-th="glass"] .th-pv { background: linear-gradient(160deg,#312e81,#831843); --pa: rgba(255,255,255,.55); --pc: rgba(255,255,255,.3); }
+    body[data-skin="glass"] .profile-dropdown .pm-col input[type="range"] { accent-color: #a78bfa; }
+    body[data-skin="glass"] select,
+    body[data-skin="glass"] input,
+    body[data-skin="glass"] textarea,
+    body[data-skin="glass"] .pl-in,
+    body[data-skin="glass"] #plSheet .pl-in,
+    body[data-skin="glass"] #plSheet .pl-note,
+    body[data-skin="glass"] #plSheet .pl-ic { background: rgba(255,255,255,.1) !important; border-color: rgba(255,255,255,.24) !important; color: #fff !important; }
+    body[data-skin="glass"] input::placeholder,
+    body[data-skin="glass"] textarea::placeholder { color: rgba(255,255,255,.55) !important; }
+    body[data-skin="glass"] .main-btn { border: 1px solid rgba(255,255,255,.28) !important; }
+    body[data-skin="glass"] .modal-overlay,
+    body[data-skin="glass"] .exp-editor-overlay,
+    body[data-skin="glass"] #imageModal { background: rgba(10,6,40,.55) !important; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+    body[data-skin="glass"] #plHist,
+    body[data-skin="glass"] #plCal { background: transparent !important; }
+    body[data-skin="glass"] #plToast { background: rgba(30,27,75,.85) !important; border: var(--gb) !important; -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+    body[data-skin="glass"] .qr-ring { background: conic-gradient(#67e8f9 0, #a78bfa calc(var(--p) * 1%), rgba(255,255,255,.16) 0) !important; }
+    body[data-skin="glass"] .qr-ring::before { background: #2a2468 !important; }
+    body[data-skin="glass"] .qr-ring b { background-color: transparent !important; background-image: linear-gradient(135deg,#fff,#c4b5fd) !important; -webkit-background-clip: text !important; background-clip: text !important; -webkit-background-clip: text; background-clip: text; color: transparent !important; -webkit-text-fill-color: transparent; box-shadow: none !important; }
+    body[data-skin="glass"] .pl-empty, body[data-skin="glass"] .mode-select-grid .mode-card .mode-sub, body[data-skin="glass"] .mode-card .mode-sub, body[data-skin="glass"] .qr-stat span, body[data-skin="glass"] #setupArea .chapter-panel p, body[data-skin="glass"] .pl-sec-title, body[data-skin="glass"] .pl-hint { color: rgba(255,255,255,.72) !important; }
+    body[data-skin="glass"] .qr-sub,
+    body[data-skin="glass"] .login-tag,
+    body[data-skin="glass"] .pl-sec-title,
+    body[data-skin="glass"] .subj-count,
+    body[data-skin="glass"] small { color: rgba(255,255,255,.65) !important; }
+
+    /* loader + login on glass */
+    body[data-skin="glass"] #loadingScreen,
+    body[data-skin="glass"] #loginArea { background: radial-gradient(40% 30% at 12% 14%, rgba(56,189,248,.5), transparent 70%), radial-gradient(40% 30% at 92% 30%, rgba(244,114,182,.45), transparent 70%), linear-gradient(160deg, #1e1b4b 0%, #312e81 40%, #4c1d95 75%, #831843 125%) !important; }
+    body[data-skin="glass"] #loadingScreen .ld-b1,
+    body[data-skin="glass"] #loginArea .lg-b1 { background: #38bdf8; } body[data-skin="glass"] #loadingScreen .ld-b2,
+    body[data-skin="glass"] #loginArea .lg-b2 { background: #f472b6; }
+    body[data-skin="glass"] #loadingScreen .ld-bar i { background: var(--ag) !important; }
+    body[data-skin="glass"] #loadingScreen .ld-bar { background: rgba(255,255,255,.16) !important; }
+    body[data-skin="glass"] .modern-google-btn,
+    body[data-skin="glass"] .guest-btn,
+    body[data-skin="glass"] .lg-back { background: rgba(255,255,255,.12) !important; color: #fff !important; border: 1px solid rgba(255,255,255,.26) !important; }
+    body[data-skin="glass"] .login-input { background: rgba(255,255,255,.1) !important; }
+    body[data-skin="glass"] #rDock.show { display: flex; position: fixed; left: 0; right: 0; margin: 0 auto; width: max-content; max-width: calc(100% - 24px); bottom: max(14px, env(safe-area-inset-bottom)); z-index: 900; gap: 4px; padding: 6px; border-radius: 26px;
+      background: rgba(255,255,255,.14); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,.26); box-shadow: 0 22px 40px -18px rgba(8,6,40,.8), inset 0 1px 0 rgba(255,255,255,.3); animation: fadeIn .4s ease both; }
+    body[data-skin="glass"] #rDock button { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 64px; padding: 8px 10px 7px; border: 0; border-radius: 20px; background: transparent; color: rgba(255,255,255,.75); font: 600 10.5px 'Rubik', sans-serif; cursor: pointer; transition: transform .12s, background .2s; }
+    body[data-skin="glass"] #rDock button span { font-size: 18px; line-height: 1; }
+    body[data-skin="glass"] #rDock button.on { background: var(--ag); color: #fff; box-shadow: 0 10px 18px -10px rgba(99,102,241,.95); }
+    body[data-skin="glass"] #rDock button:active { transform: scale(.94); }
+    @media (prefers-reduced-transparency: reduce) { body[data-skin="glass"] * { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; } }
+    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { body[data-skin="glass"] .container,
+    body[data-skin="glass"] .header-btns,
+    body[data-skin="glass"] .profile-dropdown,
+    body[data-skin="glass"] #plSheet { background: rgba(49,46,129,.88) !important; } }
+
     /* --- RICH TEXT EXPLANATION EDITOR --- */
     .exp-editor-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -1098,6 +1390,7 @@
   </style>
 </head>
 <body>
+  <script>try{var _t=localStorage.getItem('hub_theme');if(_t==='dark')document.body.setAttribute('data-theme','dark');else if(_t==='aurora')document.body.setAttribute('data-skin','aurora');else if(_t==='glass'){document.body.setAttribute('data-theme','dark');document.body.setAttribute('data-skin','glass');}}catch(e){}</script>
 
   <div id="loadingScreen">
     <span class="ld-blob ld-b1"></span><span class="ld-blob ld-b2"></span>
@@ -1576,7 +1869,8 @@
       return `<div id="profileDropdown" class="profile-dropdown">
         <div class="pm-head"><div class="pm-av">${av}</div><div class="pm-who"><b>${title}</b><small>${sub}</small></div></div>
         <div class="pm-sec">
-          <button type="button" class="pm-row" onclick="toggleTheme()"><span class="pm-ic">🌙</span><span class="pm-tx">Dark Mode</span><span class="pm-sw"><i></i></span></button>
+          <div class="pm-theme"><div class="pm-theme-h"><span class="pm-ic">🎨</span><span class="pm-tx">Theme</span></div>
+            <div class="pm-theme-g" id="themeGrid">${[["light","Light"],["dark","Dark"],["aurora","Aurora"],["glass","Glass"]].map(([k,n]) => `<button type="button" class="th-opt${currentTheme()===k?" on":""}" data-th="${k}" onclick="setTheme('${k}')">${k==="glass"?'<span class="th-new">NEW</span>':""}<span class="th-pv"></span>${n}</button>`).join("")}</div></div>
           <div class="pm-row pm-col"><div class="pm-line"><span class="pm-ic">🔊</span><span class="pm-tx">Voice Speed</span></div>
             <input type="range" id="voiceSpeed" min="0.5" max="1.5" step="0.1" value="1" onchange="saveVoiceSpeed(this.value)"></div>
           <div class="pm-row pm-col"><div class="pm-line"><span class="pm-ic">🔀</span><span class="pm-tx">Question Order</span></div>
@@ -1608,6 +1902,8 @@
 
     function toggleProfileMenu(e) {
         e.stopPropagation();
+        // taps on the theme picker / voice speed / question order keep the menu open
+        if (e.target.closest && e.target.closest(".pm-theme, .pm-col")) return;
         const menu = document.getElementById("profileDropdown");
         if (!menu) return;
         if (menu.classList.contains("open")) closeProfileMenu(); else openProfileMenu();
@@ -1986,10 +2282,52 @@
       reader.readAsText(file);
     }
 
-    function toggleTheme() {
+    // Themes: light | dark | aurora. "aurora" = light base + data-skin="aurora" (teal-emerald overrides on top of the light theme).
+    function currentTheme() {
       const b = document.body;
-      b.hasAttribute("data-theme") ? b.removeAttribute("data-theme") : b.setAttribute("data-theme", "dark");
+      const sk = b.getAttribute("data-skin");
+      return sk === "aurora" ? "aurora" : sk === "glass" ? "glass" : (b.hasAttribute("data-theme") ? "dark" : "light");
     }
+    function applyTheme(t) {
+      const b = document.body;
+      if (t === "light") { b.removeAttribute("data-theme"); b.removeAttribute("data-skin"); }
+      else if (t === "aurora") { b.removeAttribute("data-theme"); b.setAttribute("data-skin", "aurora"); }
+      else if (t === "glass") { b.setAttribute("data-theme", "dark"); b.setAttribute("data-skin", "glass"); }
+      else { b.setAttribute("data-theme", "dark"); b.removeAttribute("data-skin"); }
+      const mc = document.querySelector('meta[name="theme-color"]');
+      if (mc) mc.setAttribute("content", t === "glass" ? "#1b1146" : t === "aurora" ? "#e6f6f1" : t === "dark" ? "#0b1020" : "#eeeafd");
+    }
+    function setTheme(t) {
+      applyTheme(t);
+      try { localStorage.setItem("hub_theme", t); } catch (e) {}
+      document.querySelectorAll("#themeGrid .th-opt").forEach(b => b.classList.toggle("on", b.dataset.th === t));
+    }
+
+    // Aurora layout: floating quick-nav dock on the home screen
+    function rDock(k) {
+      const go = (el) => { if (!el) return; const y = el.getBoundingClientRect().top + window.scrollY - 84; window.scrollTo({ top: Math.max(0, y), behavior: "smooth" }); };
+      if (k === "home") window.scrollTo({ top: 0, behavior: "smooth" });
+      else if (k === "plan") go(document.getElementById("plannerArea"));
+      else if (k === "practice") go(document.querySelector(".mode-select-grid"));
+      else if (k === "me") { const u = document.getElementById("userProfile"); if (u) u.click(); }
+    }
+    function syncDock() {
+      const d = document.getElementById("rDock"); if (!d) return;
+      const vis = (id) => { const e = document.getElementById(id); return !!(e && e.offsetParent !== null); };
+      const onHome = ["aurora","glass"].includes(document.body.getAttribute("data-skin")) && vis("plannerArea") && !vis("quizArea") && !vis("loginArea") && !vis("loadingScreen");
+      d.classList.toggle("show", onHome);
+      document.body.classList.toggle("has-dock", onHome);
+      if (!onHome) return;
+      let k = "home";
+      const g = document.querySelector(".mode-select-grid");
+      if (g && g.getBoundingClientRect().top < innerHeight * 0.55) k = "practice";
+      else if (window.scrollY > 120) k = "plan";
+      d.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.d === k));
+    }
+    setInterval(syncDock, 300);
+    window.addEventListener("scroll", syncDock, { passive: true });
+    function toggleTheme() { setTheme(currentTheme() === "light" ? "dark" : "light"); }
+    try { applyTheme(localStorage.getItem("hub_theme") || "light"); } catch (e) {}
 
     function getSubjectIcon(name) {
       const n = name.toLowerCase();
@@ -2935,7 +3273,7 @@
 
     Object.assign(window, {
       toggleProfileMenu, logoutUser, changeDisplayName, loginWithGoogle, loginWithEmail,
-      forgotPassword, continueAsGuest, openGuestLock, closeGuestLock, unlockGuest, lgToggleEye, clearGuestAndLogin, toggleTheme, selectSubject, renderChapterList,
+      forgotPassword, continueAsGuest, openGuestLock, closeGuestLock, unlockGuest, lgToggleEye, clearGuestAndLogin, toggleTheme, rDock, setTheme, currentTheme, selectSubject, renderChapterList,
       toggleAllChapters, toggleTracker, startQuiz, resumeQuiz, selectMode, backToModeSelect,
       exportData, importData, menuBackup, menuRestore, saveVoiceSpeed, setOrderMode, readFullQuestion,
       openExplanationEditor, closeExplanationEditor, applyExpFormat, applyExpFontSize,
@@ -3408,5 +3746,11 @@
 
     }); // end DOMContentLoaded
   </script>
+  <nav id="rDock" aria-label="Quick navigation">
+    <button type="button" class="on" data-d="home" onclick="rDock('home')"><span>🏠</span>Home</button>
+    <button type="button" data-d="plan" onclick="rDock('plan')"><span>📅</span>Planner</button>
+    <button type="button" data-d="practice" onclick="rDock('practice')"><span>🎯</span>Practice</button>
+    <button type="button" data-d="me" onclick="rDock('me')"><span>👤</span>Profile</button>
+  </nav>
 </body>
 </html>
