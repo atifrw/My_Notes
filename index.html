@@ -25,10 +25,11 @@
     }
     html { background: #eeeafd; min-height: 100%; }
     [data-theme="dark"] { color-scheme: dark; }
-    body { min-height: 100vh; min-height: 100dvh; background-color: #eeeafd;
-      background-image: radial-gradient(90% 40% at 50% 0%, rgba(129,140,248,.22), transparent 70%), radial-gradient(70% 40% at 100% 100%, rgba(192,132,252,.20), transparent 70%), linear-gradient(180deg, #f8f7ff 0%, #eeeafd 100%);
-      background-attachment: fixed; }
-    body[data-theme="dark"] { background-color: #0b1020;
+    body { min-height: 100vh; min-height: 100dvh; }
+    body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; transform: translateZ(0); background-color: #eeeafd;
+      background-image: radial-gradient(90% 40% at 50% 0%, rgba(129,140,248,.22), transparent 70%), radial-gradient(70% 40% at 100% 100%, rgba(192,132,252,.20), transparent 70%), linear-gradient(180deg, #f8f7ff 0%, #eeeafd 100%); }
+    html:has(body[data-theme="dark"]) { background: #0b1020; }
+    body[data-theme="dark"]::before { background-color: #0b1020;
       background-image: radial-gradient(90% 40% at 50% 0%, rgba(99,102,241,.22), transparent 70%), radial-gradient(70% 40% at 100% 100%, rgba(168,85,247,.16), transparent 70%), linear-gradient(180deg, #111827 0%, #070b16 100%); }
     body { font-family: 'Rubik', sans-serif; color: var(--text-color); margin: 0; padding: 4px; transition: 0.3s; }
 
@@ -513,10 +514,9 @@
     }
 
     /* --- GLASSMORPHISM SKIN (Settings > Theme) --- */
-    body[data-skin="glass"] { background-color: #c7d2fe;
-      background-image: radial-gradient(42% 34% at 12% 8%, rgba(251,182,206,.95), transparent 70%), radial-gradient(46% 38% at 92% 18%, rgba(125,211,252,.9), transparent 70%), radial-gradient(52% 44% at 85% 96%, rgba(196,181,253,.95), transparent 70%), radial-gradient(40% 34% at 8% 92%, rgba(253,224,171,.85), transparent 70%), linear-gradient(135deg, #c7d2fe, #e9d5ff 55%, #fbcfe8);
-      background-attachment: fixed; }
-    body[data-skin="glass"][data-theme="dark"] { background-color: #0b1020;
+    body[data-skin="glass"]::before { background-color: #c7d2fe;
+      background-image: radial-gradient(42% 34% at 12% 8%, rgba(251,182,206,.95), transparent 70%), radial-gradient(46% 38% at 92% 18%, rgba(125,211,252,.9), transparent 70%), radial-gradient(52% 44% at 85% 96%, rgba(196,181,253,.95), transparent 70%), radial-gradient(40% 34% at 8% 92%, rgba(253,224,171,.85), transparent 70%), linear-gradient(135deg, #c7d2fe, #e9d5ff 55%, #fbcfe8); }
+    body[data-skin="glass"][data-theme="dark"]::before { background-color: #0b1020;
       background-image: radial-gradient(42% 34% at 12% 8%, rgba(190,60,140,.55), transparent 70%), radial-gradient(46% 38% at 92% 18%, rgba(30,110,200,.55), transparent 70%), radial-gradient(52% 44% at 85% 96%, rgba(110,70,230,.6), transparent 70%), radial-gradient(40% 34% at 8% 92%, rgba(20,150,140,.4), transparent 70%), linear-gradient(135deg, #0f172a, #1e1b4b 60%, #2a1240); }
     html:has(body[data-skin="glass"]) { background: #c7d2fe; }
     html:has(body[data-skin="glass"][data-theme="dark"]) { background: #0b1020; }
@@ -541,7 +541,7 @@
     body[data-skin="glass"] #optionsBox .option-btn:not(.correct-answer):not(.wrong-answer),
     body[data-skin="glass"] .pl-d:not(.on),
     body[data-skin="glass"] .exp-editor-card,
-    body[data-skin="glass"] .pl-note { background: rgba(255,255,255,.36) !important; backdrop-filter: blur(18px) saturate(170%) !important; -webkit-backdrop-filter: blur(18px) saturate(170%) !important; border: 1px solid rgba(255,255,255,.7) !important; box-shadow: 0 14px 32px -16px rgba(70,55,150,.45), inset 0 1px 0 rgba(255,255,255,.75) !important; }
+    body[data-skin="glass"] .pl-note { background: rgba(255,255,255,.36) !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; border: 1px solid rgba(255,255,255,.7) !important; box-shadow: 0 14px 32px -16px rgba(70,55,150,.45), inset 0 1px 0 rgba(255,255,255,.75) !important; }
     body[data-skin="glass"] [data-theme="dark"] .header-btns,
     body[data-skin="glass"] [data-theme="dark"] #setupArea .subject-panel,
     body[data-skin="glass"] [data-theme="dark"] #setupArea .chapter-panel,
@@ -582,6 +582,32 @@
     body[data-skin="glass"][data-theme="dark"] input:not([type="range"]):not([type="checkbox"]), body[data-skin="glass"][data-theme="dark"] textarea, body[data-skin="glass"][data-theme="dark"] #plSheet .pl-in { background: rgba(255,255,255,.07) !important; border-color: rgba(255,255,255,.14) !important; }
     body[data-skin="glass"] #loginArea { background: transparent; }
     body[data-skin="glass"] #loadingScreen { background: transparent; }
+
+    /* perf: small repeated items skip the expensive blur */
+    body[data-skin="glass"] .pl-d:not(.on),
+    body[data-skin="glass"] #setupArea .subject-item:not(.active),
+    body[data-skin="glass"] #setupArea .chapter-item,
+    body[data-skin="glass"] #optionsBox .option-btn:not(.correct-answer):not(.wrong-answer),
+    body[data-skin="glass"] .qr-stat, body[data-skin="glass"] .pl-note, body[data-skin="glass"] .pl-task:not(.dn) { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; background: rgba(255,255,255,.5) !important; }
+    body[data-skin="glass"][data-theme="dark"] .pl-d:not(.on),
+    body[data-skin="glass"][data-theme="dark"] #setupArea .subject-item:not(.active),
+    body[data-skin="glass"][data-theme="dark"] #setupArea .chapter-item,
+    body[data-skin="glass"][data-theme="dark"] #optionsBox .option-btn:not(.correct-answer):not(.wrong-answer),
+    body[data-skin="glass"][data-theme="dark"] .qr-stat, body[data-skin="glass"][data-theme="dark"] .pl-note, body[data-skin="glass"][data-theme="dark"] .pl-task:not(.dn) { background: rgba(30,36,64,.62) !important; }
+    body[data-skin="glass"] #optionsBox .option-btn.correct-answer, body[data-skin="glass"] #optionsBox .option-btn.wrong-answer { backdrop-filter: none; }
+    /* perf: no endless shine animation while scrolling, body transition only on colours */
+    body { transition: color .3s; }
+
+    /* floating panels stay readable: more opaque glass */
+    body[data-skin="glass"] .profile-dropdown, body[data-skin="glass"] #plSheet .pl-sh, body[data-skin="glass"] .modal-content, body[data-skin="glass"] .modal-card, body[data-skin="glass"] .exp-editor-card { background: rgba(255,255,255,.9) !important; backdrop-filter: blur(26px) saturate(170%) !important; -webkit-backdrop-filter: blur(26px) saturate(170%) !important; }
+    body[data-skin="glass"][data-theme="dark"] .profile-dropdown, body[data-skin="glass"][data-theme="dark"] #plSheet .pl-sh, body[data-skin="glass"][data-theme="dark"] .modal-content, body[data-skin="glass"][data-theme="dark"] .modal-card, body[data-skin="glass"][data-theme="dark"] .exp-editor-card { background: rgba(20,24,44,.92) !important; }
+
+    html body[data-skin="glass"] #mainHeader #userProfile .profile-dropdown { background: rgba(255,255,255,.94) !important; backdrop-filter: blur(28px) saturate(170%) !important; -webkit-backdrop-filter: blur(28px) saturate(170%) !important; }
+    html body[data-skin="glass"][data-theme="dark"] #mainHeader #userProfile .profile-dropdown { background: rgba(18,22,42,.95) !important; }
+
+    /* keep the header (and its profile popup) above the page content; backdrop-filter makes it its own stacking layer */
+    .header-btns { position: relative; z-index: 60; }
+    body[data-skin="glass"] .header-btns { position: relative; z-index: 60; }
 
     /* theme picker (profile menu) */
     .profile-dropdown .pm-skins { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
